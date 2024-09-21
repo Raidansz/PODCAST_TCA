@@ -23,13 +23,18 @@ protocol PartialPodcast {
     var genres: [String]! { get }
 }
 
-class SearchResults {
+class SearchResults: Equatable {
     let resultCount: Int!
     let results: [SearchResult]!
-
+    
     init(resultCount: Int, results: [SearchResult]) {
         self.resultCount = resultCount
         self.results = results
+    }
+    
+    static func == (lhs: SearchResults, rhs: SearchResults) -> Bool {
+        return lhs.results == rhs.results &&
+        lhs.resultCount == rhs.resultCount
     }
 }
 
@@ -40,7 +45,7 @@ extension Formatter {
     }()
 }
 
-class SearchResult: PartialPodcast {
+class SearchResult: Equatable, PartialPodcast {
     var wrapperType: String!
     var kind: String!
     var collectionId: Int!
@@ -117,5 +122,16 @@ class SearchResult: PartialPodcast {
         } else {
             genres = []
         }
+    }
+
+    static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {
+        return lhs.collectionId == rhs.collectionId &&
+               lhs.trackId == rhs.trackId &&
+               lhs.artistName == rhs.artistName &&
+               lhs.collectionName == rhs.collectionName &&
+               lhs.trackName == rhs.trackName &&
+               lhs.feedUrl == rhs.feedUrl &&
+               lhs.collectionViewUrl == rhs.collectionViewUrl &&
+               lhs.primaryGenreName == rhs.primaryGenreName
     }
 }
