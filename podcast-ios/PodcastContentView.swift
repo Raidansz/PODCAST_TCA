@@ -6,12 +6,16 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 @main
 struct PodcastContentView: App {
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            HomeView(store: Store(initialState: HomeFeature.State()) {
+                HomeFeature()
+            }
+            )
         }
     }
 }
