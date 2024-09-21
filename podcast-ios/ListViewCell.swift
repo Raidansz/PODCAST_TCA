@@ -14,7 +14,6 @@ struct ListViewCell: View {
                 .aspectRatio(contentMode: .fit)
                 .cornerRadius(24)
                 .frame(width: 108, height: 96)
-                
             VStack(alignment: .leading, spacing: 8) {
                 Text("See Mama Be")
                     .bold()
