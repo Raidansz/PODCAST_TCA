@@ -12,6 +12,8 @@
 		AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */; };
 		AA7DE4BE2C9F0D5800D51A42 /* ListViewHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */; };
 		AA7DE4C22C9F1C9600D51A42 /* ItunesCallerConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4C12C9F1C9300D51A42 /* ItunesCallerConstants.swift */; };
+		AA7DE4C42C9F1D0D00D51A42 /* ItunesModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4C32C9F1D0800D51A42 /* ItunesModels.swift */; };
+		AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */; };
 		AA9278472C8F151C00D5CF6D /* PodcastContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9278462C8F151C00D5CF6D /* PodcastContentView.swift */; };
 		AA92784B2C8F151D00D5CF6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784A2C8F151D00D5CF6D /* Assets.xcassets */; };
 		AA92784E2C8F151D00D5CF6D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784D2C8F151D00D5CF6D /* Preview Assets.xcassets */; };
@@ -24,6 +26,7 @@
 		AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewHero.swift; sourceTree = "<group>"; };
 		AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		AA7DE4C12C9F1C9300D51A42 /* ItunesCallerConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItunesCallerConstants.swift; sourceTree = "<group>"; };
+		AA7DE4C32C9F1D0800D51A42 /* ItunesModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItunesModels.swift; sourceTree = "<group>"; };
 		AA9278432C8F151C00D5CF6D /* podcast-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "podcast-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA9278462C8F151C00D5CF6D /* PodcastContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastContentView.swift; sourceTree = "<group>"; };
 		AA92784A2C8F151D00D5CF6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -35,6 +38,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */,
 				AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -45,6 +49,7 @@
 		AA7DE4C02C9F1C6600D51A42 /* ItunesManager */ = {
 			isa = PBXGroup;
 			children = (
+				AA7DE4C32C9F1D0800D51A42 /* ItunesModels.swift */,
 				AA7DE4C12C9F1C9300D51A42 /* ItunesCallerConstants.swift */,
 			);
 			path = ItunesManager;
@@ -108,6 +113,7 @@
 			name = "podcast-ios";
 			packageProductDependencies = (
 				AA9278552C8F155C00D5CF6D /* ComposableArchitecture */,
+				AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */,
 			);
 			productName = "podcast-ios";
 			productReference = AA9278432C8F151C00D5CF6D /* podcast-ios.app */;
@@ -139,6 +145,7 @@
 			mainGroup = AA92783A2C8F151C00D5CF6D;
 			packageReferences = (
 				AA9278542C8F155C00D5CF6D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			productRefGroup = AA9278442C8F151C00D5CF6D /* Products */;
 			projectDirPath = "";
@@ -188,6 +195,7 @@
 			files = (
 				AA7DE4C22C9F1C9600D51A42 /* ItunesCallerConstants.swift in Sources */,
 				AA7DE4BB2C9F0D5800D51A42 /* HomeView.swift in Sources */,
+				AA7DE4C42C9F1D0D00D51A42 /* ItunesModels.swift in Sources */,
 				AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */,
 				AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */,
 				AA7DE4BE2C9F0D5800D51A42 /* ListViewHero.swift in Sources */,
@@ -401,6 +409,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.2;
+			};
+		};
 		AA9278542C8F155C00D5CF6D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture.git";
@@ -412,6 +428,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
+		};
 		AA9278552C8F155C00D5CF6D /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AA9278542C8F155C00D5CF6D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;

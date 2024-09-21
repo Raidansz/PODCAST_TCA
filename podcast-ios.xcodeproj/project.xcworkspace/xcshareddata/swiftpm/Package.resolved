@@ -1,5 +1,5 @@
 {
-  "originHash" : "81d703dd6e7ef361d922e4159d56e99fa7337762368097761b4ba0ff022b4d31",
+  "originHash" : "c6637683794cd9e76fcec6c44d7668dd246c0b3a21a8188304a8e9a22c6f6011",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -107,6 +107,15 @@
       "state" : {
         "revision" : "515f79b522918f83483068d99c68daeb5116342d",
         "version" : "600.0.0-prerelease-2024-09-04"
+      }
+    },
+    {
+      "identity" : "swiftyjson",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftyJSON/SwiftyJSON.git",
+      "state" : {
+        "revision" : "af76cf3ef710b6ca5f8c05f3a31307d44a3c5828",
+        "version" : "5.0.2"
       }
     },
     {
