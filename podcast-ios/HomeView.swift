@@ -8,7 +8,9 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct HomeFeature: Reducer {
+@Reducer
+struct HomeFeature {
+    @ObservableState
     struct State: Equatable {
         var trendingPodcasts: [SearchResult] = []
         var promotedPodcasts: [SearchResult] = []
@@ -20,9 +22,11 @@ struct HomeFeature: Reducer {
     enum Action: Equatable {
         case podcastSearchResponse(SearchResults)
         case searchForPodcastTapped(with: String)
-        case searchTermChange(String)
+        case searchTermChanged(String)
     }
+
     @Injected(\.itunesManager) private var itunesManager: ItunesManagerProtocol
+
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -35,9 +39,16 @@ struct HomeFeature: Reducer {
                 state.searchPodcastResults = nil
                 state.isLoading = true
                 return .run {  send in
-                    try await send(.podcastSearchResponse(self.itunesManager.searchPodcasts(term: term, entity: .podcastAndEpisode)))
+                    try await send(
+                        .podcastSearchResponse(
+                            self.itunesManager.searchPodcasts(
+                                term: term,
+                                entity: .podcastAndEpisode
+                            )
+                        )
+                    )
                 }
-            case .searchTermChange(let searchTerm):
+            case .searchTermChanged(let searchTerm):
                 state.searchTerm = searchTerm
                 return .none
             }
@@ -46,9 +57,9 @@ struct HomeFeature: Reducer {
 }
 
 struct HomeView: View {
-    let store: StoreOf<HomeFeature>
+    @Bindable var store: StoreOf<HomeFeature>
+
     var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
             NavigationStack {
                 ScrollView {
                     VStack {
@@ -79,13 +90,10 @@ struct HomeView: View {
                                     .frame(width: 24, height: 24)
                                     .foregroundColor(.black)
                                     .padding(.leading, 15)
-                                TextField("Search the podcast here...", text: viewStore.binding(
-                                    get: { $0.searchTerm },
-                                    send: HomeFeature.Action.searchTermChange)
-                                )
+                                TextField("Search the podcast here...", text: $store.searchTerm.sending(\.searchTermChanged))
                                 .padding(.leading, 5)
                                 .onSubmit {
-                                    viewStore.send(.searchForPodcastTapped(with: viewStore.searchTerm))
+                                    store.send(.searchForPodcastTapped(with: store.searchTerm))
                                 }
                             }
                             .frame(width: 364, height: 64)
@@ -118,12 +126,8 @@ struct HomeView: View {
                                 Text("Trending Podcasts")
                                     .fontWeight(.semibold)
                                 Spacer()
-                                Button {
-                                    viewStore.send(.searchForPodcastTapped(with: "hello"))
-                                } label: {
-                                    Text("See more..")
-                                        .foregroundStyle(Color(.blue))
-                                }
+                                Text("See more..")
+                                    .foregroundStyle(Color(.blue))
                             }
                             .padding(.horizontal, 16)
                         }
@@ -131,6 +135,6 @@ struct HomeView: View {
                     }
                 }
             }
-        }
+     //   }
     }
 }
