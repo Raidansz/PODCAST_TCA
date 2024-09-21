@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA7DE4BB2C9F0D5800D51A42 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B72C9F0D5800D51A42 /* HomeView.swift */; };
+		AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */; };
+		AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */; };
+		AA7DE4BE2C9F0D5800D51A42 /* ListViewHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */; };
 		AA9278472C8F151C00D5CF6D /* podcast_iosApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9278462C8F151C00D5CF6D /* podcast_iosApp.swift */; };
 		AA9278492C8F151C00D5CF6D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9278482C8F151C00D5CF6D /* ContentView.swift */; };
 		AA92784B2C8F151D00D5CF6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784A2C8F151D00D5CF6D /* Assets.xcassets */; };
@@ -15,6 +19,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AA7DE4B72C9F0D5800D51A42 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
+		AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewCell.swift; sourceTree = "<group>"; };
+		AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewHero.swift; sourceTree = "<group>"; };
+		AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		AA9278432C8F151C00D5CF6D /* podcast-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "podcast-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA9278462C8F151C00D5CF6D /* podcast_iosApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = podcast_iosApp.swift; sourceTree = "<group>"; };
 		AA9278482C8F151C00D5CF6D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -53,6 +61,10 @@
 		AA9278452C8F151C00D5CF6D /* podcast-ios */ = {
 			isa = PBXGroup;
 			children = (
+				AA7DE4B72C9F0D5800D51A42 /* HomeView.swift */,
+				AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */,
+				AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */,
+				AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */,
 				AA9278462C8F151C00D5CF6D /* podcast_iosApp.swift */,
 				AA9278482C8F151C00D5CF6D /* ContentView.swift */,
 				AA92784A2C8F151D00D5CF6D /* Assets.xcassets */,
@@ -79,6 +91,7 @@
 				AA92783F2C8F151C00D5CF6D /* Sources */,
 				AA9278402C8F151C00D5CF6D /* Frameworks */,
 				AA9278412C8F151C00D5CF6D /* Resources */,
+				AA7DE4B62C9DF87700D51A42 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -140,11 +153,35 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		AA7DE4B62C9DF87700D51A42 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif command -v swiftlint >/dev/null 2>&1\nthen\n    swiftlint\nelse\n    echo \"warning: `swiftlint` command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		AA92783F2C8F151C00D5CF6D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA7DE4BB2C9F0D5800D51A42 /* HomeView.swift in Sources */,
+				AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */,
+				AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */,
+				AA7DE4BE2C9F0D5800D51A42 /* ListViewHero.swift in Sources */,
 				AA9278492C8F151C00D5CF6D /* ContentView.swift in Sources */,
 				AA9278472C8F151C00D5CF6D /* podcast_iosApp.swift in Sources */,
 			);
@@ -282,6 +319,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"podcast-ios/Preview Content\"";
 				DEVELOPMENT_TEAM = 534SAT4S5S;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -311,6 +349,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"podcast-ios/Preview Content\"";
 				DEVELOPMENT_TEAM = 534SAT4S5S;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
