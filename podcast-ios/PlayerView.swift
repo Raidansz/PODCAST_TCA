@@ -69,10 +69,6 @@ struct PlayerView: View {
     }
 }
 
-#Preview {
-    PlayerView()
-}
-
 struct ControllButton: View {
     var body: some View {
         VStack {
@@ -121,4 +117,8 @@ struct ControllButton: View {
             }
         }
     }
+}
+
+#Preview {
+    PlayerView()
 }
