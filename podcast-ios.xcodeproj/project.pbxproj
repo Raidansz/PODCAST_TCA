@@ -20,7 +20,7 @@
 		AA7DE4CF2CA076E200D51A42 /* AudioSliderBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4CE2CA076CD00D51A42 /* AudioSliderBarView.swift */; };
 		AA7DE4D22CA08D4F00D51A42 /* PodcastIndexModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4D12CA08D4C00D51A42 /* PodcastIndexModel.swift */; };
 		AA7DE4D42CA08D8D00D51A42 /* PodcastIndexManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4D32CA08D8900D51A42 /* PodcastIndexManager.swift */; };
-		AA7DE4D82CA08E2E00D51A42 /* PodcastIndexKeys.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA7DE4D72CA08E2E00D51A42 /* PodcastIndexKeys.plist */; };
+		AA7DE4DA2CA090A400D51A42 /* PodcastIndexKey.pl in Resources */ = {isa = PBXBuildFile; fileRef = AA7DE4D92CA090A400D51A42 /* PodcastIndexKey.pl */; };
 		AA9278472C8F151C00D5CF6D /* PodcastContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9278462C8F151C00D5CF6D /* PodcastContentView.swift */; };
 		AA92784B2C8F151D00D5CF6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784A2C8F151D00D5CF6D /* Assets.xcassets */; };
 		AA92784E2C8F151D00D5CF6D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784D2C8F151D00D5CF6D /* Preview Assets.xcassets */; };
@@ -40,7 +40,7 @@
 		AA7DE4CE2CA076CD00D51A42 /* AudioSliderBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSliderBarView.swift; sourceTree = "<group>"; };
 		AA7DE4D12CA08D4C00D51A42 /* PodcastIndexModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastIndexModel.swift; sourceTree = "<group>"; };
 		AA7DE4D32CA08D8900D51A42 /* PodcastIndexManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastIndexManager.swift; sourceTree = "<group>"; };
-		AA7DE4D72CA08E2E00D51A42 /* PodcastIndexKeys.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = PodcastIndexKeys.plist; sourceTree = "<group>"; };
+		AA7DE4D92CA090A400D51A42 /* PodcastIndexKey.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = PodcastIndexKey.pl; sourceTree = "<group>"; };
 		AA9278432C8F151C00D5CF6D /* podcast-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "podcast-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA9278462C8F151C00D5CF6D /* PodcastContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastContentView.swift; sourceTree = "<group>"; };
 		AA92784A2C8F151D00D5CF6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -110,7 +110,7 @@
 				AA9278462C8F151C00D5CF6D /* PodcastContentView.swift */,
 				AA92784A2C8F151D00D5CF6D /* Assets.xcassets */,
 				AA92784C2C8F151D00D5CF6D /* Preview Content */,
-				AA7DE4D72CA08E2E00D51A42 /* PodcastIndexKeys.plist */,
+				AA7DE4D92CA090A400D51A42 /* PodcastIndexKey.pl */,
 			);
 			path = "podcast-ios";
 			sourceTree = "<group>";
@@ -190,7 +190,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA7DE4D82CA08E2E00D51A42 /* PodcastIndexKeys.plist in Resources */,
+				AA7DE4DA2CA090A400D51A42 /* PodcastIndexKey.pl in Resources */,
 				AA92784E2C8F151D00D5CF6D /* Preview Assets.xcassets in Resources */,
 				AA92784B2C8F151D00D5CF6D /* Assets.xcassets in Resources */,
 			);
