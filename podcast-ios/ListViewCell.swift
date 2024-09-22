@@ -26,7 +26,7 @@ struct ListViewCell: View {
                 .resizable()
                 .frame(width: 48, height: 48)
         }
-        .padding(.horizontal, 16)
+        Divider()
     }
 }
 

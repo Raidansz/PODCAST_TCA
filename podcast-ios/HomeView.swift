@@ -115,6 +115,8 @@ struct HomeView: View {
                         .padding(.horizontal, 16)
                     }
                     )
+                    Spacer()
+                        .frame(height: 32)
                     Section(content: {
                         LazyVStack(spacing: 24) {
                             ForEach(0..<6) { _ in

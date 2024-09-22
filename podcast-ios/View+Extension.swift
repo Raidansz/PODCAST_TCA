@@ -17,6 +17,7 @@ extension View {
             LazyHStack(spacing: spacing) {
                 ForEach(data, id: \.self) { item in
                     content(item)
+                        .shadow(color: .black.opacity(0.3), radius: 10, x: 5, y: 5)
                 }
             }
             .padding()
