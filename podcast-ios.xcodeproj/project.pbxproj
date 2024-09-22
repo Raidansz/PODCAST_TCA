@@ -16,6 +16,8 @@
 		AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */; };
 		AA7DE4C92C9F1DA800D51A42 /* ItunesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4C82C9F1DA500D51A42 /* ItunesManager.swift */; };
 		AA7DE4CB2C9F1E0A00D51A42 /* InjectionKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4CA2C9F1E0600D51A42 /* InjectionKey.swift */; };
+		AA7DE4CD2C9F725200D51A42 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4CC2C9F724D00D51A42 /* PlayerView.swift */; };
+		AA7DE4CF2CA076E200D51A42 /* AudioSliderBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4CE2CA076CD00D51A42 /* AudioSliderBarView.swift */; };
 		AA9278472C8F151C00D5CF6D /* PodcastContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA9278462C8F151C00D5CF6D /* PodcastContentView.swift */; };
 		AA92784B2C8F151D00D5CF6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784A2C8F151D00D5CF6D /* Assets.xcassets */; };
 		AA92784E2C8F151D00D5CF6D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784D2C8F151D00D5CF6D /* Preview Assets.xcassets */; };
@@ -31,6 +33,8 @@
 		AA7DE4C32C9F1D0800D51A42 /* ItunesModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItunesModels.swift; sourceTree = "<group>"; };
 		AA7DE4C82C9F1DA500D51A42 /* ItunesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItunesManager.swift; sourceTree = "<group>"; };
 		AA7DE4CA2C9F1E0600D51A42 /* InjectionKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionKey.swift; sourceTree = "<group>"; };
+		AA7DE4CC2C9F724D00D51A42 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
+		AA7DE4CE2CA076CD00D51A42 /* AudioSliderBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSliderBarView.swift; sourceTree = "<group>"; };
 		AA9278432C8F151C00D5CF6D /* podcast-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "podcast-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA9278462C8F151C00D5CF6D /* PodcastContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastContentView.swift; sourceTree = "<group>"; };
 		AA92784A2C8F151D00D5CF6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -79,6 +83,8 @@
 		AA9278452C8F151C00D5CF6D /* podcast-ios */ = {
 			isa = PBXGroup;
 			children = (
+				AA7DE4CE2CA076CD00D51A42 /* AudioSliderBarView.swift */,
+				AA7DE4CC2C9F724D00D51A42 /* PlayerView.swift */,
 				AA7DE4CA2C9F1E0600D51A42 /* InjectionKey.swift */,
 				AA7DE4C02C9F1C6600D51A42 /* ItunesManager */,
 				AA7DE4B72C9F0D5800D51A42 /* HomeView.swift */,
@@ -202,6 +208,8 @@
 				AA7DE4C22C9F1C9600D51A42 /* ItunesCallerConstants.swift in Sources */,
 				AA7DE4C92C9F1DA800D51A42 /* ItunesManager.swift in Sources */,
 				AA7DE4BB2C9F0D5800D51A42 /* HomeView.swift in Sources */,
+				AA7DE4CD2C9F725200D51A42 /* PlayerView.swift in Sources */,
+				AA7DE4CF2CA076E200D51A42 /* AudioSliderBarView.swift in Sources */,
 				AA7DE4C42C9F1D0D00D51A42 /* ItunesModels.swift in Sources */,
 				AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */,
 				AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */,
