@@ -58,9 +58,9 @@ final class PodcastIndexManager: PodcastIndexManagerProtocol {
 private extension PodcastIndexManager {
     // Function to load API keys from PodcastIndexKeys.plist
     func loadApiKeys() -> (apiKey: String, apiSecret: String)? {
-        guard let path = Bundle.main.path(forResource: "PodcastIndexKeys", ofType: "plist"),
+        guard let path = Bundle.main.path(forResource: "PodcastIndexKey", ofType: "pl"),
               let xml = FileManager.default.contents(atPath: path) else {
-            print("Error: PodcastIndexKeys.plist not found.")
+            print("Error: PodcastIndexKey.plist not found.")
             return nil
         }
 
@@ -83,7 +83,6 @@ private extension PodcastIndexManager {
 protocol PodcastIndexManagerProtocol {
     func getTrending() async throws -> PodcastIndexResponse
 }
-
 
 private struct PodcastIndexManagerKey: InjectionKey {
     static var currentValue: PodcastIndexManagerProtocol = PodcastIndexManager()
