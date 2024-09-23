@@ -23,10 +23,18 @@ struct PodcastIndexResponse: Equatable {
         self.query = json["query"].stringValue
         self.description = json["description"].stringValue
     }
+
+    static func == (lhs: PodcastIndexResponse, rhs: PodcastIndexResponse) -> Bool {
+        return lhs.status == rhs.status &&
+               lhs.count == rhs.count &&
+               lhs.query == rhs.query &&
+               lhs.description == rhs.description &&
+               lhs.items == rhs.items
+    }
 }
 
 // MARK: - Item Model
-struct Item {
+struct Item: Equatable {
     let id: Int
     let title: String
     let link: URL?
@@ -81,6 +89,10 @@ struct Item {
         self.chaptersUrl = URL(string: json["chaptersUrl"].stringValue)
         self.transcriptUrl = URL(string: json["transcriptUrl"].stringValue)
         self.transcripts = json["transcripts"].arrayValue.map { Transcript(json: $0) }
+    }
+
+    static func == (lhs: Item, rhs: Item) -> Bool {
+        return lhs.id == rhs.id
     }
 }
 

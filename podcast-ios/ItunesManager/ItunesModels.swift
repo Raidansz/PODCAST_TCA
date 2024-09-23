@@ -26,12 +26,12 @@ protocol PartialPodcast {
 class SearchResults: Equatable {
     let resultCount: Int!
     let results: [SearchResult]!
-    
+
     init(resultCount: Int, results: [SearchResult]) {
         self.resultCount = resultCount
         self.results = results
     }
-    
+
     static func == (lhs: SearchResults, rhs: SearchResults) -> Bool {
         return lhs.results == rhs.results &&
         lhs.resultCount == rhs.resultCount

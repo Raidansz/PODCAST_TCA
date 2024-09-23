@@ -24,6 +24,7 @@ struct HomeFeature {
         case searchForPodcastTapped(with: String)
         case searchTermChanged(String)
         case fetchTrendingPodcasts
+        case loadView
         case trendingPodcastResponse(PodcastIndexResponse)
     }
 
@@ -64,11 +65,12 @@ struct HomeFeature {
                         )
                     )
                 }
-                
             case .trendingPodcastResponse(let result):
                 state.trendingPodcasts = [result]
                 state.isLoading = false
                 return .none
+            case .loadView:
+                return .send(.fetchTrendingPodcasts)
             }
         }
     }
@@ -155,6 +157,9 @@ struct HomeView: View {
                 }
                 .padding(.horizontal, 16)
             }
+        }
+        .onAppear() {
+            store.send(.loadView)
         }
     }
 }
