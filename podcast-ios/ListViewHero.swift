@@ -11,9 +11,9 @@ struct ListViewHero: View {
     var body: some View {
         VStack {
             AsyncImage(url: URL(string: "https://picsum.photos/331/200")!)
-                .aspectRatio(contentMode: .fit)
-                .cornerRadius(24)
                 .frame(width: 331, height: 200)
+                .aspectRatio(contentMode: .fit)
+                .cornerRadius(20)
         }
     }
 }
