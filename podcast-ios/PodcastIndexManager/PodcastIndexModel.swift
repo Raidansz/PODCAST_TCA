@@ -9,7 +9,7 @@ import Foundation
 import SwiftyJSON
 
 // MARK: - PodcastIndexResponse Model
-struct PodcastIndexResponse {
+struct PodcastIndexResponse: Equatable {
     let status: Bool
     let items: [Item]
     let count: Int

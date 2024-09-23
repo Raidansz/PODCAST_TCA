@@ -12,7 +12,7 @@ import ComposableArchitecture
 struct HomeFeature {
     @ObservableState
     struct State: Equatable {
-        var trendingPodcasts: [SearchResult] = []
+        var trendingPodcasts: [PodcastIndexResponse]?
         var promotedPodcasts: [SearchResult] = []
         var searchPodcastResults: [SearchResults]?
         var isLoading: Bool = false
@@ -23,9 +23,12 @@ struct HomeFeature {
         case podcastSearchResponse(SearchResults)
         case searchForPodcastTapped(with: String)
         case searchTermChanged(String)
+        case fetchTrendingPodcasts
+        case trendingPodcastResponse(PodcastIndexResponse)
     }
 
     @Injected(\.itunesManager) private var itunesManager: ItunesManagerProtocol
+    @Injected(\.podcastIndexManager) private var podcastIndexManager: PodcastIndexManagerProtocol
 
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -50,6 +53,21 @@ struct HomeFeature {
                 }
             case .searchTermChanged(let searchTerm):
                 state.searchTerm = searchTerm
+                return .none
+            case .fetchTrendingPodcasts:
+                state.trendingPodcasts = nil
+                state.isLoading = true
+                return .run {  send in
+                    try await send(
+                        .trendingPodcastResponse(
+                            self.podcastIndexManager.getTrending()
+                        )
+                    )
+                }
+                
+            case .trendingPodcastResponse(let result):
+                state.trendingPodcasts = [result]
+                state.isLoading = false
                 return .none
             }
         }
