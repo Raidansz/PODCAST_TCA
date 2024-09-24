@@ -8,16 +8,28 @@
 import SwiftUI
 
 struct ListViewHero: View {
+    let podcast: Item
+
     var body: some View {
         VStack {
-            AsyncImage(url: URL(string: "https://picsum.photos/331/200")!)
-                .frame(width: 331, height: 200)
-                .aspectRatio(contentMode: .fit)
-                .cornerRadius(20)
+            AsyncImage(url: podcast.image) { phase in
+                if let image = phase.image {
+                    image
+                        .resizable()
+                        .frame(width: 331, height: 200)
+                        .aspectRatio(contentMode: .fit)
+                        .cornerRadius(20)
+                        .clipped()
+                } else {
+                    Image(systemName: "waveform.badge.mic")
+                        .frame(width: 331, height: 200)
+                        .cornerRadius(20)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 24)
+                                .stroke(Color.gray, lineWidth: 0.5)
+                        )
+                }
+            }
         }
     }
-}
-
-#Preview {
-    ListViewHero()
 }

@@ -143,8 +143,10 @@ struct HomeViewContent: View {
                 }
                 .padding()
                 Section(content: {
-                    horizontalList(data: [1, 2, 3, 4, 5]) { _ in
-                        ListViewHero()
+                    if (store.trendingPodcasts?.first?.items) != nil {
+                        horizontalList(data: (store.trendingPodcasts?.first!.items)!) { podcast in
+                            ListViewHero(podcast: podcast)
+                        }
                     }
                 }, header: {
                     HStack {
