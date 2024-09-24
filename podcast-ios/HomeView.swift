@@ -91,6 +91,35 @@ struct HomeView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 32)
+                            .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
+                            .frame(width: 35, height: 35)
+                        HStack {
+                            Image(systemName: "person.fill")
+                                .resizable()
+                                .frame(width: 21, height: 21)
+                        }
+                    }
+                }
+
+                ToolbarItem(placement: .topBarLeading) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 32)
+                            .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
+                            .frame(width: 35, height: 35)
+                        HStack {
+                            Image(systemName: "bell.fill")
+                                .resizable()
+                                .frame(width: 21, height: 21)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Home")
+            .navigationBarTitleDisplayMode(.large)
         }
         .onAppear {
             store.send(.loadView)
@@ -103,22 +132,6 @@ struct HomeViewContent: View {
     var body: some View {
         ScrollView {
             VStack {
-                HStack {
-                    Image(systemName: "music.mic.circle.fill")
-                        .resizable()
-                        .frame(width: 45, height: 45)
-                    Spacer()
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 32)
-                            .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
-                            .frame(width: 45, height: 45)
-                        HStack {
-                            Image(systemName: "bell.fill")
-                                .resizable()
-                                .frame(width: 21, height: 21)
-                        }
-                    }
-                }
                 ZStack {
                     RoundedRectangle(cornerRadius: 32)
                         .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
@@ -164,6 +177,7 @@ struct HomeViewContent: View {
                         if (store.trendingPodcasts?.first?.items) != nil {
                             ForEach((store.trendingPodcasts?.first!.items)!, id: \.self) { response in
                                 ListViewCell(podcast: response)
+                                    .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                             }
                         }
                     }

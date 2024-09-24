@@ -37,6 +37,7 @@ struct ListViewCell: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text(podcast.title)
                     .bold()
+                    .lineLimit(2)
                 Text("\(podcast.description)")
                     .lineLimit(2)
             }
