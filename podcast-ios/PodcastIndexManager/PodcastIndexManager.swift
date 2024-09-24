@@ -11,7 +11,7 @@ import SwiftyJSON
 
 final class PodcastIndexManager: PodcastIndexManagerProtocol {
     func getTrending() async throws -> PodcastIndexResponse {
-        return try await performQuery("podcasts/trending?max=20?lang=en")
+        return try await performQuery("podcasts/trending?max=10?lang=en")
     }
 
     private func performQuery(_ query: String) async throws -> PodcastIndexResponse {

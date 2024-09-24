@@ -16,13 +16,13 @@ struct ListViewHero: View {
                 if let image = phase.image {
                     image
                         .resizable()
-                        .frame(width: 331, height: 200)
-                        .aspectRatio(contentMode: .fit)
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 300, height: 300)
                         .cornerRadius(20)
                         .clipped()
                 } else {
                     Image(systemName: "waveform.badge.mic")
-                        .frame(width: 331, height: 200)
+                        .frame(width: 300, height: 300)
                         .cornerRadius(20)
                         .overlay(
                             RoundedRectangle(cornerRadius: 24)
@@ -30,6 +30,8 @@ struct ListViewHero: View {
                         )
                 }
             }
+            .frame(width: 300, height: 300)
+            .cornerRadius(20)
         }
     }
 }
