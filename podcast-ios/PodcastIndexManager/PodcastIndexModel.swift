@@ -9,7 +9,7 @@ import Foundation
 import SwiftyJSON
 
 // MARK: - PodcastIndexResponse Model
-struct PodcastIndexResponse: Equatable {
+struct PodcastIndexResponse: Equatable, Hashable {
     let status: Bool
     let items: [Item]
     let count: Int
@@ -34,7 +34,7 @@ struct PodcastIndexResponse: Equatable {
 }
 
 // MARK: - Item Model
-struct Item: Equatable {
+struct Item: Equatable, Hashable {
     let id: Int
     let title: String
     let link: URL?
@@ -97,7 +97,7 @@ struct Item: Equatable {
 }
 
 // MARK: - Transcript Model
-struct Transcript {
+struct Transcript: Hashable {
     let url: URL?
     let type: String
 

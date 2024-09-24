@@ -11,7 +11,7 @@ import SwiftyJSON
 
 final class PodcastIndexManager: PodcastIndexManagerProtocol {
     func getTrending() async throws -> PodcastIndexResponse {
-        return try await performQuery("search/byperson?q=Martin+Mouritzen&pretty")
+        return try await performQuery("search/byperson?q=jack")
     }
 
     private func performQuery(_ query: String) async throws -> PodcastIndexResponse {
