@@ -131,7 +131,6 @@ struct HomeViewContent: View {
     @Bindable var store: StoreOf<HomeFeature>
     var body: some View {
         ScrollView {
-            VStack {
                 ZStack {
                     RoundedRectangle(cornerRadius: 32)
                         .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
@@ -194,7 +193,6 @@ struct HomeViewContent: View {
                     .padding(.horizontal, 16)
                 }
                 )
-            }
             .padding(.horizontal, 16)
         }
     }
