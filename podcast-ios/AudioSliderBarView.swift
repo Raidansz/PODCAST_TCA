@@ -15,13 +15,13 @@ struct MusicProgressSlider<T: BinaryFloatingPoint>: View {
     let emptyColor: Color
     let height: CGFloat
     let onEditingChanged: (Bool) -> Void
-    
+
     // private variables
     @State private var localRealProgress: T = 0
     @State private var localTempProgress: T = 0
     @GestureState private var isActive: Bool = false
     @State private var progressDuration: T = 0
-    
+
     init(
         value: Binding<T>,
         inRange: ClosedRange<T>,
@@ -39,7 +39,7 @@ struct MusicProgressSlider<T: BinaryFloatingPoint>: View {
         self.height = height
         self.onEditingChanged = onEditingChanged
     }
-    
+
     var body: some View {
         GeometryReader { bounds in
             ZStack {

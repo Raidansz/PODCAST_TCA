@@ -18,7 +18,7 @@ struct PodcastIndexResponse: Equatable, Hashable {
 
     init(json: JSON) {
         self.status = json["status"].boolValue
-        self.items = json["items"].arrayValue.map { Item(json: $0) }
+        self.items = json["feeds"].arrayValue.map { Item(json: $0) }
         self.count = json["count"].intValue
         self.query = json["query"].stringValue
         self.description = json["description"].stringValue
