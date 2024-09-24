@@ -170,8 +170,10 @@ struct HomeViewContent: View {
                     .padding(.horizontal, 16)
                 }
                 )
+
                 Spacer()
                     .frame(height: 32)
+
                 Section(content: {
                     LazyVStack(spacing: 24) {
                         if (store.trendingPodcasts?.first?.items) != nil {

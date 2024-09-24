@@ -25,6 +25,7 @@
 		AA92784B2C8F151D00D5CF6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784A2C8F151D00D5CF6D /* Assets.xcassets */; };
 		AA92784E2C8F151D00D5CF6D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784D2C8F151D00D5CF6D /* Preview Assets.xcassets */; };
 		AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = AA9278552C8F155C00D5CF6D /* ComposableArchitecture */; };
+		AAAD22772CA31AAB0064F2C5 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAD22762CA31AAB0064F2C5 /* ExploreView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		AA9278462C8F151C00D5CF6D /* PodcastContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastContentView.swift; sourceTree = "<group>"; };
 		AA92784A2C8F151D00D5CF6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA92784D2C8F151D00D5CF6D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		AAAD22762CA31AAB0064F2C5 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +113,7 @@
 				AA92784A2C8F151D00D5CF6D /* Assets.xcassets */,
 				AA92784C2C8F151D00D5CF6D /* Preview Content */,
 				AA7DE4D92CA090A400D51A42 /* PodcastIndexKey.pl */,
+				AAAD22762CA31AAB0064F2C5 /* ExploreView.swift */,
 			);
 			path = "podcast-ios";
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AAAD22772CA31AAB0064F2C5 /* ExploreView.swift in Sources */,
 				AA7DE4C22C9F1C9600D51A42 /* ItunesCallerConstants.swift in Sources */,
 				AA7DE4C92C9F1DA800D51A42 /* ItunesManager.swift in Sources */,
 				AA7DE4BB2C9F0D5800D51A42 /* HomeView.swift in Sources */,
