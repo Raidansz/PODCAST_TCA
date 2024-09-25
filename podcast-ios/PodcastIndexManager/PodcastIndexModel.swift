@@ -7,21 +7,25 @@
 
 import Foundation
 import SwiftyJSON
+import ComposableArchitecture
 
 // MARK: - PodcastIndexResponse Model
-struct PodcastIndexResponse: Equatable, Hashable {
+struct PodcastIndexResponse: Equatable, Hashable, Identifiable {
+    var id: String
+    
     let status: Bool
-    let items: [Item]
+    var items: IdentifiedArrayOf<Item> = []
     let count: Int
     let query: String
     let description: String
 
     init(json: JSON) {
         self.status = json["status"].boolValue
-        self.items = json["feeds"].arrayValue.map { Item(json: $0) }
+        self.items = IdentifiedArray(uniqueElements: json["feeds"].arrayValue.map { Item(json: $0) }) 
         self.count = json["count"].intValue
         self.query = json["query"].stringValue
         self.description = json["description"].stringValue
+        self.id = json["id"].stringValue
     }
 
     static func == (lhs: PodcastIndexResponse, rhs: PodcastIndexResponse) -> Bool {
@@ -34,7 +38,7 @@ struct PodcastIndexResponse: Equatable, Hashable {
 }
 
 // MARK: - Item Model
-struct Item: Equatable, Hashable {
+struct Item: Equatable, Hashable, Identifiable {
     let id: Int
     let title: String
     let link: URL?

@@ -23,7 +23,7 @@ protocol PartialPodcast {
     var genres: [String]! { get }
 }
 
-class SearchResults: Equatable {
+class SearchResults: Equatable, Identifiable {
     let resultCount: Int!
     let results: [SearchResult]!
 
@@ -45,7 +45,7 @@ extension Formatter {
     }()
 }
 
-class SearchResult: Equatable, PartialPodcast {
+class SearchResult: Equatable, Identifiable, PartialPodcast {
     var wrapperType: String!
     var kind: String!
     var collectionId: Int!

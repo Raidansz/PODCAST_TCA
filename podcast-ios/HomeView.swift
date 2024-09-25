@@ -12,9 +12,9 @@ import ComposableArchitecture
 struct HomeFeature {
     @ObservableState
     struct State: Equatable {
-        var trendingPodcasts: [PodcastIndexResponse]?
-        var promotedPodcasts: [SearchResult] = []
-        var searchPodcastResults: [SearchResults]?
+        var trendingPodcasts: PodcastIndexResponse? //IdentifiedArrayOf<PodcastIndexResponse> = []
+        var promotedPodcasts: IdentifiedArrayOf<SearchResult> = []
+        var searchPodcastResults: IdentifiedArrayOf<SearchResults> = []
         var isLoading: Bool = false
         var searchTerm = ""
     }
@@ -35,12 +35,12 @@ struct HomeFeature {
         Reduce { state, action in
             switch action {
             case .podcastSearchResponse(let result):
-                state.searchPodcastResults = [result]
+                state.searchPodcastResults.append(result)
                 state.isLoading = false
                 return .none
             case .searchForPodcastTapped(with: let term):
                 print(term)
-                state.searchPodcastResults = nil
+//                state.searchPodcastResults = nil
                 state.isLoading = true
                 return .run {  send in
                     try await send(
@@ -56,7 +56,7 @@ struct HomeFeature {
                 state.searchTerm = searchTerm
                 return .none
             case .fetchTrendingPodcasts:
-                state.trendingPodcasts = nil
+//                state.trendingPodcasts = nil
                 state.isLoading = true
                 return .run {  send in
                     try await send(
@@ -66,7 +66,7 @@ struct HomeFeature {
                     )
                 }
             case .trendingPodcastResponse(let result):
-                state.trendingPodcasts = [result]
+                state.trendingPodcasts = result
                 state.isLoading = false
                 return .none
             case .loadView:
@@ -155,9 +155,9 @@ struct HomeViewContent: View {
                 }
                 .padding()
                 Section(content: {
-                    if (store.trendingPodcasts?.first?.items) != nil {
-                        horizontalList(data: (store.trendingPodcasts?.first!.items)!) { podcast in
-                            ListViewHero(podcast: podcast)
+                    if (store.trendingPodcasts?.items) != nil {
+                        horizontalList(data: (store.trendingPodcasts!.items)) { podcast in
+                        ListViewHero(podcast: podcast)
                         }
                     }
                 }, header: {
@@ -175,8 +175,8 @@ struct HomeViewContent: View {
 
                 Section(content: {
                     LazyVStack(spacing: 24) {
-                        if (store.trendingPodcasts?.first?.items) != nil {
-                            ForEach((store.trendingPodcasts?.first!.items)!, id: \.self) { response in
+                        if (store.trendingPodcasts?.items) != nil {
+                            ForEach((store.trendingPodcasts!.items), id: \.self) { response in
                                 ListViewCell(podcast: response)
                                     .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                             }
