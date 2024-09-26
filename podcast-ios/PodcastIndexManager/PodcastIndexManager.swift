@@ -83,9 +83,9 @@ private extension PodcastIndexManager {
 protocol PodcastIndexManagerProtocol {
     func getTrending() async throws -> PodcastIndexResponse
 }
-
-private struct PodcastIndexManagerKey: InjectionKey {
-    static var currentValue: PodcastIndexManagerProtocol = PodcastIndexManager()
+//TODO: Check if this is the right thing
+private struct PodcastIndexManagerKey: @preconcurrency InjectionKey {
+    @MainActor static var currentValue: PodcastIndexManagerProtocol = PodcastIndexManager()
 }
 
 extension InjectedValues {

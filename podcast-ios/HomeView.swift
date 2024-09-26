@@ -12,7 +12,7 @@ import ComposableArchitecture
 struct HomeFeature {
     @ObservableState
     struct State: Equatable {
-        var trendingPodcasts: PodcastIndexResponse? //IdentifiedArrayOf<PodcastIndexResponse> = []
+        var trendingPodcasts: PodcastIndexResponse?
         var promotedPodcasts: IdentifiedArrayOf<SearchResult> = []
         var searchPodcastResults: IdentifiedArrayOf<SearchResults> = []
         var isLoading: Bool = false

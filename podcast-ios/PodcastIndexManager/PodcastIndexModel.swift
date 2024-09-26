@@ -12,7 +12,7 @@ import ComposableArchitecture
 // MARK: - PodcastIndexResponse Model
 struct PodcastIndexResponse: Equatable, Hashable, Identifiable {
     var id: String
-    
+
     let status: Bool
     var items: IdentifiedArrayOf<Item> = []
     let count: Int
@@ -21,7 +21,7 @@ struct PodcastIndexResponse: Equatable, Hashable, Identifiable {
 
     init(json: JSON) {
         self.status = json["status"].boolValue
-        self.items = IdentifiedArray(uniqueElements: json["feeds"].arrayValue.map { Item(json: $0) }) 
+        self.items = IdentifiedArray(uniqueElements: json["feeds"].arrayValue.map { Item(json: $0) })
         self.count = json["count"].intValue
         self.query = json["query"].stringValue
         self.description = json["description"].stringValue
