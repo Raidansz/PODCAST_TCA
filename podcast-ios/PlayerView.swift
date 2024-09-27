@@ -6,16 +6,58 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
+import AVFoundation
+@Reducer
+struct PlayerFeature {
+    @ObservableState
+    struct State: Equatable {
+        
+        var player: AVPlayer?
+        var isPlaying = false
+        var totalTime: TimeInterval = 0.0
+        var currentTime: TimeInterval = 0.0
+        var audioURL: URL?
+    }
+    
+    enum Action: BindableAction {
+        case binding(BindingAction<State>)
+        case initialize(URL?)
+        case play
+        case pause
+    }
+    
+    var body: some ReducerOf<Self> {
+        BindingReducer()
+        Reduce { state, action in
+            switch action {
+            case .binding(_):
+                return .none
+            case .initialize(let url):
+                if let url {
+                    state.player = AVPlayer(url: url)
+                    state.player!.play()
+                }
+                return .none
+            case .play:
+                if state.player == nil {
+                    return .send(.initialize(state.audioURL))
+                } else {
+                    state.isPlaying = true
+                    state.player!.play()
+                    return .none
+                }
+            case .pause:
+                state.isPlaying = false
+                state.player?.pause()
+                return .none
+            }
+        }
+    }
+}
 
 struct PlayerView: View {
-    @State private var playerDuration: TimeInterval = 100
-    private let maxDuration = TimeInterval(240)
-    @State private var volume: Double = 0.3
-    private var maxVolume: Double = 1
-    @State private var sliderValue: Double = 10
-    private var maxSliderValue: Double = 100
-    @State private var color: Color = .white
-
+    @State var store: StoreOf<PlayerFeature>
     var body: some View {
         NavigationStack {
             VStack {
@@ -24,14 +66,14 @@ struct PlayerView: View {
                         .aspectRatio(contentMode: .fit)
                         .cornerRadius(24)
                         .frame(width: 364, height: 364)
-
+                    
                     VStack {
                         Spacer()
                             .frame(height: 359)
-
+                        
                         RoundedRectangle(cornerRadius: 48)
                             .fill(Color.blue.opacity(0.2))
-
+                        
                             .blur(radius: 5)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 48)
@@ -55,12 +97,24 @@ struct PlayerView: View {
                     Text("15:00")
                 }
                 .padding(.horizontal, 16)
-                MusicProgressSlider(value: $playerDuration, inRange: TimeInterval.zero...maxDuration, activeFillColor: color, fillColor: .blue, emptyColor: .gray, height: 32) { started in
-                }
+                
+                Slider(value: Binding(get: {
+                    store.currentTime
+                }, set: { newValue in
+                    // Update the player's current time and the currentTime state
+                    // store.player.currentTime = newValue
+                    store.currentTime = newValue
+                }), in: 0...store.totalTime)  // Slider range from 0 to the total duration of the audio
+                .accentColor(.blue)
                 .frame(height: 40)
                 .padding(.horizontal, 16)
-
-                ControllButton()
+                //                MusicProgressSlider(value: $playerDuration, inRange: TimeInterval.
+                //                zero...maxDuration, activeFillColor: color, fillColor: .blue, emptyColor: .gray, height: 32) { started in
+                //                }
+                //                .frame(height: 40)
+                //                .padding(.horizontal, 16)
+                
+                ControllButton(store: store)
                     .padding(.top, 40)
             }
             .navigationTitle("Now Playing")
@@ -69,13 +123,15 @@ struct PlayerView: View {
     }
 }
 
+
 struct ControllButton: View {
+    @State var store: StoreOf<PlayerFeature>
     var body: some View {
         VStack {
             HStack {
                 Spacer()
                 Button {
-                   ()
+                    ()
                 } label: {
                     Image(systemName: "shuffle")
                         .resizable()
@@ -91,7 +147,7 @@ struct ControllButton: View {
                 }
                 Spacer()
                 Button {
-                    ()
+                    store.send(.play)
                 } label: {
                     Image(systemName: "play.circle.fill")
                         .resizable()
@@ -120,5 +176,8 @@ struct ControllButton: View {
 }
 
 #Preview {
-    PlayerView()
+    PlayerView(store: Store(initialState: PlayerFeature.State(audioURL: URL(string: "https://www.ivoox.com/228-tan-solo-mejores-lo-logran_mf_134242749_feed_1.mp3"))) {
+        PlayerFeature()
+            ._printChanges()
+    })
 }

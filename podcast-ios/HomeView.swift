@@ -56,7 +56,7 @@ struct HomeFeature {
                 state.searchTerm = searchTerm
                 return .none
             case .fetchTrendingPodcasts:
-//                state.trendingPodcasts = nil
+                state.trendingPodcasts = nil
                 state.isLoading = true
                 return .run {  send in
                     try await send(
@@ -77,7 +77,7 @@ struct HomeFeature {
 }
 
 struct HomeView: View {
-    @Bindable var store: StoreOf<HomeFeature>
+    @State var store: StoreOf<HomeFeature>
     var body: some View {
         NavigationStack {
             ZStack(alignment: .top) {
@@ -128,7 +128,7 @@ struct HomeView: View {
 }
 
 struct HomeViewContent: View {
-    @Bindable var store: StoreOf<HomeFeature>
+    @State var store: StoreOf<HomeFeature>
     var body: some View {
         ScrollView {
                 ZStack {
