@@ -12,21 +12,21 @@ import AVFoundation
 struct PlayerFeature {
     @ObservableState
     struct State: Equatable {
-        
+
         var player: AVPlayer?
         var isPlaying = false
         var totalTime: TimeInterval = 0.0
         var currentTime: TimeInterval = 0.0
         var audioURL: URL?
     }
-    
+
     enum Action: BindableAction {
         case binding(BindingAction<State>)
         case initialize(URL?)
         case play
         case pause
     }
-    
+
     var body: some ReducerOf<Self> {
         BindingReducer()
         Reduce { state, action in
@@ -66,14 +66,14 @@ struct PlayerView: View {
                         .aspectRatio(contentMode: .fit)
                         .cornerRadius(24)
                         .frame(width: 364, height: 364)
-                    
+
                     VStack {
                         Spacer()
                             .frame(height: 359)
-                        
+
                         RoundedRectangle(cornerRadius: 48)
                             .fill(Color.blue.opacity(0.2))
-                        
+
                             .blur(radius: 5)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 48)
@@ -98,16 +98,16 @@ struct PlayerView: View {
                 }
                 .padding(.horizontal, 16)
                 
-                Slider(value: Binding(get: {
-                    store.currentTime
-                }, set: { newValue in
-                    // Update the player's current time and the currentTime state
-                    // store.player.currentTime = newValue
-                    store.currentTime = newValue
-                }), in: 0...store.totalTime)  // Slider range from 0 to the total duration of the audio
-                .accentColor(.blue)
-                .frame(height: 40)
-                .padding(.horizontal, 16)
+//                Slider(value: Binding(get: {
+//                    store.currentTime
+//                }, set: { newValue in
+//                    // Update the player's current time and the currentTime state
+//                    // store.player.currentTime = newValue
+//                    store.currentTime = newValue
+//                }), in: 0...store.totalTime)  // Slider range from 0 to the total duration of the audio
+//                .accentColor(.blue)
+//                .frame(height: 40)
+//                .padding(.horizontal, 16)
                 //                MusicProgressSlider(value: $playerDuration, inRange: TimeInterval.
                 //                zero...maxDuration, activeFillColor: color, fillColor: .blue, emptyColor: .gray, height: 32) { started in
                 //                }
