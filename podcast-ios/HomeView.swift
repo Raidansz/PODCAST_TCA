@@ -27,6 +27,8 @@ struct HomeFeature {
         case fetchTrendingPodcasts
         case loadView
         case trendingPodcastResponse(PodcastIndexResponse)
+        case playAudioTapped
+        case playAudio(PresentationAction<PlayerFeature.Action>)
     }
 
     @Injected(\.itunesManager) private var itunesManager: ItunesManagerProtocol
@@ -72,7 +74,15 @@ struct HomeFeature {
                 return .none
             case .loadView:
                 return .send(.fetchTrendingPodcasts)
+            case .playAudioTapped:
+                state.playAudio = PlayerFeature.State(podcast: state.trendingPodcasts!.items.first!)
+                return .none
+            case .playAudio:
+                return .none
             }
+        }
+        .ifLet(\.$playAudio, action: /Action.playAudio){
+            PlayerFeature()
         }
     }
 }
@@ -80,7 +90,7 @@ struct HomeFeature {
 struct HomeView: View {
     @State var store: StoreOf<HomeFeature>
     var body: some View {
-        NavigationStack {
+       // NavigationStack {
             ZStack(alignment: .top) {
                 HomeViewContent(store: store)
                     .blur(
@@ -121,9 +131,20 @@ struct HomeView: View {
             }
             .navigationTitle("Home")
             .navigationBarTitleDisplayMode(.large)
-        }
+       // }
         .onAppear {
             store.send(.loadView)
+        }
+        .sheet(
+          store: self.store.scope(
+            state: \.$playAudio,
+            action: { .playAudio($0) }
+          )
+        ) { store in
+          NavigationStack {
+              PlayerView(store: store)
+              .navigationTitle("Player")
+          }
         }
     }
 }
@@ -188,8 +209,12 @@ struct HomeViewContent: View {
                         Text("Trending Podcasts")
                             .fontWeight(.semibold)
                         Spacer()
-                        Text("See more..")
-                            .foregroundStyle(Color(.blue))
+                        Button {
+                            store.send(.playAudioTapped)
+                        } label: {
+                            Text("See more..")
+                                .foregroundStyle(Color(.blue))
+                        }
                     }
                     .padding(.horizontal, 16)
                 }
