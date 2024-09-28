@@ -13,8 +13,7 @@ struct HomeFeature {
     @ObservableState
     struct State: Equatable {
         var trendingPodcasts: PodcastIndexResponse?
-//        var promotedPodcasts: IdentifiedArrayOf<SearchResult> = []
-        var searchPodcastResults: SearchResults? // IdentifiedArrayOf<SearchResults> = []
+        var searchPodcastResults: SearchResults?
         @Presents var playAudio: PlayerFeature.State?
         var isLoading: Bool = false
         var searchTerm = ""
@@ -64,7 +63,7 @@ struct HomeFeature {
                 return .run {  send in
                     try await send(
                         .trendingPodcastResponse(
-                            self.podcastIndexManager.performQuery(for: .episode, .trending, termValue: "")                        )
+                            self.podcastIndexManager.performQuery(for: .podcast, .trending, termValue: "")                        )
                     )
                 }
             case .trendingPodcastResponse(let result):

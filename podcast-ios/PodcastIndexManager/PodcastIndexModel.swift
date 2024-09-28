@@ -12,7 +12,6 @@ import ComposableArchitecture
 // MARK: - PodcastIndexResponse Model
 struct PodcastIndexResponse: Equatable, Hashable, Identifiable {
     var id: String
-
     let status: Bool
     var items: IdentifiedArrayOf<Item> = []
     let count: Int
@@ -21,11 +20,24 @@ struct PodcastIndexResponse: Equatable, Hashable, Identifiable {
 
     init(json: JSON) {
         self.status = json["status"].boolValue
-        self.items = IdentifiedArray(uniqueElements: json["feeds"].arrayValue.map { Item(json: $0) })
         self.count = json["count"].intValue
         self.query = json["query"].stringValue
         self.description = json["description"].stringValue
         self.id = json["id"].stringValue
+
+        if let episodes = json["episodes"].array {
+            self.items = IdentifiedArray(uniqueElements: episodes.map { Item(json: $0) })
+        
+        } else if let items = json["items"].array {
+            self.items = IdentifiedArray(uniqueElements: items.map { Item(json: $0) })
+        
+        } else if let feeds = json["feeds"].array {
+            self.items = IdentifiedArray(uniqueElements: feeds.map { Item(json: $0) })
+        
+        } else {
+            self.items = IdentifiedArray(uniqueElements: [])
+        }
+
     }
 
     static func == (lhs: PodcastIndexResponse, rhs: PodcastIndexResponse) -> Bool {
@@ -252,6 +264,3 @@ let mockJSON = JSON([
         ]
     ]
 ])
-
-// MARK: - Creating Mock PodcastIndexResponse Instance
-let mockPodcastIndexResponse = PodcastIndexResponse(json: mockJSON)

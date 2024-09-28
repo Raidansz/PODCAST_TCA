@@ -103,9 +103,6 @@ struct ExloreView: View {
     }
 }
 
-
-
-
 struct ExploreViewContent: View {
     var store: StoreOf<ExploreFeature>
     var body: some View {
@@ -125,8 +122,8 @@ struct ExploreViewContent: View {
             })
             Section(content: {
                 LazyVStack(spacing: 24) {
-                    if !mockPodcastIndexResponse.items.isEmpty {
-                        ForEach((mockPodcastIndexResponse.items), id: \.self) { response in
+                    if ((store.podcastsList?.items) != nil) {
+                        ForEach((store.podcastsList!.items), id: \.self) { response in
                             ListViewCell(podcast: response)
                                 .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                         }

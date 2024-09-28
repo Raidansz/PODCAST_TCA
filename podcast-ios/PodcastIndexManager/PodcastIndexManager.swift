@@ -118,7 +118,8 @@ enum QueryType: String {
     case guid = "byguid?guid="
     case title = "bytitle?title="
     case medium = "bymedium?medium="
-    case trending = "trending"
+    case trending = "trending" // only for podcast types
+    case random = "random" // only for episode types
 }
 
 enum PodcastOrEpisode: String {
