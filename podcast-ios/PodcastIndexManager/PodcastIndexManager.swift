@@ -10,48 +10,21 @@ import CryptoKit
 import SwiftyJSON
 
 final class PodcastIndexManager: PodcastIndexManagerProtocol {
-    func getTrending() async throws -> PodcastIndexResponse {
-        return try await performQuery("podcasts/trending?max=5")
-    }
-
-    private func performQuery(_ query: String) async throws -> PodcastIndexResponse {
-        // Prepare URL and request
-        guard let url = URL(string: "https://api.podcastindex.org/api/1.0/\(query)") else {
-            throw NSError(domain: "Invalid URL", code: 0, userInfo: nil)
-        }
-
+    func performQuery(
+        for type: PodcastOrEpisode,
+        _ query: QueryType,
+        termValue: String?
+    )
+    async throws -> PodcastIndexResponse {
+        let url = try constructURL(type: type, getBy: query, termValue: termValue)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         try setAuthorizationHeaders(for: &request)
 
-        // Perform the request
         let (data, response) = try await URLSession.shared.data(for: request)
 
-        // Validate the response
-        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
-            throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid response from server"])
-        }
-
-        // Parse the JSON response
-        let json = try JSON(data: data)
-        return PodcastIndexResponse(json: json)
-    }
-
-    private func setAuthorizationHeaders(for request: inout URLRequest) throws {
-        guard let keys = loadApiKeys() else {
-            throw NSError(domain: "API keys missing", code: 0, userInfo: nil)
-        }
-
-        let apiHeaderTime = Int(Date().timeIntervalSince1970)
-        let data4Hash = keys.apiKey + keys.apiSecret + "\(apiHeaderTime)"
-        let hashString = Insecure.SHA1.hash(data: Data(data4Hash.utf8))
-            .map { String(format: "%02x", $0) }
-            .joined()
-
-        request.addValue("\(apiHeaderTime)", forHTTPHeaderField: "X-Auth-Date")
-        request.addValue(keys.apiKey, forHTTPHeaderField: "X-Auth-Key")
-        request.addValue(hashString, forHTTPHeaderField: "Authorization")
-        request.addValue("SuperPodcastPlayer/1.8", forHTTPHeaderField: "User-Agent")
+        try validateResponse(response)
+        return try parseResponseData(data)
     }
 }
 
@@ -79,11 +52,89 @@ private extension PodcastIndexManager {
             return nil
         }
     }
+
+    private func setAuthorizationHeaders(for request: inout URLRequest) throws {
+        guard let keys = loadApiKeys() else {
+            throw PodcastIndexError.missingAPIKeys
+        }
+
+        let apiHeaderTime = Int(Date().timeIntervalSince1970)
+        let dataToHash = keys.apiKey + keys.apiSecret + "\(apiHeaderTime)"
+        let hashString = Insecure.SHA1.hash(data: Data(dataToHash.utf8))
+            .map { String(format: "%02x", $0) }
+            .joined()
+
+        request.addValue("\(apiHeaderTime)", forHTTPHeaderField: "X-Auth-Date")
+        request.addValue(keys.apiKey, forHTTPHeaderField: "X-Auth-Key")
+        request.addValue(hashString, forHTTPHeaderField: "Authorization")
+        request.addValue("SuperPodcastPlayer/1.8", forHTTPHeaderField: "User-Agent")
+    }
+
+    private func constructURL( type: PodcastOrEpisode, getBy query: QueryType, termValue: String?) throws -> URL {
+        let path = "\(type.rawValue)/\(query.rawValue)\(termValue ?? "")"
+        guard let url = URL(string: "https://api.podcastindex.org/api/1.0/\(path)") else {
+            throw PodcastIndexError.invalidURL
+        }
+        return url
+    }
+
+    private func validateResponse(_ response: URLResponse) throws {
+        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+            throw PodcastIndexError.invalidResponse
+        }
+    }
+
+    private func parseResponseData(_ data: Data) throws -> PodcastIndexResponse {
+        do {
+            let json = try JSON(data: data)
+            return PodcastIndexResponse(json: json)
+        } catch {
+            throw PodcastIndexError.invalidData
+        }
+    }
+
+    // MARK: - Custom Errors
+    enum PodcastIndexError: Error, LocalizedError {
+        case invalidURL
+        case invalidResponse
+        case invalidData
+        case missingAPIKeys
+
+        var errorDescription: String? {
+            switch self {
+            case .invalidURL: return "Failed to construct the URL for the API request."
+            case .invalidResponse: return "Received an invalid response from the server."
+            case .invalidData: return "Failed to parse the data from the server."
+            case .missingAPIKeys: return "API keys are missing or invalid."
+            }
+        }
+    }
 }
+
+enum QueryType: String {
+    case feedID = "byfeedid?id="
+    case feedURL = "byfeedurl?url="
+    case itunesID = "byitunesid?id="
+    case guid = "byguid?guid="
+    case title = "bytitle?title="
+    case medium = "bymedium?medium="
+    case trending = "trending"
+}
+
+enum PodcastOrEpisode: String {
+    case podcast = "podcasts"
+    case episode = "episodes"
+}
+
 protocol PodcastIndexManagerProtocol {
-    func getTrending() async throws -> PodcastIndexResponse
+    func performQuery(
+        for type: PodcastOrEpisode,
+        _ query: QueryType,
+        termValue: String?
+    ) async throws -> PodcastIndexResponse
 }
-//TODO: Check if this is the right thing
+
+// TODO: Check if this is the right thing
 private struct PodcastIndexManagerKey: @preconcurrency InjectionKey {
     @MainActor static var currentValue: PodcastIndexManagerProtocol = PodcastIndexManager()
 }

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA1F8E3C2CA8572C009FFC85 /* PodHubModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1F8E3B2CA8571F009FFC85 /* PodHubModel.swift */; };
+		AA1F8E3E2CA8573E009FFC85 /* PodHubManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1F8E3D2CA85737009FFC85 /* PodHubManager.swift */; };
 		AA7DE4BB2C9F0D5800D51A42 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B72C9F0D5800D51A42 /* HomeView.swift */; };
 		AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */; };
 		AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */; };
@@ -29,6 +31,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AA1F8E3B2CA8571F009FFC85 /* PodHubModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodHubModel.swift; sourceTree = "<group>"; };
+		AA1F8E3D2CA85737009FFC85 /* PodHubManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodHubManager.swift; sourceTree = "<group>"; };
 		AA7DE4B72C9F0D5800D51A42 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewCell.swift; sourceTree = "<group>"; };
 		AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewHero.swift; sourceTree = "<group>"; };
@@ -62,6 +66,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AA1F8E3A2CA8570B009FFC85 /* PodHubManager */ = {
+			isa = PBXGroup;
+			children = (
+				AA1F8E3D2CA85737009FFC85 /* PodHubManager.swift */,
+				AA1F8E3B2CA8571F009FFC85 /* PodHubModel.swift */,
+			);
+			path = PodHubManager;
+			sourceTree = "<group>";
+		};
 		AA7DE4C02C9F1C6600D51A42 /* ItunesManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -100,6 +113,7 @@
 		AA9278452C8F151C00D5CF6D /* podcast-ios */ = {
 			isa = PBXGroup;
 			children = (
+				AA1F8E3A2CA8570B009FFC85 /* PodHubManager */,
 				AA7DE4D02CA08D3500D51A42 /* PodcastIndexManager */,
 				AA7DE4CE2CA076CD00D51A42 /* AudioSliderBarView.swift */,
 				AA7DE4CC2C9F724D00D51A42 /* PlayerView.swift */,
@@ -229,6 +243,7 @@
 				AAAD22772CA31AAB0064F2C5 /* ExploreView.swift in Sources */,
 				AA7DE4C22C9F1C9600D51A42 /* ItunesCallerConstants.swift in Sources */,
 				AA7DE4C92C9F1DA800D51A42 /* ItunesManager.swift in Sources */,
+				AA1F8E3C2CA8572C009FFC85 /* PodHubModel.swift in Sources */,
 				AA7DE4BB2C9F0D5800D51A42 /* HomeView.swift in Sources */,
 				AA7DE4CD2C9F725200D51A42 /* PlayerView.swift in Sources */,
 				AA7DE4CF2CA076E200D51A42 /* AudioSliderBarView.swift in Sources */,
@@ -236,6 +251,7 @@
 				AA7DE4C42C9F1D0D00D51A42 /* ItunesModels.swift in Sources */,
 				AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */,
 				AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */,
+				AA1F8E3E2CA8573E009FFC85 /* PodHubManager.swift in Sources */,
 				AA7DE4D42CA08D8D00D51A42 /* PodcastIndexManager.swift in Sources */,
 				AA7DE4BE2C9F0D5800D51A42 /* ListViewHero.swift in Sources */,
 				AA7DE4CB2C9F1E0A00D51A42 /* InjectionKey.swift in Sources */,

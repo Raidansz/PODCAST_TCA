@@ -64,8 +64,7 @@ struct HomeFeature {
                 return .run {  send in
                     try await send(
                         .trendingPodcastResponse(
-                            self.podcastIndexManager.getTrending()
-                        )
+                            self.podcastIndexManager.performQuery(for: .episode, .trending, termValue: "")                        )
                     )
                 }
             case .trendingPodcastResponse(let result):
