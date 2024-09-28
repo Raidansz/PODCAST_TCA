@@ -21,7 +21,6 @@ struct ListViewCell: View {
                         .cornerRadius(24)
                         .clipped()
                 } else {
-
                     Image(systemName: "waveform.badge.mic")
                         .frame(width: 100, height: 100)
                         .cornerRadius(24)

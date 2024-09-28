@@ -12,27 +12,26 @@ import AVFoundation
 struct PlayerFeature {
     @ObservableState
     struct State: Equatable {
-
         var player: AVPlayer?
         var isPlaying = false
         var totalTime: TimeInterval = 0.0
         var currentTime: TimeInterval = 0.0
         var audioURL: URL?
+        var playerPodcast: Item
+        init(podcast: Item) {
+            self.playerPodcast = podcast
+        }
     }
 
-    enum Action: BindableAction {
-        case binding(BindingAction<State>)
+    enum Action: Equatable {
         case initialize(URL?)
         case play
         case pause
     }
 
     var body: some ReducerOf<Self> {
-        BindingReducer()
         Reduce { state, action in
             switch action {
-            case .binding(_):
-                return .none
             case .initialize(let url):
                 if let url {
                     state.player = AVPlayer(url: url)
@@ -173,11 +172,4 @@ struct ControllButton: View {
             }
         }
     }
-}
-
-#Preview {
-    PlayerView(store: Store(initialState: PlayerFeature.State(audioURL: URL(string: "https://www.ivoox.com/228-tan-solo-mejores-lo-logran_mf_134242749_feed_1.mp3"))) {
-        PlayerFeature()
-            ._printChanges()
-    })
 }

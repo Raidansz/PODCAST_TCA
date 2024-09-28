@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftyJSON
+import ComposableArchitecture
 
 protocol PartialPodcast {
     var collectionId: Int! { get }
@@ -25,9 +26,9 @@ protocol PartialPodcast {
 
 class SearchResults: Equatable, Identifiable {
     let resultCount: Int!
-    let results: [SearchResult]!
+    var results: IdentifiedArrayOf<SearchResult> = []
 
-    init(resultCount: Int, results: [SearchResult]) {
+    init(resultCount: Int, results: IdentifiedArrayOf<SearchResult>) {
         self.resultCount = resultCount
         self.results = results
     }

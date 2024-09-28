@@ -14,8 +14,6 @@ struct PodcastContentView: App {
         WindowGroup {
             TabBarView(store: Store(initialState: HomeFeature.State()) {
                 HomeFeature()
-            }, playerStore: Store(initialState: PlayerFeature.State()) {
-                PlayerFeature()
                     ._printChanges()
             })
         }
@@ -24,7 +22,7 @@ struct PodcastContentView: App {
 
 struct TabBarView: View {
     let store: StoreOf<HomeFeature>
-    let playerStore: StoreOf<PlayerFeature>
+//    let playerStore: StoreOf<PlayerFeature>
 
     var body: some View {
         TabView {
@@ -33,7 +31,7 @@ struct TabBarView: View {
                     Label("Home", systemImage: "house")
                 }
 
-            PlayerView(store: playerStore)
+            HomeView(store: store)
                 .tabItem {
                     Label("Explore", systemImage: "magnifyingglass")
                 }

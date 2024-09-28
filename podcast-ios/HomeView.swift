@@ -13,8 +13,9 @@ struct HomeFeature {
     @ObservableState
     struct State: Equatable {
         var trendingPodcasts: PodcastIndexResponse?
-        var promotedPodcasts: IdentifiedArrayOf<SearchResult> = []
-        var searchPodcastResults: IdentifiedArrayOf<SearchResults> = []
+//        var promotedPodcasts: IdentifiedArrayOf<SearchResult> = []
+        var searchPodcastResults: SearchResults? // IdentifiedArrayOf<SearchResults> = []
+        @Presents var playAudio: PlayerFeature.State?
         var isLoading: Bool = false
         var searchTerm = ""
     }
@@ -35,12 +36,12 @@ struct HomeFeature {
         Reduce { state, action in
             switch action {
             case .podcastSearchResponse(let result):
-                state.searchPodcastResults.append(result)
+                state.searchPodcastResults = result
                 state.isLoading = false
                 return .none
             case .searchForPodcastTapped(with: let term):
                 print(term)
-//                state.searchPodcastResults = nil
+                state.searchPodcastResults = nil
                 state.isLoading = true
                 return .run {  send in
                     try await send(
