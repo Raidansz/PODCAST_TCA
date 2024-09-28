@@ -6,13 +6,155 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
-struct ExploreView: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+@Reducer
+struct ExploreFeature {
+    @ObservableState
+    struct State: Equatable {
+        var podcastsList: PodcastIndexResponse?
+        var isLoading: Bool = false
+        var selectedPodcast: Item?
+    }
+
+    enum Action: Equatable {
+    case fetchPodcasts
+    case fetchPodcastsResponse(PodcastIndexResponse)
+    case podcastCellTapped(Item)
+    }
+
+    @Injected(\.itunesManager) private var itunesManager: ItunesManagerProtocol
+    @Injected(\.podcastIndexManager) private var podcastIndexManager: PodcastIndexManagerProtocol
+
+    var body: some ReducerOf<Self> {
+        Reduce { state, action in
+            switch action {
+            case .fetchPodcasts:
+                state.podcastsList = nil
+                state.isLoading = true
+                return .run {  send in
+                    try await send(
+                        .fetchPodcastsResponse(
+                            self.podcastIndexManager.getTrending()
+                        )
+                    )
+                }
+            case .fetchPodcastsResponse(let response):
+                state.isLoading = false
+                state.podcastsList = response
+                return .none
+            case .podcastCellTapped(let podcast):
+                state.selectedPodcast = nil
+                state.selectedPodcast = podcast
+                return .none
+            }
+        }
     }
 }
 
-#Preview {
-    ExploreView()
+struct ExloreView: View {
+    var store: StoreOf<ExploreFeature>
+    var body: some View {
+        NavigationStack {
+            ZStack(alignment: .top) {
+                ExploreViewContent(store: store)
+                    .blur(
+                        radius: store.isLoading ? 5 : 0
+                    )
+                if store.isLoading {
+                    ProgressView("Please wait")
+                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 32)
+                            .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
+                            .frame(width: 35, height: 35)
+                        HStack {
+                            Image(systemName: "person.fill")
+                                .resizable()
+                                .frame(width: 21, height: 21)
+                        }
+                    }
+                }
+
+                ToolbarItem(placement: .topBarLeading) {
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 32)
+                            .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
+                            .frame(width: 35, height: 35)
+                        HStack {
+                            Image(systemName: "bell.fill")
+                                .resizable()
+                                .frame(width: 21, height: 21)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Explore")
+            .navigationBarTitleDisplayMode(.large)
+        }
+        .onAppear{
+            store.send(.fetchPodcasts)
+        }
+    }
+}
+
+
+
+
+struct ExploreViewContent: View {
+    var store: StoreOf<ExploreFeature>
+    var body: some View {
+        ScrollView {
+            Section(content: {
+                if (store.podcastsList?.items) != nil {
+                    horizontalList(data: (store.podcastsList!.items)) { podcast in
+                        ListViewHero(podcast: podcast)
+                    }
+                }
+            }, header: {
+                HStack {
+                    Text("Today’s Top 5 Podcasts")
+                        .fontWeight(.semibold)
+                    Spacer()
+                }
+            })
+            Section(content: {
+                LazyVStack(spacing: 24) {
+                    if !mockPodcastIndexResponse.items.isEmpty {
+                        ForEach((mockPodcastIndexResponse.items), id: \.self) { response in
+                            ListViewCell(podcast: response)
+                                .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                        }
+                    }
+                }
+            }, header: {
+                if (store.podcastsList?.items) != nil {
+                    horizontalList(data: (store.podcastsList!.items)) { podcast in
+                        CatagoriesView(label: podcast.title)
+                    }
+                }
+            })
+        }
+    }
+}
+
+struct CatagoriesView: View {
+    let label: String
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 28)
+                .fill(Color.blue)
+            Text(label)
+                .font(.headline)
+                .foregroundColor(.black)
+                .lineLimit(1)
+        }
+       
+        .frame(width: 130, height: 56)
+    }
 }

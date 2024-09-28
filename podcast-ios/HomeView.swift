@@ -90,7 +90,7 @@ struct HomeFeature {
 struct HomeView: View {
     @State var store: StoreOf<HomeFeature>
     var body: some View {
-       // NavigationStack {
+        NavigationStack {
             ZStack(alignment: .top) {
                 HomeViewContent(store: store)
                     .blur(
@@ -131,7 +131,7 @@ struct HomeView: View {
             }
             .navigationTitle("Home")
             .navigationBarTitleDisplayMode(.large)
-       // }
+        }
         .onAppear {
             store.send(.loadView)
         }

@@ -110,3 +110,148 @@ struct Transcript: Hashable {
         self.type = json["type"].stringValue
     }
 }
+
+let mockJSON = JSON([
+    "status": true,
+    "count": 1,
+    "query": "sample query",
+    "description": "A sample podcast search response",
+    "id": "12345",
+    "feeds": [
+        [
+            "id": 101,
+            "title": "Sample Podcast Episode",
+            "link": "https://example.com/episode/1",
+            "description": "This is a sample podcast episode.",
+            "guid": "abc123",
+            "datePublished": 1633024800, // Sample timestamp
+            "dateCrawled": 1633034800, // Sample timestamp
+            "enclosureUrl": "https://example.com/episode/1/audio.mp3",
+            "enclosureType": "audio/mpeg",
+            "enclosureLength": 20485760,
+            "duration": 3600,
+            "explicit": false,
+            "episode": 1,
+            "episodeType": "full",
+            "season": 1,
+            "image": "https://picsum.photos/331/200",
+            "feedItunesId": 567890,
+            "feedImage": "https://picsum.photos/331/200",
+            "feedId": 111,
+            "feedUrl": "https://example.com/feed",
+            "feedAuthor": "Sample Author",
+            "feedTitle": "Sample Podcast",
+            "feedLanguage": "en-US",
+            "chaptersUrl": "https://example.com/episode/1/chapters",
+            "transcriptUrl": "https://example.com/episode/1/transcript",
+            "transcripts": [
+                [
+                    "url": "https://example.com/episode/1/transcript/en",
+                    "type": "text/html"
+                ]
+            ]
+        ],
+        [
+            "id": 102,
+            "title": "Sample Podcast Episode",
+            "link": "https://example.com/episode/1",
+            "description": "This is a sample podcast episode.",
+            "guid": "abc123",
+            "datePublished": 1633024800, // Sample timestamp
+            "dateCrawled": 1633034800, // Sample timestamp
+            "enclosureUrl": "https://example.com/episode/1/audio.mp3",
+            "enclosureType": "audio/mpeg",
+            "enclosureLength": 20485760,
+            "duration": 3600,
+            "explicit": false,
+            "episode": 1,
+            "episodeType": "full",
+            "season": 1,
+            "image": "https://picsum.photos/331/200",
+            "feedItunesId": 567890,
+            "feedImage": "https://picsum.photos/331/200",
+            "feedId": 111,
+            "feedUrl": "https://example.com/feed",
+            "feedAuthor": "Sample Author",
+            "feedTitle": "Sample Podcast",
+            "feedLanguage": "en-US",
+            "chaptersUrl": "https://example.com/episode/1/chapters",
+            "transcriptUrl": "https://example.com/episode/1/transcript",
+            "transcripts": [
+                [
+                    "url": "https://example.com/episode/1/transcript/en",
+                    "type": "text/html"
+                ]
+            ]
+        ],
+        [
+            "id": 103,
+            "title": "Sample Podcast Episode",
+            "link": "https://example.com/episode/1",
+            "description": "This is a sample podcast episode.",
+            "guid": "abc123",
+            "datePublished": 1633024800, // Sample timestamp
+            "dateCrawled": 1633034800, // Sample timestamp
+            "enclosureUrl": "https://example.com/episode/1/audio.mp3",
+            "enclosureType": "audio/mpeg",
+            "enclosureLength": 20485760,
+            "duration": 3600,
+            "explicit": false,
+            "episode": 1,
+            "episodeType": "full",
+            "season": 1,
+            "image": "https://picsum.photos/331/200",
+            "feedItunesId": 567890,
+            "feedImage": "https://picsum.photos/331/200",
+            "feedId": 111,
+            "feedUrl": "https://example.com/feed",
+            "feedAuthor": "Sample Author",
+            "feedTitle": "Sample Podcast",
+            "feedLanguage": "en-US",
+            "chaptersUrl": "https://example.com/episode/1/chapters",
+            "transcriptUrl": "https://example.com/episode/1/transcript",
+            "transcripts": [
+                [
+                    "url": "https://example.com/episode/1/transcript/en",
+                    "type": "text/html"
+                ]
+            ]
+        ],
+        [
+            "id": 104,
+            "title": "Sample Podcast Episode",
+            "link": "https://example.com/episode/1",
+            "description": "This is a sample podcast episode.",
+            "guid": "abc123",
+            "datePublished": 1633024800, // Sample timestamp
+            "dateCrawled": 1633034800, // Sample timestamp
+            "enclosureUrl": "https://example.com/episode/1/audio.mp3",
+            "enclosureType": "audio/mpeg",
+            "enclosureLength": 20485760,
+            "duration": 3600,
+            "explicit": false,
+            "episode": 1,
+            "episodeType": "full",
+            "season": 1,
+            "image": "https://picsum.photos/331/200",
+            "feedItunesId": 567890,
+            "feedImage": "https://picsum.photos/331/200",
+            "feedId": 111,
+            "feedUrl": "https://example.com/feed",
+            "feedAuthor": "Sample Author",
+            "feedTitle": "Sample Podcast",
+            "feedLanguage": "en-US",
+            "chaptersUrl": "https://example.com/episode/1/chapters",
+            "transcriptUrl": "https://example.com/episode/1/transcript",
+            "transcripts": [
+                [
+                    "url": "https://example.com/episode/1/transcript/en",
+                    "type": "text/html"
+                ]
+            ]
+        ]
+    ]
+])
+
+// MARK: - Creating Mock PodcastIndexResponse Instance
+let mockPodcastIndexResponse = PodcastIndexResponse(json: mockJSON)
