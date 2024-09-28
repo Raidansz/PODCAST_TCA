@@ -97,23 +97,7 @@ struct PlayerView: View {
                     Text("15:00")
                 }
                 .padding(.horizontal, 16)
-                
-//                Slider(value: Binding(get: {
-//                    store.currentTime
-//                }, set: { newValue in
-//                    // Update the player's current time and the currentTime state
-//                    // store.player.currentTime = newValue
-//                    store.currentTime = newValue
-//                }), in: 0...store.totalTime)  // Slider range from 0 to the total duration of the audio
-//                .accentColor(.blue)
-//                .frame(height: 40)
-//                .padding(.horizontal, 16)
-                //                MusicProgressSlider(value: $playerDuration, inRange: TimeInterval.
-                //                zero...maxDuration, activeFillColor: color, fillColor: .blue, emptyColor: .gray, height: 32) { started in
-                //                }
-                //                .frame(height: 40)
-                //                .padding(.horizontal, 16)
-                
+// TODO: Add slider
                 ControllButton(store: store)
                     .padding(.top, 40)
             }

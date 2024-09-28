@@ -24,9 +24,7 @@ enum PodcastGenre: String {
     case tvAndFilm = "1309"
     case trueCrime = "1488"
 }
-//attribute: String? = nil,
-//version: Int? = 2,
-//explicit: String? = nil
+
 enum Entity: String {
     case podcast = "podcast"
     case podcastEpisode = "podcastEpisode"

@@ -63,7 +63,8 @@ struct HomeFeature {
                 return .run {  send in
                     try await send(
                         .trendingPodcastResponse(
-                            self.podcastIndexManager.performQuery(for: .podcast, .trending, termValue: "")                        )
+                            self.podcastIndexManager.performQuery(for: .podcast, .trending)
+                        )
                     )
                 }
             case .trendingPodcastResponse(let result):
@@ -79,7 +80,7 @@ struct HomeFeature {
                 return .none
             }
         }
-        .ifLet(\.$playAudio, action: /Action.playAudio){
+        .ifLet(\.$playAudio, action: /Action.playAudio) {
             PlayerFeature()
         }
     }

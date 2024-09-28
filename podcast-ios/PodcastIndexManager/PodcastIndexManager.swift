@@ -12,11 +12,10 @@ import SwiftyJSON
 final class PodcastIndexManager: PodcastIndexManagerProtocol {
     func performQuery(
         for type: PodcastOrEpisode,
-        _ query: QueryType,
-        termValue: String?
+        _ query: QueryType
     )
     async throws -> PodcastIndexResponse {
-        let url = try constructURL(type: type, getBy: query, termValue: termValue)
+        let url = try constructURL(type: type, getBy: query)
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         try setAuthorizationHeaders(for: &request)
@@ -70,8 +69,8 @@ private extension PodcastIndexManager {
         request.addValue("SuperPodcastPlayer/1.8", forHTTPHeaderField: "User-Agent")
     }
 
-    private func constructURL( type: PodcastOrEpisode, getBy query: QueryType, termValue: String?) throws -> URL {
-        let path = "\(type.rawValue)/\(query.rawValue)\(termValue ?? "")"
+    private func constructURL( type: PodcastOrEpisode, getBy query: QueryType) throws -> URL {
+        let path = "\(type.rawValue)/\(query.query)"
         guard let url = URL(string: "https://api.podcastindex.org/api/1.0/\(path)") else {
             throw PodcastIndexError.invalidURL
         }
@@ -111,15 +110,38 @@ private extension PodcastIndexManager {
     }
 }
 
-enum QueryType: String {
-    case feedID = "byfeedid?id="
-    case feedURL = "byfeedurl?url="
-    case itunesID = "byitunesid?id="
-    case guid = "byguid?guid="
-    case title = "bytitle?title="
-    case medium = "bymedium?medium="
-    case trending = "trending" // only for podcast types
-    case random = "random" // only for episode types
+enum QueryType {
+    case feedID(Int)
+    case feedURL(String)
+    case itunesID(Int)
+    case guid(String)
+    case title(String)
+    case medium(String)
+    /// only for podcast types.
+    case trending
+    /// only for episode types.
+    case random
+
+    var query: String {
+        switch self {
+        case .feedID(let id):
+            return "byfeedid?id=\(id)"
+        case .feedURL(let url):
+            return "byfeedurl?url=\(url)"
+        case .itunesID(let id):
+            return "byitunesid?id=\(id)"
+        case .guid(let guid):
+            return "byguid?guid=\(guid)"
+        case .title(let title):
+            return "bytitle?title=\(title)"
+        case .medium(let medium):
+            return "bymedium?medium=\(medium)"
+        case .trending:
+            return "trending"
+        case .random:
+            return "random"
+        }
+    }
 }
 
 enum PodcastOrEpisode: String {
@@ -130,8 +152,7 @@ enum PodcastOrEpisode: String {
 protocol PodcastIndexManagerProtocol {
     func performQuery(
         for type: PodcastOrEpisode,
-        _ query: QueryType,
-        termValue: String?
+        _ query: QueryType
     ) async throws -> PodcastIndexResponse
 }
 

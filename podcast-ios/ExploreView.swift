@@ -35,7 +35,7 @@ struct ExploreFeature {
                 return .run {  send in
                     try await send(
                         .fetchPodcastsResponse(
-                            self.podcastIndexManager.performQuery(for: .podcast, .trending, termValue: "")
+                            self.podcastIndexManager.performQuery(for: .podcast, .trending)
                         )
                     )
                 }
@@ -97,7 +97,7 @@ struct ExloreView: View {
             .navigationTitle("Explore")
             .navigationBarTitleDisplayMode(.large)
         }
-        .onAppear{
+        .onAppear {
             store.send(.fetchPodcasts)
         }
     }
@@ -151,7 +151,6 @@ struct CatagoriesView: View {
                 .foregroundColor(.black)
                 .lineLimit(1)
         }
-       
         .frame(width: 130, height: 56)
     }
 }

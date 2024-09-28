@@ -35,7 +35,10 @@ class ItunesManager: ItunesManagerProtocol {
         let resultCount = json["resultCount"].intValue
         let resultsArray = json["results"].arrayValue
         let searchResults = resultsArray.map { SearchResult(json: $0) }
-        let searchResultsModel = SearchResults(resultCount: resultCount, results: IdentifiedArray(uniqueElements: searchResults))
+        let searchResultsModel = SearchResults(
+            resultCount: resultCount,
+            results: IdentifiedArray(uniqueElements: searchResults)
+        )
 
         return searchResultsModel
     }
