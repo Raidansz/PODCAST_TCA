@@ -24,7 +24,7 @@ protocol PartialPodcast {
     var genres: [String]! { get }
 }
 
-class SearchResults: Equatable, Identifiable {
+class SearchResults: Equatable, Identifiable, PodHubConvertable {
     let resultCount: Int!
     var results: IdentifiedArrayOf<SearchResult> = []
 

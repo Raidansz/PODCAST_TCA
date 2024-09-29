@@ -10,7 +10,7 @@ import SwiftyJSON
 import ComposableArchitecture
 
 // MARK: - PodcastIndexResponse Model
-struct PodcastIndexResponse: Equatable, Hashable, Identifiable {
+struct PodcastIndexResponse: Equatable, Hashable, Identifiable, PodHubConvertable {
     var id: String
     let status: Bool
     var items: IdentifiedArrayOf<Item> = []
@@ -50,7 +50,7 @@ struct PodcastIndexResponse: Equatable, Hashable, Identifiable {
 }
 
 // MARK: - Item Model
-struct Item: Equatable, Hashable, Identifiable {
+struct Item: Equatable, Hashable, Identifiable, PodHubConvertable {
     let id: Int
     let title: String
     let link: URL?

@@ -35,7 +35,7 @@ struct ExploreFeature {
                 return .run {  send in
                     try await send(
                         .fetchPodcastsResponse(
-                            self.podcastIndexManager.performQuery(for: .podcast, .trending)
+                            self.podcastIndexManager.performQuery(for: .podcast, .trending, parameter: .max(5))
                         )
                     )
                 }

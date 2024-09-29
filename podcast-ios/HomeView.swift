@@ -63,7 +63,7 @@ struct HomeFeature {
                 return .run {  send in
                     try await send(
                         .trendingPodcastResponse(
-                            self.podcastIndexManager.performQuery(for: .podcast, .trending)
+                            self.podcastIndexManager.performQuery(for: .podcast, .trending, parameter: .lang("ar"))
                         )
                     )
                 }
