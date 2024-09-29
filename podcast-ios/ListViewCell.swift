@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ListViewCell: View {
-    let podcast: Item
+    let podcast: Podcast
 
     var body: some View {
         HStack {
@@ -34,7 +34,7 @@ struct ListViewCell: View {
             .cornerRadius(24)
 
             VStack(alignment: .leading, spacing: 8) {
-                Text(podcast.title)
+                Text(podcast.title ?? "")
                     .bold()
                     .lineLimit(2)
                 Text("\(podcast.description)")

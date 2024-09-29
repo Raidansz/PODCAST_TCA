@@ -7,7 +7,7 @@
 
 import Foundation
 
-class PodHubManager {
+class PodHubManager: PodHubManagerProtocol {
     @Injected(\.itunesManager) private var itunesManager: ItunesManagerProtocol
     @Injected(\.podcastIndexManager) private var podcastIndexManager: PodcastIndexManagerProtocol
 
@@ -19,7 +19,7 @@ class PodHubManager {
         return try normalizeResult(result: result)
     }
 
-    func lookupItunes(searchFor: SearchFor, value: String) async throws -> SearchResults {
+    private func lookupItunes(searchFor: SearchFor, value: String) async throws -> SearchResults {
         let searchResult: SearchResults
         if searchFor == .podcast {
             searchResult = try await itunesManager.searchPodcasts(term: value, entity: .podcast)
@@ -31,7 +31,7 @@ class PodHubManager {
         return searchResult
     }
 
-    func lookupPodcastIndex(searchFor: SearchFor, value: String) async throws -> PodcastIndexResponse {
+    private func lookupPodcastIndex(searchFor: SearchFor, value: String) async throws -> PodcastIndexResponse {
         if searchFor == .podcast {
             return   try await podcastIndexManager.performQuery(for: .podcast , .title(value), parameter: nil)
         } else {
@@ -40,18 +40,10 @@ class PodHubManager {
     }
 
     private func normalizeResult(result: PodHubConvertable) throws -> PodHub {
-        if let item = result as? SearchResults { // Itunes
-            
-        } else if let item = result as? PodcastIndexResponse { // PodcastIndex
-            
-        }
-        throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+        return try PodHub(result: result)
     }
 
-    enum SearchFor {
-        case podcast
-        case episode
-    }
+
 
     enum FilterBy {
         case type
@@ -62,4 +54,24 @@ class PodHubManager {
         case name
         case author
     }
+}
+
+
+private struct PodHubManagerKey: InjectionKey {
+    static var currentValue: PodHubManagerProtocol = PodHubManager()
+}
+
+extension InjectedValues {
+    var podHubManager: PodHubManagerProtocol {
+        get { Self[PodHubManagerKey.self]}
+        set { Self[PodHubManagerKey.self] = newValue }
+    }
+}
+
+protocol PodHubManagerProtocol {
+    func searchFor(searchFor: SearchFor, value: String) async throws -> PodHub
+}
+enum SearchFor {
+    case podcast
+    case episode
 }

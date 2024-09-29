@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ListViewHero: View {
-    let podcast: Item
+    let podcast: Podcast
 
     var body: some View {
         VStack {

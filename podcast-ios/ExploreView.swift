@@ -12,19 +12,18 @@ import ComposableArchitecture
 struct ExploreFeature {
     @ObservableState
     struct State: Equatable {
-        var podcastsList: PodcastIndexResponse?
+        var podcastsList: PodHub?
         var isLoading: Bool = false
         var selectedPodcast: Item?
     }
 
     enum Action: Equatable {
     case fetchPodcasts
-    case fetchPodcastsResponse(PodcastIndexResponse)
+    case fetchPodcastsResponse(PodHub)
     case podcastCellTapped(Item)
     }
 
-    @Injected(\.itunesManager) private var itunesManager: ItunesManagerProtocol
-    @Injected(\.podcastIndexManager) private var podcastIndexManager: PodcastIndexManagerProtocol
+    @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
 
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -35,7 +34,7 @@ struct ExploreFeature {
                 return .run {  send in
                     try await send(
                         .fetchPodcastsResponse(
-                            self.podcastIndexManager.performQuery(for: .podcast, .trending, parameter: .max(5))
+                            self.podHubManager.searchFor(searchFor: .podcast, value: "ehe")
                         )
                     )
                 }
@@ -108,8 +107,8 @@ struct ExploreViewContent: View {
     var body: some View {
         ScrollView {
             Section(content: {
-                if (store.podcastsList?.items) != nil {
-                    horizontalList(data: (store.podcastsList!.items)) { podcast in
+                if (store.podcastsList?.podcasts) != nil {
+                    horizontalList(data: (store.podcastsList!.podcasts)) { podcast in
                         ListViewHero(podcast: podcast)
                     }
                 }
@@ -122,17 +121,17 @@ struct ExploreViewContent: View {
             })
             Section(content: {
                 LazyVStack(spacing: 24) {
-                    if ((store.podcastsList?.items) != nil) {
-                        ForEach((store.podcastsList!.items), id: \.self) { response in
+                    if ((store.podcastsList?.podcasts) != nil) {
+                        ForEach((store.podcastsList!.podcasts), id: \.self) { response in
                             ListViewCell(podcast: response)
                                 .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                         }
                     }
                 }
             }, header: {
-                if (store.podcastsList?.items) != nil {
-                    horizontalList(data: (store.podcastsList!.items)) { podcast in
-                        CatagoriesView(label: podcast.title)
+                if (store.podcastsList?.podcasts) != nil {
+                    horizontalList(data: (store.podcastsList!.podcasts)) { podcast in
+                        CatagoriesView(label: podcast.title ?? "")
                     }
                 }
             })

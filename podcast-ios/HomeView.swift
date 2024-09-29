@@ -12,27 +12,26 @@ import ComposableArchitecture
 struct HomeFeature {
     @ObservableState
     struct State: Equatable {
-        var trendingPodcasts: PodcastIndexResponse?
-        var searchPodcastResults: SearchResults?
+        var trendingPodcasts: PodHub?
+        var searchPodcastResults: PodHub?
         @Presents var playAudio: PlayerFeature.State?
         var isLoading: Bool = false
         var searchTerm = ""
     }
 
     enum Action: Equatable {
-        case podcastSearchResponse(SearchResults)
+        case podcastSearchResponse(PodHub)
         case searchForPodcastTapped(with: String)
         case searchTermChanged(String)
         case fetchTrendingPodcasts
         case loadView
-        case trendingPodcastResponse(PodcastIndexResponse)
-        case playAudioTapped
-        case playAudio(PresentationAction<PlayerFeature.Action>)
+        case trendingPodcastResponse(PodHub)
+      //  case playAudioTapped
+      //  case playAudio(PresentationAction<PlayerFeature.Action>)
     }
 
-    @Injected(\.itunesManager) private var itunesManager: ItunesManagerProtocol
-    @Injected(\.podcastIndexManager) private var podcastIndexManager: PodcastIndexManagerProtocol
-
+    @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
+    
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -47,10 +46,7 @@ struct HomeFeature {
                 return .run {  send in
                     try await send(
                         .podcastSearchResponse(
-                            self.itunesManager.searchPodcasts(
-                                term: term,
-                                entity: .podcastAndEpisode
-                            )
+                            self.podHubManager.searchFor(searchFor: .podcast, value: "hoho")
                         )
                     )
                 }
@@ -63,26 +59,27 @@ struct HomeFeature {
                 return .run {  send in
                     try await send(
                         .trendingPodcastResponse(
-                            self.podcastIndexManager.performQuery(for: .podcast, .trending, parameter: .lang("ar"))
+                            self.podHubManager.searchFor(searchFor: .episode, value: "good+morning")
                         )
                     )
                 }
             case .trendingPodcastResponse(let result):
+                print(result)
                 state.trendingPodcasts = result
                 state.isLoading = false
                 return .none
             case .loadView:
                 return .send(.fetchTrendingPodcasts)
-            case .playAudioTapped:
-                state.playAudio = PlayerFeature.State(podcast: state.trendingPodcasts!.items.first!)
+//            case .playAudioTapped:
+//                state.playAudio = PlayerFeature.State(podcast: state.trendingPodcasts?.podcasts)
                 return .none
-            case .playAudio:
-                return .none
+//            case .playAudio:
+//                return .none
             }
         }
-        .ifLet(\.$playAudio, action: /Action.playAudio) {
-            PlayerFeature()
-        }
+//        .ifLet(\.$playAudio, action: /Action.playAudio) {
+//            PlayerFeature()
+//        }
     }
 }
 
@@ -134,17 +131,17 @@ struct HomeView: View {
         .onAppear {
             store.send(.loadView)
         }
-        .sheet(
-          store: self.store.scope(
-            state: \.$playAudio,
-            action: { .playAudio($0) }
-          )
-        ) { store in
-          NavigationStack {
-              PlayerView(store: store)
-              .navigationTitle("Player")
-          }
-        }
+//        .sheet(
+//          store: self.store.scope(
+//            state: \.$playAudio,
+//            action: { .playAudio($0) }
+//          )
+//        ) { store in
+//          NavigationStack {
+//              PlayerView(store: store)
+//              .navigationTitle("Player")
+//          }
+//        }
     }
 }
 
@@ -176,8 +173,8 @@ struct HomeViewContent: View {
                 }
                 .padding()
                 Section(content: {
-                    if (store.trendingPodcasts?.items) != nil {
-                        horizontalList(data: (store.trendingPodcasts!.items)) { podcast in
+                    if (store.trendingPodcasts?.podcasts) != nil {
+                        horizontalList(data: (store.trendingPodcasts!.podcasts)) { podcast in
                         ListViewHero(podcast: podcast)
                         }
                     }
@@ -196,8 +193,8 @@ struct HomeViewContent: View {
 
                 Section(content: {
                     LazyVStack(spacing: 24) {
-                        if (store.trendingPodcasts?.items) != nil {
-                            ForEach((store.trendingPodcasts!.items), id: \.self) { response in
+                        if (store.trendingPodcasts?.podcasts) != nil {
+                            ForEach((store.trendingPodcasts!.podcasts), id: \.self) { response in
                                 ListViewCell(podcast: response)
                                     .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                             }
@@ -209,7 +206,7 @@ struct HomeViewContent: View {
                             .fontWeight(.semibold)
                         Spacer()
                         Button {
-                            store.send(.playAudioTapped)
+                           // store.send(.playAudioTapped)
                         } label: {
                             Text("See more..")
                                 .foregroundStyle(Color(.blue))
