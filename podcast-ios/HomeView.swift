@@ -26,8 +26,8 @@ struct HomeFeature {
         case fetchTrendingPodcasts
         case loadView
         case trendingPodcastResponse(PodHub)
-      //  case playAudioTapped
-      //  case playAudio(PresentationAction<PlayerFeature.Action>)
+        case playAudioTapped
+        case playAudio(PresentationAction<PlayerFeature.Action>)
     }
 
     @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
@@ -70,16 +70,16 @@ struct HomeFeature {
                 return .none
             case .loadView:
                 return .send(.fetchTrendingPodcasts)
-//            case .playAudioTapped:
-//                state.playAudio = PlayerFeature.State(podcast: state.trendingPodcasts?.podcasts)
+            case .playAudioTapped:
+                state.playAudio = PlayerFeature.State(podcast: state.trendingPodcasts!.podcasts)
                 return .none
-//            case .playAudio:
-//                return .none
+            case .playAudio:
+                return .none
             }
         }
-//        .ifLet(\.$playAudio, action: /Action.playAudio) {
-//            PlayerFeature()
-//        }
+        .ifLet(\.$playAudio, action: /Action.playAudio) {
+            PlayerFeature()
+        }
     }
 }
 
@@ -131,17 +131,17 @@ struct HomeView: View {
         .onAppear {
             store.send(.loadView)
         }
-//        .sheet(
-//          store: self.store.scope(
-//            state: \.$playAudio,
-//            action: { .playAudio($0) }
-//          )
-//        ) { store in
-//          NavigationStack {
-//              PlayerView(store: store)
-//              .navigationTitle("Player")
-//          }
-//        }
+        .sheet(
+          store: self.store.scope(
+            state: \.$playAudio,
+            action: { .playAudio($0) }
+          )
+        ) { store in
+          NavigationStack {
+              PlayerView(store: store)
+              .navigationTitle("Player")
+          }
+        }
     }
 }
 
@@ -206,7 +206,7 @@ struct HomeViewContent: View {
                             .fontWeight(.semibold)
                         Spacer()
                         Button {
-                           // store.send(.playAudioTapped)
+                            store.send(.playAudioTapped)
                         } label: {
                             Text("See more..")
                                 .foregroundStyle(Color(.blue))

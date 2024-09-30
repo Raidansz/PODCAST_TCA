@@ -17,9 +17,9 @@ struct PlayerFeature {
         var totalTime: TimeInterval = 0.0
         var currentTime: TimeInterval = 0.0
         var audioURL: URL?
-        var playerPodcast: Podcast
+        var playerPodcast: IdentifiedArrayOf<Podcast>
 
-        init(podcast: Podcast) {
+        init(podcast: IdentifiedArrayOf<Podcast>) {
             self.playerPodcast = podcast
         }
     }
