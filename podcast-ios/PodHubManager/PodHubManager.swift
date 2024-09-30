@@ -33,17 +33,15 @@ class PodHubManager: PodHubManagerProtocol {
 
     private func lookupPodcastIndex(searchFor: SearchFor, value: String) async throws -> PodcastIndexResponse {
         if searchFor == .podcast {
-            return   try await podcastIndexManager.performQuery(for: .podcast , .title(value), parameter: nil)
+            return   try await podcastIndexManager.performQuery(for: .podcast, .title(value), parameter: nil)
         } else {
-            return  try await podcastIndexManager.performQuery(for: .episode , .title(value), parameter: nil)
+            return  try await podcastIndexManager.performQuery(for: .episode, .title(value), parameter: nil)
         }
     }
 
     private func normalizeResult(result: PodHubConvertable) throws -> PodHub {
         return try PodHub(result: result)
     }
-
-
 
     enum FilterBy {
         case type
