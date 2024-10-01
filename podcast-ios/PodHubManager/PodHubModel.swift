@@ -16,13 +16,13 @@ struct PodHub: Equatable {
     var id: UUID = UUID()
     var podcasts: IdentifiedArrayOf<Podcast> = []
 
-    init(result: PodHubConvertable) throws {
+    init(result: PodHubConvertable, mediaType: MediaType) throws {
         self.podcasts = IdentifiedArray()
 
       
         if let searchResults = result as? SearchResults {
             if !searchResults.results.isEmpty {
-                let uniquePodcasts = removeDuplicatePodcasts(from: searchResults.results.map { Podcast(item: $0) })
+                let uniquePodcasts = removeDuplicatePodcasts(from: searchResults.results.map { Podcast(item: $0, mediaType: mediaType) })
                 self.podcasts = IdentifiedArray(uniqueElements: uniquePodcasts)
                 return
             }
@@ -30,7 +30,7 @@ struct PodHub: Equatable {
 
         if let podcastIndexResponse = result as? PodcastIndexResponse {
             if !podcastIndexResponse.items.isEmpty {
-                let uniquePodcasts = removeDuplicatePodcasts(from: podcastIndexResponse.items.map { Podcast(item: $0) })
+                let uniquePodcasts = removeDuplicatePodcasts(from: podcastIndexResponse.items.map { Podcast(item: $0, mediaType: mediaType) })
                 self.podcasts = IdentifiedArray(uniqueElements: uniquePodcasts)
                 return
             }
@@ -60,9 +60,10 @@ struct Podcast: Identifiable, Equatable, Hashable {
     var image: URL?
     var publicationDate: Date?
     var author: String?
+    var isPodcast: Bool
    // var episodes: IdentifiedArrayOf<Episode>
 
-    init(item: SearchResult){
+    init(item: SearchResult, mediaType: MediaType){
         if let uuid = UUID(uuidString: "\(item.id)") {
               self.id = uuid
           } else {
@@ -73,10 +74,11 @@ struct Podcast: Identifiable, Equatable, Hashable {
         self.image = item.artworkUrl600 ?? item.artworkUrl100!
         self.publicationDate = item.releaseDate
         self.author = item.artistName ?? ""
+        self.isPodcast = mediaType == .podcast
       //  self.episodes = IdentifiedArray(uniqueElements: item.res.map { Episode(item: $0) })
     }
 
-    init(item: Item){
+    init(item: Item, mediaType: MediaType){
         if let uuid = UUID(uuidString: "\(item.id)") {
               self.id = uuid
           } else {
@@ -87,6 +89,7 @@ struct Podcast: Identifiable, Equatable, Hashable {
         self.image = item.image ?? item.feedImage!
         self.publicationDate = item.datePublished
         self.author = item.feedAuthor
+        self.isPodcast = mediaType == .podcast
       //  self.episodes = IdentifiedArray(uniqueElements: item.res.map { Episode(item: $0) })
     }
 }

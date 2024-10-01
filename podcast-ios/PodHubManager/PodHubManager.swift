@@ -11,15 +11,16 @@ class PodHubManager: PodHubManagerProtocol {
     @Injected(\.itunesManager) private var itunesManager: ItunesManagerProtocol
     @Injected(\.podcastIndexManager) private var podcastIndexManager: PodcastIndexManagerProtocol
 
-    func searchFor(searchFor: SearchFor, value: String) async throws -> PodHub {
-        let result =  try await lookupItunes(searchFor: searchFor, value: value)
+    func searchFor(searchFor mediaType: MediaType, value: String) async throws -> PodHub {
+        let result =  try await lookupItunes(searchFor: mediaType, value: value)
         if result.results.isEmpty {
-            return try normalizeResult(result: try await lookupPodcastIndex(searchFor: searchFor, value: value))
+            let result = try await lookupPodcastIndex(searchFor: mediaType, value: value)
+            return try normalizeResult(result: result, mediaType: mediaType)
         }
-        return try normalizeResult(result: result)
+        return try normalizeResult(result: result, mediaType: mediaType)
     }
 
-    private func lookupItunes(searchFor: SearchFor, value: String) async throws -> SearchResults {
+    private func lookupItunes(searchFor: MediaType, value: String) async throws -> SearchResults {
         let searchResult: SearchResults
         if searchFor == .podcast {
             searchResult = try await itunesManager.searchPodcasts(term: value, entity: .podcast)
@@ -31,7 +32,7 @@ class PodHubManager: PodHubManagerProtocol {
         return searchResult
     }
 
-    private func lookupPodcastIndex(searchFor: SearchFor, value: String) async throws -> PodcastIndexResponse {
+    private func lookupPodcastIndex(searchFor: MediaType, value: String) async throws -> PodcastIndexResponse {
         if searchFor == .podcast {
             return   try await podcastIndexManager.performQuery(for: .podcast, .title(value), parameter: nil)
         } else {
@@ -39,8 +40,8 @@ class PodHubManager: PodHubManagerProtocol {
         }
     }
 
-    private func normalizeResult(result: PodHubConvertable) throws -> PodHub {
-        return try PodHub(result: result)
+    private func normalizeResult(result: PodHubConvertable, mediaType: MediaType ) throws -> PodHub {
+        return try PodHub(result: result, mediaType: mediaType)
     }
 
     enum FilterBy {
@@ -67,9 +68,9 @@ extension InjectedValues {
 }
 
 protocol PodHubManagerProtocol {
-    func searchFor(searchFor: SearchFor, value: String) async throws -> PodHub
+    func searchFor(searchFor: MediaType, value: String) async throws -> PodHub
 }
-enum SearchFor {
+enum MediaType {
     case podcast
     case episode
 }

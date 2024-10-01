@@ -18,9 +18,9 @@ struct ExploreFeature {
     }
 
     enum Action: Equatable {
-    case fetchPodcasts
-    case fetchPodcastsResponse(PodHub)
-    case podcastCellTapped(Item)
+        case fetchPodcasts
+        case fetchPodcastsResponse(PodHub)
+        case podcastCellTapped(Item)
     }
 
     @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
