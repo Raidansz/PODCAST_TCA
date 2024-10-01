@@ -107,7 +107,6 @@ struct PlayerView: View {
     }
 }
 
-
 struct ControllButton: View {
     @State var store: StoreOf<PlayerFeature>
     var body: some View {

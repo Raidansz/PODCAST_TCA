@@ -19,10 +19,13 @@ struct PodHub: Equatable {
     init(result: PodHubConvertable, mediaType: MediaType) throws {
         self.podcasts = IdentifiedArray()
 
-      
         if let searchResults = result as? SearchResults {
             if !searchResults.results.isEmpty {
-                let uniquePodcasts = removeDuplicatePodcasts(from: searchResults.results.map { Podcast(item: $0, mediaType: mediaType) })
+                let uniquePodcasts = removeDuplicatePodcasts(
+                    from: searchResults.results.map {
+                        Podcast(item: $0, mediaType: mediaType)
+                    }
+                )
                 self.podcasts = IdentifiedArray(uniqueElements: uniquePodcasts)
                 return
             }
@@ -30,7 +33,11 @@ struct PodHub: Equatable {
 
         if let podcastIndexResponse = result as? PodcastIndexResponse {
             if !podcastIndexResponse.items.isEmpty {
-                let uniquePodcasts = removeDuplicatePodcasts(from: podcastIndexResponse.items.map { Podcast(item: $0, mediaType: mediaType) })
+                let uniquePodcasts = removeDuplicatePodcasts(
+                    from: podcastIndexResponse.items.map {
+                        Podcast(item: $0, mediaType: mediaType)
+                    }
+                )
                 self.podcasts = IdentifiedArray(uniqueElements: uniquePodcasts)
                 return
             }
@@ -51,8 +58,6 @@ struct PodHub: Equatable {
     }
 }
 
-
-
 struct Podcast: Identifiable, Equatable, Hashable {
     var id: UUID
     var title: String?
@@ -63,7 +68,7 @@ struct Podcast: Identifiable, Equatable, Hashable {
     var isPodcast: Bool
    // var episodes: IdentifiedArrayOf<Episode>
 
-    init(item: SearchResult, mediaType: MediaType){
+    init(item: SearchResult, mediaType: MediaType) {
         if let uuid = UUID(uuidString: "\(item.id)") {
               self.id = uuid
           } else {
@@ -78,7 +83,7 @@ struct Podcast: Identifiable, Equatable, Hashable {
       //  self.episodes = IdentifiedArray(uniqueElements: item.res.map { Episode(item: $0) })
     }
 
-    init(item: Item, mediaType: MediaType){
+    init(item: Item, mediaType: MediaType) {
         if let uuid = UUID(uuidString: "\(item.id)") {
               self.id = uuid
           } else {
@@ -97,10 +102,7 @@ struct Podcast: Identifiable, Equatable, Hashable {
 struct Episode: Identifiable {
     var id: String
 }
-protocol PodHubConvertable {
-    
-}
-
+protocol PodHubConvertable {}
 
 //if let episodes = json["episodes"].array {
 //    let resultsArray = json["results"].arrayValue

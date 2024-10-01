@@ -31,7 +31,6 @@ struct HomeFeature {
     }
 
     @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
-    
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -134,7 +133,7 @@ struct HomeView: View {
         .sheet(
           store: self.store.scope(
             state: \.$playAudio,
-            action: { .playAudio($0) }
+            action: \.playAudio
           )
         ) { store in
           NavigationStack {

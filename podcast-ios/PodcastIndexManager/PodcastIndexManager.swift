@@ -71,7 +71,11 @@ private extension PodcastIndexManager {
         request.addValue("SuperPodcastPlayer/1.8", forHTTPHeaderField: "User-Agent")
     }
 
-    private func constructURL( type: PodcastOrEpisode, getBy query: QueryType, with parameter: QueryParameter?) throws -> URL {
+    private func constructURL(
+        type: PodcastOrEpisode,
+        getBy query: QueryType,
+        with parameter: QueryParameter?
+    ) throws -> URL {
         let path = "\(type.rawValue)/\(query.query)\(parameter!.parameter)"
         guard let url = URL(string: "https://api.podcastindex.org/api/1.0/\(path)") else {
             throw PodcastIndexError.invalidURL
@@ -146,16 +150,15 @@ enum QueryType {
     }
 }
 
-
 enum QueryParameter {
-    ///Maximum number of results to return.
+    /// Maximum number of results to return.
     case max(Int)
-    ///Specifying a language code (like "en") will return only episodes having that specific language.
+    /// Specifying a language code (like "en") will return only episodes having that specific language.
    /// You can specify multiple languages by separating them with commas.
    /// If you also want to return episodes that have no language given, use the token "unknown". (ex. en,es,ja,unknown).
     case lang(String)
-    ///Use this argument to specify that you ONLY want episodes with these categories in the results.
-    ///Separate multiple categories with commas.
+    /// Use this argument to specify that you ONLY want episodes with these categories in the results.
+    /// Separate multiple categories with commas.
    /// You may specify either the Category ID and/or the Category Name.
    /// Values are not case sensitive.
     case cat(String)
@@ -171,7 +174,6 @@ enum QueryParameter {
         }
     }
 }
-
 
 enum PodcastOrEpisode: String {
     case podcast = "podcasts"

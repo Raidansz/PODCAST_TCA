@@ -55,7 +55,6 @@ class PodHubManager: PodHubManagerProtocol {
     }
 }
 
-
 private struct PodHubManagerKey: InjectionKey {
     static var currentValue: PodHubManagerProtocol = PodHubManager()
 }
