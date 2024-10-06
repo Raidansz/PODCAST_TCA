@@ -11,7 +11,7 @@ struct ListViewCell: View {
     let podcast: Podcast
 
     var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             AsyncImage(url: podcast.image) { phase in
                 if let image = phase.image {
                     image
@@ -33,19 +33,26 @@ struct ListViewCell: View {
             .frame(width: 100, height: 100)
             .cornerRadius(24)
 
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: 16) {
+                Spacer()
+                    .frame(maxHeight: 4)
                 Text(podcast.title ?? "")
+                    .font(.headline)
                     .bold()
+                    .lineLimit(1)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text(podcast.author ?? "")
+                    .font(.subheadline)
                     .lineLimit(2)
-                Text("\(podcast.description)")
-                    .lineLimit(2)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(.leading, 8)
-            .padding(.trailing, 88)
-            Image(systemName: "play.circle.fill")
-                .resizable()
-                .frame(width: 48, height: 48)
+            .frame(maxWidth: .infinity, alignment: .leading)
+
+            Spacer()
         }
+        .frame(alignment: .center)
         Divider()
+            .background(Color(.systemGray))
     }
 }

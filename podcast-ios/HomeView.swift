@@ -58,7 +58,7 @@ struct HomeFeature {
                 return .run {  send in
                     try await send(
                         .trendingPodcastResponse(
-                            self.podHubManager.searchFor(searchFor: .episode, value: "good+morning")
+                            self.podHubManager.searchFor(searchFor: .podcast, value: "good+morning")
                         )
                     )
                 }
