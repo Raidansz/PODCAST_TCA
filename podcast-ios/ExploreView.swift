@@ -118,16 +118,19 @@ struct ExploreViewContent: View {
                         .fontWeight(.semibold)
                     Spacer()
                 }
+                .padding(.horizontal, 16)
             })
+
             Section(content: {
                 LazyVStack(spacing: 24) {
-                    if ((store.podcastsList?.podcasts) != nil) {
+                    if((store.podcastsList?.podcasts) != nil) {
                         ForEach((store.podcastsList!.podcasts), id: \.self) { response in
                             ListViewCell(podcast: response)
                                 .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                         }
                     }
                 }
+                .padding(.horizontal, 16)
             }, header: {
                 if (store.podcastsList?.podcasts) != nil {
                     horizontalList(data: (store.podcastsList!.podcasts)) { podcast in

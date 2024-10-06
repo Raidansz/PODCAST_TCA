@@ -18,7 +18,7 @@ struct HomeFeature {
         var isLoading: Bool = false
         var searchTerm = ""
     }
-
+    
     enum Action: Equatable {
         case podcastSearchResponse(PodHub)
         case searchForPodcastTapped(with: String)
@@ -29,7 +29,7 @@ struct HomeFeature {
         case playAudioTapped
         case playAudio(PresentationAction<PlayerFeature.Action>)
     }
-
+    
     @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -58,7 +58,7 @@ struct HomeFeature {
                 return .run {  send in
                     try await send(
                         .trendingPodcastResponse(
-                            self.podHubManager.searchFor(searchFor: .podcast, value: "good+morning")
+                            self.podHubManager.searchFor(searchFor: .podcast, value: "hie")
                         )
                     )
                 }
@@ -76,7 +76,7 @@ struct HomeFeature {
                 return .none
             }
         }
-        .ifLet(\.$playAudio, action: /Action.playAudio) {
+        .ifLet(\.$playAudio, action: \.playAudio) {
             PlayerFeature()
         }
     }
@@ -110,7 +110,7 @@ struct HomeView: View {
                         }
                     }
                 }
-
+                
                 ToolbarItem(placement: .topBarLeading) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 32)
@@ -131,15 +131,15 @@ struct HomeView: View {
             store.send(.loadView)
         }
         .sheet(
-          store: self.store.scope(
-            state: \.$playAudio,
-            action: \.playAudio
-          )
+            store: self.store.scope(
+                state: \.$playAudio,
+                action: \.playAudio
+            )
         ) { store in
-          NavigationStack {
-              PlayerView(store: store)
-              .navigationTitle("Player")
-          }
+            NavigationStack {
+                PlayerView(store: store)
+                    .navigationTitle("Player")
+            }
         }
     }
 }
@@ -148,73 +148,73 @@ struct HomeViewContent: View {
     @State var store: StoreOf<HomeFeature>
     var body: some View {
         ScrollView {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 32)
-                        .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
-                        .frame(width: 364, height: 64)
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                            .foregroundColor(.black)
-                            .padding(.leading, 15)
-                        TextField(
-                            "Search the podcast here...",
-                            text: $store.searchTerm.sending(\.searchTermChanged)
-                        )
-                        .padding(.leading, 5)
-                        .onSubmit {
-                            store.send(.searchForPodcastTapped(with: store.searchTerm))
-                        }
-                    }
+            ZStack {
+                RoundedRectangle(cornerRadius: 32)
+                    .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
                     .frame(width: 364, height: 64)
-                    .clipShape(RoundedRectangle(cornerRadius: 32))
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(.black)
+                        .padding(.leading, 15)
+                    TextField(
+                        "Search the podcast here...",
+                        text: $store.searchTerm.sending(\.searchTermChanged)
+                    )
+                    .padding(.leading, 5)
+                    .onSubmit {
+                        store.send(.searchForPodcastTapped(with: store.searchTerm))
+                    }
                 }
-                .padding()
-                Section(content: {
-                    if (store.trendingPodcasts?.podcasts) != nil {
-                        horizontalList(data: (store.trendingPodcasts!.podcasts)) { podcast in
+                .frame(width: 364, height: 64)
+                .clipShape(RoundedRectangle(cornerRadius: 32))
+            }
+            .padding()
+            Section(content: {
+                if (store.trendingPodcasts?.podcasts) != nil {
+                    horizontalList(data: (store.trendingPodcasts!.podcasts)) { podcast in
                         ListViewHero(podcast: podcast)
-                        }
                     }
-                }, header: {
-                    HStack {
-                        Text("Trending Podcasts")
-                            .fontWeight(.semibold)
-                        Spacer()
-                    }
-                    .padding(.horizontal, 16)
                 }
-                )
-
-                Spacer()
-                    .frame(height: 32)
-
-                Section(content: {
-                    LazyVStack(spacing: 24) {
-                        if (store.trendingPodcasts?.podcasts) != nil {
-                            ForEach((store.trendingPodcasts!.podcasts), id: \.self) { response in
-                                ListViewCell(podcast: response)
-                                    .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
-                            }
-                        }
-                    }
-                }, header: {
-                    HStack {
-                        Text("Trending Podcasts")
-                            .fontWeight(.semibold)
-                        Spacer()
-                        Button {
-                            store.send(.playAudioTapped)
-                        } label: {
-                            Text("See more..")
-                                .foregroundStyle(Color(.blue))
-                        }
-                    }
-                    .padding(.horizontal, 16)
+            }, header: {
+                HStack {
+                    Text("Trending Podcasts")
+                        .fontWeight(.semibold)
+                    Spacer()
                 }
-                )
                 .padding(.horizontal, 16)
+            }
+            )
+            
+            Spacer()
+                .frame(height: 32)
+            
+            Section(content: {
+                LazyVStack(spacing: 24) {
+                    if (store.trendingPodcasts?.podcasts) != nil {
+                        ForEach((store.trendingPodcasts!.podcasts), id: \.self) { response in
+                            ListViewCell(podcast: response)
+                                .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                        }
+                    }
+                }
+            }, header: {
+                HStack {
+                    Text("Trending Podcasts")
+                        .fontWeight(.semibold)
+                    Spacer()
+                    Button {
+                        store.send(.playAudioTapped)
+                    } label: {
+                        Text("See more..")
+                            .foregroundStyle(Color(.blue))
+                    }
+                }
+                .padding(.horizontal, 16)
+            }
+            )
+            .padding(.horizontal, 16)
         }
     }
 }

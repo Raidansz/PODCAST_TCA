@@ -118,33 +118,3 @@ extension Collection {
         return !isEmpty
     }
 }
-
-
-
-//
-//let id: Int
-//let title: String
-//let link: URL?
-//let description: String
-//let guid: String
-//let datePublished: Date
-//let dateCrawled: Date
-//let enclosureUrl: URL?
-//let enclosureType: String
-//let enclosureLength: Int
-//let duration: Int
-//let explicit: Bool
-//let episode: Int?
-//let episodeType: String
-//let season: Int
-//let image: URL?
-//let feedItunesId: Int?
-//let feedImage: URL?
-//let feedId: Int
-//let feedUrl: URL?
-//let feedAuthor: String
-//let feedTitle: String
-//let feedLanguage: String
-//let chaptersUrl: URL?
-//let transcriptUrl: URL?
-//let transcripts: [Transcript]
