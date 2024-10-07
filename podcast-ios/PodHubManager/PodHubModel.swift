@@ -7,6 +7,7 @@
 import Foundation
 import ComposableArchitecture
 import SwiftyJSON
+import FeedKit
 
 struct PodHub: Equatable {
     static func == (lhs: PodHub, rhs: PodHub) -> Bool {
@@ -116,5 +117,44 @@ protocol PodHubConvertable {}
 extension Collection {
     var isNotEmpty: Bool {
         return !isEmpty
+    }
+}
+
+
+struct Episode: Codable, Identifiable {
+    var id: String
+    let title: String
+    let pubDate: Date
+    let description: String
+    let author: String
+    let streamUrl: String
+
+    var fileUrl: String?
+    var imageUrl: String?
+
+    init(feedItem: RSSFeedItem) {
+        self.id = feedItem.guid?.value ?? UUID().uuidString
+        self.streamUrl = feedItem.enclosure?.attributes?.url ?? ""
+        self.title = feedItem.title ?? "No Title"
+        self.pubDate = feedItem.pubDate ?? Date()
+        self.description = Episode.cleanHTMLTags(
+            from: feedItem.iTunes?.iTunesSubtitle ?? feedItem.description ?? "No Description Available")
+        self.author = feedItem.iTunes?.iTunesAuthor ?? "Unknown Author"
+        self.imageUrl = feedItem.iTunes?.iTunesImage?.attributes?.href
+    }
+
+    
+    private static func cleanHTMLTags(from string: String) -> String {
+        let regex = try? NSRegularExpression(pattern: "<[^>]+>", options: .caseInsensitive)
+        let range = NSMakeRange(0, string.count)
+        let htmlLessString = regex?.stringByReplacingMatches(in: string, options: [], range: range, withTemplate: "")
+        let cleanedString = htmlLessString?
+            .replacingOccurrences(of: "&amp;", with: "&")
+            .replacingOccurrences(of: "&lt;", with: "<")
+            .replacingOccurrences(of: "&gt;", with: ">")
+            .replacingOccurrences(of: "&quot;", with: "\"")
+            .replacingOccurrences(of: "&#39;", with: "'")
+
+        return cleanedString?.trimmingCharacters(in: .whitespacesAndNewlines) ?? string
     }
 }
