@@ -103,9 +103,9 @@ struct Podcast: Identifiable, Equatable, Hashable {
     }
 }
 
-struct Episode: Identifiable {
-    var id: String
-}
+//struct Episode: Identifiable {
+//    var id: String
+//}
 protocol PodHubConvertable {}
 
 //if let episodes = json["episodes"].array {

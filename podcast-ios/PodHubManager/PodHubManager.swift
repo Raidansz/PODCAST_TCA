@@ -69,7 +69,9 @@ extension InjectedValues {
 protocol PodHubManagerProtocol {
     func searchFor(searchFor: MediaType, value: String) async throws -> PodHub
 }
+
 enum MediaType {
     case podcast
     case episode
 }
+
