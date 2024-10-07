@@ -4,6 +4,7 @@
 //
 //  Created by Raidan on 2024. 09. 28..
 //
+
 import Foundation
 import ComposableArchitecture
 import SwiftyJSON
@@ -68,51 +69,39 @@ struct Podcast: Identifiable, Equatable, Hashable {
     var author: String?
     var isPodcast: Bool
     var feedURL: URL?
-   // var episodes: IdentifiedArrayOf<Episode>
 
     init(item: SearchResult, mediaType: MediaType) {
         if let uuid = UUID(uuidString: "\(item.id)") {
-              self.id = uuid
-          } else {
-              self.id = UUID()
-          }
+            self.id = uuid
+        } else {
+            self.id = UUID()
+        }
         self.title = item.trackName
         self.description = "TBCH"
         self.image = item.artworkUrl600 ?? item.artworkUrl100!
         self.publicationDate = item.releaseDate
         self.author = item.artistName ?? ""
         self.isPodcast = mediaType == .podcast
-      //  self.episodes = IdentifiedArray(uniqueElements: item.res.map { Episode(item: $0) })
         self.feedURL = item.feedUrl
     }
 
     init(item: Item, mediaType: MediaType) {
         if let uuid = UUID(uuidString: "\(item.id)") {
-              self.id = uuid
-          } else {
-              self.id = UUID()
-          }
+            self.id = uuid
+        } else {
+            self.id = UUID()
+        }
         self.title = item.title
         self.description = item.description
         self.image = item.image ?? item.feedImage!
         self.publicationDate = item.datePublished
         self.author = item.feedAuthor
         self.isPodcast = mediaType == .podcast
-      //  self.episodes = IdentifiedArray(uniqueElements: item.res.map { Episode(item: $0) })
-       // self.feedURL = item.feedUrl
         self.feedURL = item.feedUrl
     }
 }
 
-//struct Episode: Identifiable {
-//    var id: String
-//}
 protocol PodHubConvertable {}
-
-//if let episodes = json["episodes"].array {
-//    let resultsArray = json["results"].arrayValue
-//    let searchResults = resultsArray.map { SearchResult(json: $0) }
-//    self.items = IdentifiedArray(uniqueElements: episodes.map { Item(json: $0) })
 
 extension Collection {
     var isNotEmpty: Bool {
@@ -120,8 +109,7 @@ extension Collection {
     }
 }
 
-
-struct Episode: Codable, Identifiable {
+struct Episode: Codable, Identifiable, Equatable, Hashable {
     var id: String
     let title: String
     let pubDate: Date
@@ -143,7 +131,6 @@ struct Episode: Codable, Identifiable {
         self.imageUrl = feedItem.iTunes?.iTunesImage?.attributes?.href
     }
 
-    
     private static func cleanHTMLTags(from string: String) -> String {
         let regex = try? NSRegularExpression(pattern: "<[^>]+>", options: .caseInsensitive)
         let range = NSMakeRange(0, string.count)

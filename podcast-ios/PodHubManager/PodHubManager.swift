@@ -74,4 +74,3 @@ enum MediaType {
     case podcast
     case episode
 }
-
