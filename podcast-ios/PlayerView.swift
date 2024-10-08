@@ -43,7 +43,6 @@ struct PlayerFeature {
                     return .send(.initialize(state.audioURL))
                 } else {
                     state.isPlaying = true
-                    state.player!.play()
                     return .none
                 }
             case .pause:
@@ -147,7 +146,6 @@ struct ControllButton: View {
                             .resizable()
                             .frame(width: 80, height: 80)
                     }
-                       
                 }
                 Spacer()
                 Button {
