@@ -17,10 +17,10 @@ struct PlayerFeature {
         var totalTime: TimeInterval = 0.0
         var currentTime: TimeInterval = 0.0
         var audioURL: URL?
-        var playerPodcast: IdentifiedArrayOf<Podcast>
+        var episode: Episode
 
-        init(podcast: IdentifiedArrayOf<Podcast>) {
-            self.playerPodcast = podcast
+        init(episode: Episode) {
+            self.episode = episode
         }
     }
 
@@ -36,7 +36,6 @@ struct PlayerFeature {
             case .initialize(let url):
                 if let url {
                     state.player = AVPlayer(url: url)
-                    state.player!.play()
                 }
                 return .none
             case .play:
@@ -62,7 +61,7 @@ struct PlayerView: View {
         NavigationStack {
             VStack {
                 ZStack {
-                    AsyncImage(url: URL(string: "https://picsum.photos/364/364")!)
+                    ListViewHero(imageURL: URL(string: store.episode.imageUrl ?? "")!)
                         .aspectRatio(contentMode: .fit)
                         .cornerRadius(24)
                         .frame(width: 364, height: 364)
@@ -104,6 +103,9 @@ struct PlayerView: View {
             .navigationTitle("Now Playing")
             .navigationBarTitleDisplayMode(.inline)
         }
+        .onAppear {
+            store.send(.initialize(URL(string: store.episode.streamUrl)))
+        }
     }
 }
 
@@ -130,11 +132,22 @@ struct ControllButton: View {
                 }
                 Spacer()
                 Button {
-                    store.send(.play)
+                    if store.isPlaying {
+                        store.send(.pause)
+                    } else {
+                        store.send(.play)
+                    }
                 } label: {
-                    Image(systemName: "play.circle.fill")
-                        .resizable()
-                        .frame(width: 80, height: 80)
+                    if store.isPlaying {
+                        Image(systemName: "pause.circle.fill")
+                            .resizable()
+                            .frame(width: 80, height: 80)
+                    } else {
+                        Image(systemName: "play.circle.fill")
+                            .resizable()
+                            .frame(width: 80, height: 80)
+                    }
+                       
                 }
                 Spacer()
                 Button {

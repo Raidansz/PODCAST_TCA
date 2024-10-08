@@ -57,10 +57,6 @@ struct ListViewCell: View {
     }
 }
 
-
-
-
-
 struct ListEpisodeViewCell: View {
     let episode: Episode
 

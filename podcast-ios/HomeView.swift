@@ -44,7 +44,7 @@ struct HomeFeature {
                 return .run {  send in
                     try await send(
                         .podcastSearchResponse(
-                            self.podHubManager.searchFor(searchFor: .podcast, value: "hoho")
+                            self.podHubManager.searchFor(searchFor: .podcast, value: term)
                         )
                     )
                 }

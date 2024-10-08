@@ -15,11 +15,14 @@ struct PodcastDetailsFeature {
         let podcast: Podcast
         var episodes: IdentifiedArrayOf<Episode>?
         var isLoading: Bool = false
+        @Presents var playEpisode: PlayerFeature.State?
         var episodeURL: URL?
     }
 
     enum Action: Equatable {
         case fetchEpisode
+        case cellTapped(Episode)
+        case playEpisode(PresentationAction<PlayerFeature.Action>)
         case episodeResponse(IdentifiedArrayOf<Episode>?)
     }
 
@@ -59,7 +62,15 @@ struct PodcastDetailsFeature {
                 state.isLoading = false
                 state.episodes = response
                 return .none
+            case .cellTapped(let episode):
+                state.playEpisode = PlayerFeature.State(episode: episode)
+                return .none
+            case .playEpisode:
+                return .none
             }
+        }
+        .ifLet(\.$playEpisode, action: \.playEpisode) {
+            PlayerFeature()
         }
     }
 }
@@ -77,6 +88,9 @@ struct PodcastDetailsView: View {
                                 ForEach((store.episodes!), id: \.self) { response in
                                     ListEpisodeViewCell(episode: response)
                                         .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                                        .onTapGesture {
+                                            store.send(.cellTapped(response))
+                                        }
                                 }
                             }
                         }
@@ -99,6 +113,18 @@ struct PodcastDetailsView: View {
         }
         .onAppear {
             store.send(.fetchEpisode)
+        }
+        .sheet(
+            store: self.store.scope(
+                state: \.$playEpisode,
+                action: \.playEpisode
+            )
+        ) { store in
+            NavigationStack {
+                PlayerView(store: store)
+                    .navigationTitle(store.episode.title)
+                    .navigationBarTitleDisplayMode(.inline)
+            }
         }
     }
 }
