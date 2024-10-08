@@ -1,5 +1,5 @@
 //
-//  PodcastView.swift
+//  PodcastDetailsView.swift
 //  podcast-ios
 //
 //  Created by Raidan on 2024. 10. 07..
@@ -17,12 +17,12 @@ struct PodcastDetailsFeature {
         var isLoading: Bool = false
         var episodeURL: URL?
     }
-    
+
     enum Action: Equatable {
         case fetchEpisode
         case episodeResponse(IdentifiedArrayOf<Episode>?)
     }
-    
+
     private func parseFeed(url: URL?) async throws -> IdentifiedArrayOf<Episode> {
         return try await withCheckedThrowingContinuation { continuation in
             guard let url else { return }
@@ -42,7 +42,7 @@ struct PodcastDetailsFeature {
             }
         }
     }
-    
+
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -67,9 +67,38 @@ struct PodcastDetailsFeature {
 struct PodcastDetailsView: View {
     @State var store: StoreOf<PodcastDetailsFeature>
     var body: some View {
-        List(store.episodes ?? []) { episode in
-            Text(episode.title)
-            
+        NavigationStack {
+            ZStack(alignment: .top) {
+                ScrollView {
+                    // TODO: Pagination
+                    Section(content: {
+                        LazyVStack(spacing: 24) {
+                            if (store.episodes) != nil {
+                                ForEach((store.episodes!), id: \.self) { response in
+                                    ListEpisodeViewCell(episode: response)
+                                        .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                                }
+                            }
+                        }
+                    }, header: {
+                        ListViewHero(imageURL: store.podcast.image ?? URL(string: "")!)
+                            .frame(width: 380, height: 380)
+                            .padding(.bottom, 20)
+                    })
+                    .padding(.horizontal, 16)
+                }
+                .blur(
+                    radius: store.isLoading ? 5 : 0
+                )
+                if store.isLoading {
+                    ProgressView("Please wait")
+                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
+        }
+        .onAppear {
+            store.send(.fetchEpisode)
         }
     }
 }

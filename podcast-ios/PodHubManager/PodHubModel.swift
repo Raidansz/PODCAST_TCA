@@ -23,40 +23,25 @@ struct PodHub: Equatable {
 
         if let searchResults = result as? SearchResults {
             if !searchResults.results.isEmpty {
-                let uniquePodcasts = removeDuplicatePodcasts(
-                    from: searchResults.results.map {
-                        Podcast(item: $0, mediaType: mediaType)
-                    }
-                )
-                self.podcasts = IdentifiedArray(uniqueElements: uniquePodcasts)
+                let itunesPodcasts = searchResults.results.map {
+                    Podcast(item: $0, mediaType: mediaType)
+                }
+                self.podcasts = IdentifiedArray(uniqueElements: itunesPodcasts)
                 return
             }
         }
 
         if let podcastIndexResponse = result as? PodcastIndexResponse {
             if !podcastIndexResponse.items.isEmpty {
-                let uniquePodcasts = removeDuplicatePodcasts(
-                    from: podcastIndexResponse.items.map {
-                        Podcast(item: $0, mediaType: mediaType)
-                    }
-                )
-                self.podcasts = IdentifiedArray(uniqueElements: uniquePodcasts)
+                let podcasts = podcastIndexResponse.items.map {
+                    Podcast(item: $0, mediaType: mediaType)
+                }
+                self.podcasts = IdentifiedArray(uniqueElements: podcasts)
                 return
             }
         }
 
         throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Result is empty or unrecognized"])
-    }
-
-    private func removeDuplicatePodcasts(from podcasts: [Podcast]) -> [Podcast] {
-        var seen = Set<UUID>()
-        return podcasts.filter { podcast in
-            guard !seen.contains(podcast.id) else {
-                return false
-            }
-            seen.insert(podcast.id)
-            return true
-        }
     }
 }
 
@@ -69,6 +54,7 @@ struct Podcast: Identifiable, Equatable, Hashable {
     var author: String?
     var isPodcast: Bool
     var feedURL: URL?
+    var type: String
 
     init(item: SearchResult, mediaType: MediaType) {
         if let uuid = UUID(uuidString: "\(item.id)") {
@@ -83,6 +69,7 @@ struct Podcast: Identifiable, Equatable, Hashable {
         self.author = item.artistName ?? ""
         self.isPodcast = mediaType == .podcast
         self.feedURL = item.feedUrl
+        self.type = "it"
     }
 
     init(item: Item, mediaType: MediaType) {
@@ -98,6 +85,7 @@ struct Podcast: Identifiable, Equatable, Hashable {
         self.author = item.feedAuthor
         self.isPodcast = mediaType == .podcast
         self.feedURL = item.feedUrl
+        self.type = "index"
     }
 }
 

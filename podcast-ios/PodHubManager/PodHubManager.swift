@@ -22,21 +22,23 @@ class PodHubManager: PodHubManagerProtocol {
 
     private func lookupItunes(searchFor: MediaType, value: String) async throws -> SearchResults {
         let searchResult: SearchResults
+        let encodedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         if searchFor == .podcast {
-            searchResult = try await itunesManager.searchPodcasts(term: value, entity: .podcast)
+            searchResult = try await itunesManager.searchPodcasts(term: encodedValue, entity: .podcast)
         } else if searchFor == .episode {
-            searchResult = try await itunesManager.searchPodcasts(term: value, entity: .podcastEpisode)
+            searchResult = try await itunesManager.searchPodcasts(term: encodedValue, entity: .podcastEpisode)
         } else {
-            searchResult = try await itunesManager.searchPodcasts(term: value, entity: .podcastAndEpisode)
+            searchResult = try await itunesManager.searchPodcasts(term: encodedValue, entity: .podcastAndEpisode)
         }
         return searchResult
     }
 
     private func lookupPodcastIndex(searchFor: MediaType, value: String) async throws -> PodcastIndexResponse {
+        let encodedValue = value.replacingOccurrences(of: " ", with: "+")
         if searchFor == .podcast {
-            return   try await podcastIndexManager.performQuery(for: .podcast, .title(value), parameter: nil)
+            return   try await podcastIndexManager.performQuery(for: .podcast, .title(encodedValue), parameter: nil)
         } else {
-            return  try await podcastIndexManager.performQuery(for: .episode, .title(value), parameter: nil)
+            return  try await podcastIndexManager.performQuery(for: .episode, .title(encodedValue), parameter: nil)
         }
     }
 

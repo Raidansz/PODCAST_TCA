@@ -18,7 +18,7 @@ final class PodcastIndexManager: PodcastIndexManagerProtocol {
     async throws -> PodcastIndexResponse {
         let url = try constructURL(type: type, getBy: query, with: parameter ?? .max(5))
         var request = URLRequest(url: url)
-        print(url)
+      //  print(url)
         request.httpMethod = "GET"
         try setAuthorizationHeaders(for: &request)
 
@@ -34,7 +34,7 @@ private extension PodcastIndexManager {
     func loadApiKeys() -> (apiKey: String, apiSecret: String)? {
         guard let path = Bundle.main.path(forResource: "PodcastIndexKey", ofType: "pl"),
               let xml = FileManager.default.contents(atPath: path) else {
-            print("Error: PodcastIndexKey.plist not found.")
+           // print("Error: PodcastIndexKey.plist not found.")
             return nil
         }
 

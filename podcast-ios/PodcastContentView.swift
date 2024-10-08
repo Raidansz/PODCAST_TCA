@@ -14,10 +14,10 @@ struct PodcastContentView: App {
         WindowGroup {
             TabBarView(store: Store(initialState: HomeFeature.State()) {
                 HomeFeature()
-                    ._printChanges()
+                   // ._printChanges()
             }, exploreStore: Store(initialState: ExploreFeature.State()) {
                 ExploreFeature()
-                    ._printChanges()
+                   // ._printChanges()
             })
         }
     }

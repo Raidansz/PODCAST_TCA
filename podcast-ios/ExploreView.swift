@@ -109,7 +109,8 @@ struct ExploreViewContent: View {
             Section(content: {
                 if (store.podcastsList?.podcasts) != nil {
                     horizontalList(data: (store.podcastsList!.podcasts)) { podcast in
-                        ListViewHero(podcast: podcast)
+                        ListViewHero(imageURL: podcast.image ?? URL(string: "")!)
+                            .frame(width: 300,height: 300)
                     }
                 }
             }, header: {

@@ -14,7 +14,7 @@ struct HomeFeature {
     struct State: Equatable {
         var trendingPodcasts: PodHub?
         var searchPodcastResults: PodHub?
-        @Presents var playAudio: PlayerFeature.State?
+        @Presents var podcastDetails: PodcastDetailsFeature.State?
         var isLoading: Bool = false
         var searchTerm = ""
     }
@@ -26,8 +26,8 @@ struct HomeFeature {
         case fetchTrendingPodcasts
         case loadView
         case trendingPodcastResponse(PodHub)
-        case playAudioTapped
-        case playAudio(PresentationAction<PlayerFeature.Action>)
+        case cellTapped(Podcast)
+        case podcastDetails(PresentationAction<PodcastDetailsFeature.Action>)
     }
     
     @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
@@ -39,7 +39,6 @@ struct HomeFeature {
                 state.isLoading = false
                 return .none
             case .searchForPodcastTapped(with: let term):
-                print(term)
                 state.searchPodcastResults = nil
                 state.isLoading = true
                 return .run {  send in
@@ -58,26 +57,25 @@ struct HomeFeature {
                 return .run {  send in
                     try await send(
                         .trendingPodcastResponse(
-                            self.podHubManager.searchFor(searchFor: .podcast, value: "hie")
+                            self.podHubManager.searchFor(searchFor: .podcast, value: "morning")
                         )
                     )
                 }
             case .trendingPodcastResponse(let result):
-                print(result)
                 state.trendingPodcasts = result
                 state.isLoading = false
                 return .none
             case .loadView:
                 return .send(.fetchTrendingPodcasts)
-            case .playAudioTapped:
-                state.playAudio = PlayerFeature.State(podcast: state.trendingPodcasts!.podcasts)
+            case .cellTapped(let podcast):
+                state.podcastDetails = PodcastDetailsFeature.State(podcast: podcast)
                 return .none
-            case .playAudio:
+            case .podcastDetails:
                 return .none
             }
         }
-        .ifLet(\.$playAudio, action: \.playAudio) {
-            PlayerFeature()
+        .ifLet(\.$podcastDetails, action: \.podcastDetails) {
+            PodcastDetailsFeature()
         }
     }
 }
@@ -132,13 +130,14 @@ struct HomeView: View {
         }
         .sheet(
             store: self.store.scope(
-                state: \.$playAudio,
-                action: \.playAudio
+                state: \.$podcastDetails,
+                action: \.podcastDetails
             )
         ) { store in
             NavigationStack {
-                PlayerView(store: store)
-                    .navigationTitle("Player")
+                PodcastDetailsView(store: store)
+                    .navigationTitle(store.podcast.title ?? "")
+                    .navigationBarTitleDisplayMode(.inline)
             }
         }
     }
@@ -174,7 +173,8 @@ struct HomeViewContent: View {
             Section(content: {
                 if (store.trendingPodcasts?.podcasts) != nil {
                     horizontalList(data: (store.trendingPodcasts!.podcasts)) { podcast in
-                        ListViewHero(podcast: podcast)
+                        ListViewHero(imageURL: podcast.image ?? URL(string: "")!)
+                            .frame(width: 300,height: 300)
                     }
                 }
             }, header: {
@@ -196,6 +196,9 @@ struct HomeViewContent: View {
                         ForEach((store.trendingPodcasts!.podcasts), id: \.self) { response in
                             ListViewCell(podcast: response)
                                 .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                                .onTapGesture {
+                                    store.send(.cellTapped(response))
+                                }
                         }
                     }
                 }
@@ -205,7 +208,7 @@ struct HomeViewContent: View {
                         .fontWeight(.semibold)
                     Spacer()
                     Button {
-                        store.send(.playAudioTapped)
+                       // store.send(.playAudioTapped)
                     } label: {
                         Text("See more..")
                             .foregroundStyle(Color(.blue))
