@@ -42,6 +42,27 @@ class ItunesManager: ItunesManagerProtocol {
 
         return searchResultsModel
     }
+
+    private func performQueryWithPagination(_ url: URL?, limit: Int, page: Int) async throws -> SearchResults {
+        guard let url = url else {
+            throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
+        }
+
+        let offset = (page - 1) * limit
+        let queryURL = URL(string: "\(url)&limit=\(limit)&offset=\(offset)")!
+        let (data, _) = try await URLSession.shared.data(from: queryURL)
+
+        let json = try JSON(data: data)
+        let resultCount = json["resultCount"].intValue
+        let resultsArray = json["results"].arrayValue
+        let searchResults = resultsArray.map { SearchResult(json: $0) }
+        let searchResultsModel = SearchResults(
+            resultCount: resultCount,
+            results: IdentifiedArray(uniqueElements: searchResults)
+        )
+
+        return searchResultsModel
+    }
 }
 
 protocol ItunesManagerProtocol {
@@ -52,15 +73,16 @@ protocol ItunesManagerProtocol {
         entity: Entity?,
         attribute: String?,
         genreId: PodcastGenre?,
-        limit: Int?,
         lang: Language?,
         version: Int?,
-        explicit: String?
+        explicit: String?,
+        limit: Int?,
+        page: Int?
     ) async throws -> SearchResults
 
-    func searchPodcasts(term: String, entity: Entity) async throws -> SearchResults
+    func searchPodcasts(term: String, entity: Entity, limit: Int?, page: Int?) async throws -> SearchResults
 
-    func searchPodcasts(term: String) async throws -> SearchResults
+    func searchPodcasts(term: String, limit: Int?, page: Int?) async throws -> SearchResults
 }
 
 // MARK: Search for Podcast / Episode
@@ -70,10 +92,11 @@ extension ItunesManager {
                         entity: Entity? = .podcastAndEpisode,
                         attribute: String? = nil,
                         genreId: PodcastGenre? = nil,
-                        limit: Int? = nil,
                         lang: Language? = nil,
                         version: Int? = 2,
-                        explicit: String? = nil
+                        explicit: String? = nil,
+                        limit: Int?,
+                        page: Int?
     ) async throws -> SearchResults {
 
         var queryItems = [URLQueryItem]()
@@ -100,10 +123,6 @@ extension ItunesManager {
             queryItems.append(URLQueryItem(name: Constants.genreId.rawValue, value: genreId.rawValue))
         }
 
-        if let limit = limit {
-            queryItems.append(URLQueryItem(name: Constants.limit.rawValue, value: String(limit)))
-        }
-
         if let lang = lang {
             queryItems.append(URLQueryItem(name: Constants.lang.rawValue, value: lang.rawValue))
         }
@@ -119,10 +138,14 @@ extension ItunesManager {
         var urlComponents = URLComponents(string: Constants.apiURL.rawValue)
         urlComponents?.queryItems = queryItems
 
-        return try await performQuery(urlComponents?.url)
+        guard let limit = limit, let page = page else {
+            return try await performQuery(urlComponents?.url)
+        }
+
+        return try await performQueryWithPagination(urlComponents?.url, limit: limit, page: page)
     }
 
-    func searchPodcasts(term: String) async throws -> SearchResults {
+    func searchPodcasts(term: String, limit: Int?, page: Int?) async throws -> SearchResults {
         var queryItems = [URLQueryItem]()
 
         if let term = term.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
@@ -136,10 +159,14 @@ extension ItunesManager {
         var urlComponents = URLComponents(string: Constants.apiURL.rawValue)
         urlComponents?.queryItems = queryItems
 
-        return try await performQuery(urlComponents?.url)
+        guard let limit = limit, let page = page else {
+            return try await performQuery(urlComponents?.url)
+        }
+
+        return try await performQueryWithPagination(urlComponents?.url, limit: limit, page: page)
     }
 
-    func searchPodcasts(term: String, entity: Entity) async throws -> SearchResults {
+    func searchPodcasts(term: String, entity: Entity, limit: Int?, page: Int?) async throws -> SearchResults {
         var queryItems = [URLQueryItem]()
 
         if let term = term.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
@@ -152,8 +179,12 @@ extension ItunesManager {
 
         var urlComponents = URLComponents(string: Constants.apiURL.rawValue)
         urlComponents?.queryItems = queryItems
-
-        return try await performQuery(urlComponents?.url)
+        
+        guard let limit = limit, let page = page else {
+            return try await performQuery(urlComponents?.url)
+        }
+        
+        return try await performQueryWithPagination(urlComponents?.url, limit: limit, page: page)
     }
 }
 

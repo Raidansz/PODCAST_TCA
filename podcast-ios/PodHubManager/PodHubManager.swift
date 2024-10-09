@@ -24,11 +24,11 @@ class PodHubManager: PodHubManagerProtocol {
         let searchResult: SearchResults
         let encodedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         if searchFor == .podcast {
-            searchResult = try await itunesManager.searchPodcasts(term: encodedValue, entity: .podcast)
+            searchResult = try await itunesManager.searchPodcasts(term: encodedValue, entity: .podcast, limit: nil, page: nil)
         } else if searchFor == .episode {
-            searchResult = try await itunesManager.searchPodcasts(term: encodedValue, entity: .podcastEpisode)
+            searchResult = try await itunesManager.searchPodcasts(term: encodedValue, entity: .podcastEpisode, limit: nil, page: nil)
         } else {
-            searchResult = try await itunesManager.searchPodcasts(term: encodedValue, entity: .podcastAndEpisode)
+            searchResult = try await itunesManager.searchPodcasts(term: encodedValue, entity: .podcastAndEpisode, limit: nil, page: nil)
         }
         return searchResult
     }
