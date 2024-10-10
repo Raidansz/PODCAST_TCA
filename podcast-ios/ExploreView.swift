@@ -34,7 +34,7 @@ struct ExploreFeature {
                 return .run {  send in
                     try await send(
                         .fetchPodcastsResponse(
-                            self.podHubManager.searchFor(searchFor: .podcast, value: "ehe")
+                            self.podHubManager.searchFor(searchFor: .podcast, value: "hee", limit: 4, page: 1)
                         )
                     )
                 }

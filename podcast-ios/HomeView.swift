@@ -17,8 +17,11 @@ struct HomeFeature {
         @Presents var podcastDetails: PodcastDetailsFeature.State?
         var isLoading: Bool = false
         var searchTerm = ""
+        let limit = 10
+        var currentPage = 1
+        var totalCount: Int?
     }
-    
+
     enum Action: Equatable {
         case podcastSearchResponse(PodHub)
         case searchForPodcastTapped(with: String)
@@ -28,6 +31,7 @@ struct HomeFeature {
         case trendingPodcastResponse(PodHub)
         case cellTapped(Podcast)
         case podcastDetails(PresentationAction<PodcastDetailsFeature.Action>)
+        case updateCurrentPage
     }
     
     @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
@@ -41,10 +45,10 @@ struct HomeFeature {
             case .searchForPodcastTapped(with: let term):
                 state.searchPodcastResults = nil
                 state.isLoading = true
-                return .run {  send in
+                return .run { [state = state] send in
                     try await send(
                         .podcastSearchResponse(
-                            self.podHubManager.searchFor(searchFor: .podcast, value: term)
+                            self.podHubManager.searchFor(searchFor: .podcast, value: term, limit: state.limit, page: state.currentPage)
                         )
                     )
                 }
@@ -52,25 +56,44 @@ struct HomeFeature {
                 state.searchTerm = searchTerm
                 return .none
             case .fetchTrendingPodcasts:
-                state.trendingPodcasts = nil
                 state.isLoading = true
-                return .run {  send in
+                return .run { [state = state] send in
                     try await send(
                         .trendingPodcastResponse(
-                            self.podHubManager.searchFor(searchFor: .podcast, value: "morning")
+                            self.podHubManager.searchFor(searchFor: .podcast, value: "morning", limit: state.limit, page: state.currentPage)
                         )
                     )
                 }
             case .trendingPodcastResponse(let result):
-                state.trendingPodcasts = result
+                if state.trendingPodcasts != nil {
+                    state.trendingPodcasts!.podcasts.append(contentsOf: result.podcasts)
+                } else {
+                    state.trendingPodcasts = result
+                    state.totalCount = result.podcasts.count
+                }
                 state.isLoading = false
-                return .none
+                return .send(.updateCurrentPage)
             case .loadView:
+                state.currentPage = 1
+                let itemsLimit = state.limit
+                if state.trendingPodcasts != nil {
+                    if let podcasts = state.trendingPodcasts?.podcasts {
+                        state.trendingPodcasts?.podcasts = IdentifiedArray(podcasts.prefix(itemsLimit))
+                    }
+                    return .none
+                }
                 return .send(.fetchTrendingPodcasts)
             case .cellTapped(let podcast):
                 state.podcastDetails = PodcastDetailsFeature.State(podcast: podcast)
                 return .none
             case .podcastDetails:
+                return .none
+            case .updateCurrentPage:
+                guard let totalCount = state.totalCount else { return .none }
+                guard let podcastList = state.trendingPodcasts?.podcasts else { return .none }
+                if totalCount > podcastList.count {
+                    state.currentPage += 1
+                }
                 return .none
             }
         }
@@ -108,7 +131,6 @@ struct HomeView: View {
                         }
                     }
                 }
-                
                 ToolbarItem(placement: .topBarLeading) {
                     ZStack {
                         RoundedRectangle(cornerRadius: 32)
@@ -186,18 +208,23 @@ struct HomeViewContent: View {
                 .padding(.horizontal, 16)
             }
             )
-            
+
             Spacer()
                 .frame(height: 32)
-            
+
             Section(content: {
                 LazyVStack(spacing: 24) {
-                    if (store.trendingPodcasts?.podcasts) != nil {
-                        ForEach((store.trendingPodcasts!.podcasts), id: \.self) { response in
-                            ListViewCell(podcast: response)
+                    if let podcasts = store.trendingPodcasts?.podcasts {
+                        ForEach(podcasts, id: \.self) { podcast in
+                            ListViewCell(podcast: podcast)
                                 .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                                 .onTapGesture {
-                                    store.send(.cellTapped(response))
+                                    store.send(.cellTapped(podcast))
+                                }
+                                .onAppear {
+                                    if podcast == podcasts.last {
+                                        store.send(.fetchTrendingPodcasts)
+                                    }
                                 }
                         }
                     }

@@ -179,11 +179,11 @@ extension ItunesManager {
 
         var urlComponents = URLComponents(string: Constants.apiURL.rawValue)
         urlComponents?.queryItems = queryItems
-        
+
         guard let limit = limit, let page = page else {
             return try await performQuery(urlComponents?.url)
         }
-        
+
         return try await performQueryWithPagination(urlComponents?.url, limit: limit, page: page)
     }
 }
