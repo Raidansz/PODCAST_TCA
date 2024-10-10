@@ -65,8 +65,10 @@ struct HomeFeature {
                     )
                 }
             case .trendingPodcastResponse(let result):
-                if state.trendingPodcasts != nil {
-                    state.trendingPodcasts!.podcasts.append(contentsOf: result.podcasts)
+                if state.trendingPodcasts != nil, state.totalCount != nil {
+                    if state.totalCount! > (state.trendingPodcasts?.podcasts.count)! {
+                        state.trendingPodcasts!.podcasts.append(contentsOf: result.podcasts)
+                    }
                 } else {
                     state.trendingPodcasts = result
                     state.totalCount = result.podcasts.count

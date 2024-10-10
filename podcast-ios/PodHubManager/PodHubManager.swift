@@ -11,7 +11,12 @@ class PodHubManager: PodHubManagerProtocol {
     @Injected(\.itunesManager) private var itunesManager: ItunesManagerProtocol
     @Injected(\.podcastIndexManager) private var podcastIndexManager: PodcastIndexManagerProtocol
 
-    func searchFor(searchFor mediaType: MediaType, value: String, limit: Int? = nil, page: Int? = nil) async throws -> PodHub {
+    func searchFor(
+        searchFor mediaType: MediaType,
+        value: String,
+        limit: Int? = nil,
+        page: Int? = nil
+    ) async throws -> PodHub {
         let result =  try await lookupItunes(searchFor: mediaType, value: value, limit: limit, page: page)
         if result.results.isEmpty {
             let result = try await lookupPodcastIndex(searchFor: mediaType, value: value)
@@ -20,15 +25,35 @@ class PodHubManager: PodHubManagerProtocol {
         return try normalizeResult(result: result, mediaType: mediaType)
     }
 
-    private func lookupItunes(searchFor: MediaType, value: String, limit: Int? = nil, page: Int? = nil) async throws -> SearchResults {
+    private func lookupItunes(
+        searchFor: MediaType,
+        value: String,
+        limit: Int? = nil,
+        page: Int? = nil
+    ) async throws -> SearchResults {
         let searchResult: SearchResults
         let encodedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
         if searchFor == .podcast {
-            searchResult = try await itunesManager.searchPodcasts(term: encodedValue, entity: .podcast, limit: limit, page: page)
+            searchResult = try await itunesManager.searchPodcasts(
+                term: encodedValue,
+                entity: .podcast,
+                limit: limit,
+                page: page
+            )
         } else if searchFor == .episode {
-            searchResult = try await itunesManager.searchPodcasts(term: encodedValue, entity: .podcastEpisode, limit: limit, page: page)
+            searchResult = try await itunesManager.searchPodcasts(
+                term: encodedValue,
+                entity: .podcastEpisode,
+                limit: limit,
+                page: page
+            )
         } else {
-            searchResult = try await itunesManager.searchPodcasts(term: encodedValue, entity: .podcastAndEpisode, limit: limit, page: page)
+            searchResult = try await itunesManager.searchPodcasts(
+                term: encodedValue,
+                entity: .podcastAndEpisode,
+                limit: limit,
+                page: page
+            )
         }
         return searchResult
     }

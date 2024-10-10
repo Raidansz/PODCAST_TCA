@@ -24,6 +24,7 @@ struct PodcastDetailsFeature {
         case cellTapped(Episode)
         case playEpisode(PresentationAction<PlayerFeature.Action>)
         case episodeResponse(IdentifiedArrayOf<Episode>?)
+        case onDisappear
     }
 
     private func parseFeed(url: URL?) async throws -> IdentifiedArrayOf<Episode> {
@@ -66,6 +67,9 @@ struct PodcastDetailsFeature {
                 state.playEpisode = PlayerFeature.State(episode: episode)
                 return .none
             case .playEpisode:
+                return .none
+            case .onDisappear:
+                state.episodes = nil
                 return .none
             }
         }
