@@ -19,7 +19,6 @@ struct HomeFeature {
         var searchTerm = ""
         let limit = 10
         var currentPage = 1
-        var totalCount: Int?
     }
 
     enum Action: Equatable {
@@ -57,7 +56,7 @@ struct HomeFeature {
                 return .none
             case .fetchTrendingPodcasts:
                 state.isLoading = true
-                return .run { [state = state] send in
+                return .run { [state] send in
                     try await send(
                         .trendingPodcastResponse(
                             self.podHubManager.searchFor(searchFor: .podcast, value: "morning", limit: state.limit, page: state.currentPage)
@@ -65,25 +64,17 @@ struct HomeFeature {
                     )
                 }
             case .trendingPodcastResponse(let result):
-                if state.trendingPodcasts != nil, state.totalCount != nil {
-                    if state.totalCount! > (state.trendingPodcasts?.podcasts.count)! {
+                if state.trendingPodcasts != nil, state.trendingPodcasts?.podcasts.count != nil {
+                    if (state.trendingPodcasts?.podcasts.count)! < (state.trendingPodcasts?.totalCount)! {
                         state.trendingPodcasts!.podcasts.append(contentsOf: result.podcasts)
                     }
-                } else {
+                } else { // First fetch
                     state.trendingPodcasts = result
-                    state.totalCount = result.podcasts.count
                 }
                 state.isLoading = false
                 return .send(.updateCurrentPage)
             case .loadView:
                 state.currentPage = 1
-                let itemsLimit = state.limit
-                if state.trendingPodcasts != nil {
-                    if let podcasts = state.trendingPodcasts?.podcasts {
-                        state.trendingPodcasts?.podcasts = IdentifiedArray(podcasts.prefix(itemsLimit))
-                    }
-                    return .none
-                }
                 return .send(.fetchTrendingPodcasts)
             case .cellTapped(let podcast):
                 state.podcastDetails = PodcastDetailsFeature.State(podcast: podcast)
@@ -91,9 +82,9 @@ struct HomeFeature {
             case .podcastDetails:
                 return .none
             case .updateCurrentPage:
-                guard let totalCount = state.totalCount else { return .none }
-                guard let podcastList = state.trendingPodcasts?.podcasts else { return .none }
-                if totalCount > podcastList.count {
+                ///come back here
+                guard let podcastList = state.trendingPodcasts else { return .none }
+                if (state.trendingPodcasts?.podcasts.count)! < podcastList.totalCount {
                     state.currentPage += 1
                 }
                 return .none

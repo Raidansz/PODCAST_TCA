@@ -20,9 +20,9 @@ class PodHubManager: PodHubManagerProtocol {
         let result =  try await lookupItunes(searchFor: mediaType, value: value, limit: limit, page: page)
         if result.results.isEmpty {
             let result = try await lookupPodcastIndex(searchFor: mediaType, value: value)
-            return try normalizeResult(result: result, mediaType: mediaType)
+            return try normalizeResult(result: result, mediaType: mediaType, totalCount: result.count)
         }
-        return try normalizeResult(result: result, mediaType: mediaType)
+        return try normalizeResult(result: result, mediaType: mediaType, totalCount: result.resultCount)
     }
 
     private func lookupItunes(
@@ -67,8 +67,8 @@ class PodHubManager: PodHubManagerProtocol {
         }
     }
 
-    private func normalizeResult(result: PodHubConvertable, mediaType: MediaType ) throws -> PodHub {
-        return try PodHub(result: result, mediaType: mediaType)
+    private func normalizeResult(result: PodHubConvertable, mediaType: MediaType, totalCount: Int ) throws -> PodHub {
+        return try PodHub(result: result, mediaType: mediaType, totalCount: totalCount)
     }
 
     enum FilterBy {

@@ -17,10 +17,11 @@ struct PodHub: Equatable {
 
     var id: UUID = UUID()
     var podcasts: IdentifiedArrayOf<Podcast> = []
+    var totalCount: Int
 
-    init(result: PodHubConvertable, mediaType: MediaType) throws {
+    init(result: PodHubConvertable, mediaType: MediaType, totalCount: Int) throws {
         self.podcasts = IdentifiedArray()
-
+        self.totalCount = totalCount
         if let searchResults = result as? SearchResults {
             if !searchResults.results.isEmpty {
                 let itunesPodcasts = searchResults.results.map {
