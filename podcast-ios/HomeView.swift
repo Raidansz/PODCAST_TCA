@@ -18,6 +18,7 @@ struct HomeFeature {
         var isLoading: Bool = false
         var searchTerm = ""
         let limit = 10
+        @Presents var destination: Destination.State?
         var currentPage = 1
     }
 
@@ -30,11 +31,18 @@ struct HomeFeature {
         case trendingPodcastResponse(PodHub)
         case path(StackActionOf<Path>)
         case updateCurrentPage
+        case showMorePodcastsTapped
+        case destination(PresentationAction<Destination.Action>)
     }
 
     @Reducer
     enum Path {
         case podcastDetails(PodcastDetailsFeature)
+    }
+
+    @Reducer
+    enum Destination {
+        case showMorePodcasts(PodcastDetailsFeature)
     }
 
     @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
@@ -99,8 +107,16 @@ struct HomeFeature {
                     state.currentPage += 1
                 }
                 return .none
+            case .destination:
+                return .none
+            case .showMorePodcastsTapped:
+                state.destination = .showMorePodcasts(
+                    PodcastDetailsFeature.State(podcast: state.trendingPodcasts!.podcasts.first!)
+                )
+                return .none
             }
         }
+        .ifLet(\.$destination, action: \.destination)
         .forEach(\.path, action: \.path)
     }
 }
@@ -156,6 +172,16 @@ struct HomeView: View {
         }
         .onAppear {
             store.send(.loadView)
+        }
+        .sheet(
+            item: $store.scope(
+                state: \.destination?.showMorePodcasts,
+                action: \.destination.showMorePodcasts
+            )
+        ) { store in
+            NavigationStack {
+                PodcastDetailsView(store: store)
+            }
         }
     }
 }
@@ -233,7 +259,7 @@ struct HomeViewContent: View {
                         .fontWeight(.semibold)
                     Spacer()
                     Button {
-                        // store.send(.playAudioTapped) Here would be the one with presentation
+                        store.send(.showMorePodcastsTapped)
                     } label: {
                         Text("See more..")
                             .foregroundStyle(Color(.blue))
