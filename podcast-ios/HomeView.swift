@@ -32,6 +32,7 @@ struct HomeFeature {
         case path(StackActionOf<Path>)
         case updateCurrentPage
         case showMorePodcastsTapped
+        case podcastDetailsTapped(Podcast)
         case destination(PresentationAction<Destination.Action>)
     }
 
@@ -56,7 +57,7 @@ struct HomeFeature {
             case .searchForPodcastTapped(with: let term):
                 state.searchPodcastResults = nil
                 state.isLoading = true
-                return .run { [state] send in
+                return .run { send in
                     try await send(
                         .podcastSearchResponse(
                             self.podHubManager.searchFor(
@@ -73,7 +74,7 @@ struct HomeFeature {
                 return .none
             case .fetchTrendingPodcasts:
                 state.isLoading = true
-                return .run { [state] send in
+                return .run { send in
                     try await send(
                         .trendingPodcastResponse(
                             self.podHubManager.searchFor(
@@ -114,6 +115,9 @@ struct HomeFeature {
                 if state.limit < podcasts.podcasts.count {
                     state.destination = .showMorePodcasts(ShowMorePodcastFeature.State(trendingPodcasts: podcasts))
                 }
+                return .none
+            case .podcastDetailsTapped(let podcast):
+                state.path.append(.podcastDetails(PodcastDetailsFeature.State(podcast: podcast)))
                 return .none
             }
         }
@@ -238,19 +242,16 @@ struct HomeViewContent: View {
                 LazyVStack(spacing: 24) {
                     if let podcasts = store.trendingPodcasts?.podcasts {
                         ForEach(podcasts.prefix(store.limit), id: \.self) { podcast in
-                            NavigationLink(
-                                state: HomeFeature.Path.State.podcastDetails(
-                                    PodcastDetailsFeature.State(podcast: podcast)
-                                )
-                            ) {
-                                ListViewCell(podcast: podcast)
-                                    .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
-                            }
-                            .onAppear {
-                                if podcast == podcasts.last {
-                                    store.send(.fetchTrendingPodcasts)
+                            ListViewCell(podcast: podcast)
+                                .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                                .onTapGesture {
+                                    store.send(.podcastDetailsTapped(podcast))
                                 }
-                            }
+                                .onAppear {
+                                    if podcast == podcasts.last {
+                                        store.send(.fetchTrendingPodcasts)
+                                    }
+                                }
                         }
                     }
                 }
