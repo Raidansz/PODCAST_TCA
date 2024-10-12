@@ -47,19 +47,13 @@ class ItunesManager: ItunesManagerProtocol {
         guard let url = url else {
             throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
         }
-        // without pagination
-        let (nPData, _) = try await URLSession.shared.data(from: url)
 
-        let nPjson = try JSON(data: nPData)
-        let resultCount = nPjson["resultCount"].intValue
-        
-        
         let offset = (page - 1) * limit
         let queryURL = URL(string: "\(url)&limit=\(limit)&offset=\(offset)")!
         let (data, _) = try await URLSession.shared.data(from: queryURL)
 
         let json = try JSON(data: data)
-       // let resultCount = json["resultCount"].intValue
+        let resultCount = json["resultCount"].intValue
         let resultsArray = json["results"].arrayValue
         let searchResults = resultsArray.map { SearchResult(json: $0) }
         let searchResultsModel = SearchResults(

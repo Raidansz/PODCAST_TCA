@@ -42,7 +42,7 @@ struct HomeFeature {
 
     @Reducer
     enum Destination {
-        case showMorePodcasts(PodcastDetailsFeature)
+        case showMorePodcasts(ShowMorePodcastFeature)
     }
 
     @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
@@ -56,14 +56,14 @@ struct HomeFeature {
             case .searchForPodcastTapped(with: let term):
                 state.searchPodcastResults = nil
                 state.isLoading = true
-                return .run { [state = state] send in
+                return .run { [state] send in
                     try await send(
                         .podcastSearchResponse(
                             self.podHubManager.searchFor(
                                 searchFor: .podcast,
                                 value: term,
-                                limit: state.limit,
-                                page: state.currentPage
+                                limit: nil,
+                                page: nil
                             )
                         )
                     )
@@ -79,8 +79,8 @@ struct HomeFeature {
                             self.podHubManager.searchFor(
                                 searchFor: .podcast,
                                 value: "morning",
-                                limit: state.limit,
-                                page: state.currentPage
+                                limit: nil,
+                                page: nil
                             )
                         )
                     )
@@ -110,9 +110,10 @@ struct HomeFeature {
             case .destination:
                 return .none
             case .showMorePodcastsTapped:
-                state.destination = .showMorePodcasts(
-                    PodcastDetailsFeature.State(podcast: state.trendingPodcasts!.podcasts.first!)
-                )
+                guard let podcasts = state.trendingPodcasts else { return .none }
+                if state.limit < podcasts.podcasts.count {
+                    state.destination = .showMorePodcasts(ShowMorePodcastFeature.State(trendingPodcasts: podcasts))
+                }
                 return .none
             }
         }
@@ -180,7 +181,7 @@ struct HomeView: View {
             )
         ) { store in
             NavigationStack {
-                PodcastDetailsView(store: store)
+                ShowMorePodcastView(store: store)
             }
         }
     }
@@ -214,8 +215,8 @@ struct HomeViewContent: View {
             }
             .padding()
             Section(content: {
-                if (store.trendingPodcasts?.podcasts) != nil {
-                    horizontalList(data: (store.trendingPodcasts!.podcasts)) { podcast in
+                if let podcasts = store.trendingPodcasts {
+                    horizontalList(data: (podcasts.podcasts.prefix(store.limit))) { podcast in
                         ListViewHero(imageURL: podcast.image ?? URL(string: "")!)
                             .frame(width: 300, height: 300)
                     }
@@ -236,7 +237,7 @@ struct HomeViewContent: View {
             Section(content: {
                 LazyVStack(spacing: 24) {
                     if let podcasts = store.trendingPodcasts?.podcasts {
-                        ForEach(podcasts, id: \.self) { podcast in
+                        ForEach(podcasts.prefix(store.limit), id: \.self) { podcast in
                             NavigationLink(
                                 state: HomeFeature.Path.State.podcastDetails(
                                     PodcastDetailsFeature.State(podcast: podcast)
@@ -258,11 +259,13 @@ struct HomeViewContent: View {
                     Text("Trending Podcasts")
                         .fontWeight(.semibold)
                     Spacer()
-                    Button {
-                        store.send(.showMorePodcastsTapped)
-                    } label: {
-                        Text("See more..")
-                            .foregroundStyle(Color(.blue))
+                    if store.trendingPodcasts?.podcasts.count ?? 0 > store.limit {
+                        Button {
+                            store.send(.showMorePodcastsTapped)
+                        } label: {
+                            Text("See more..")
+                                .foregroundStyle(Color(.blue))
+                        }
                     }
                 }
                 .padding(.horizontal, 16)
