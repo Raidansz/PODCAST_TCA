@@ -11,28 +11,32 @@ import ComposableArchitecture
 @Reducer
 struct HomeFeature {
     @ObservableState
-    struct State: Equatable {
+    struct State {
         var trendingPodcasts: PodHub?
         var searchPodcastResults: PodHub?
-        @Presents var podcastDetails: PodcastDetailsFeature.State?
+        var path = StackState<Path.State>()
         var isLoading: Bool = false
         var searchTerm = ""
         let limit = 10
         var currentPage = 1
     }
 
-    enum Action: Equatable {
+    enum Action {
         case podcastSearchResponse(PodHub)
         case searchForPodcastTapped(with: String)
         case searchTermChanged(String)
         case fetchTrendingPodcasts
         case loadView
         case trendingPodcastResponse(PodHub)
-        case cellTapped(Podcast)
-        case podcastDetails(PresentationAction<PodcastDetailsFeature.Action>)
+        case path(StackActionOf<Path>)
         case updateCurrentPage
     }
-    
+
+    @Reducer
+    enum Path {
+        case podcastDetails(PodcastDetailsFeature)
+    }
+
     @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -47,7 +51,12 @@ struct HomeFeature {
                 return .run { [state = state] send in
                     try await send(
                         .podcastSearchResponse(
-                            self.podHubManager.searchFor(searchFor: .podcast, value: term, limit: state.limit, page: state.currentPage)
+                            self.podHubManager.searchFor(
+                                searchFor: .podcast,
+                                value: term,
+                                limit: state.limit,
+                                page: state.currentPage
+                            )
                         )
                     )
                 }
@@ -59,16 +68,21 @@ struct HomeFeature {
                 return .run { [state] send in
                     try await send(
                         .trendingPodcastResponse(
-                            self.podHubManager.searchFor(searchFor: .podcast, value: "morning", limit: state.limit, page: state.currentPage)
+                            self.podHubManager.searchFor(
+                                searchFor: .podcast,
+                                value: "morning",
+                                limit: state.limit,
+                                page: state.currentPage
+                            )
                         )
                     )
                 }
             case .trendingPodcastResponse(let result):
-                if state.trendingPodcasts != nil, state.trendingPodcasts?.podcasts.count != nil {
-                    if (state.trendingPodcasts?.podcasts.count)! < (state.trendingPodcasts?.totalCount)! {
+                if let localPodcastList = state.trendingPodcasts {
+                    if localPodcastList.podcasts.count < localPodcastList.totalCount {
                         state.trendingPodcasts!.podcasts.append(contentsOf: result.podcasts)
                     }
-                } else { // First fetch
+                } else {
                     state.trendingPodcasts = result
                 }
                 state.isLoading = false
@@ -76,30 +90,25 @@ struct HomeFeature {
             case .loadView:
                 state.currentPage = 1
                 return .send(.fetchTrendingPodcasts)
-            case .cellTapped(let podcast):
-                state.podcastDetails = PodcastDetailsFeature.State(podcast: podcast)
-                return .none
-            case .podcastDetails:
+            case .path:
                 return .none
             case .updateCurrentPage:
-                ///come back here
                 guard let podcastList = state.trendingPodcasts else { return .none }
-                if (state.trendingPodcasts?.podcasts.count)! < podcastList.totalCount {
+                let podcastListTotalCount = podcastList.totalCount
+                if podcastList.podcasts.count < podcastListTotalCount {
                     state.currentPage += 1
                 }
                 return .none
             }
         }
-        .ifLet(\.$podcastDetails, action: \.podcastDetails) {
-            PodcastDetailsFeature()
-        }
+        .forEach(\.path, action: \.path)
     }
 }
 
 struct HomeView: View {
-    @State var store: StoreOf<HomeFeature>
+    @Bindable var store: StoreOf<HomeFeature>
     var body: some View {
-        NavigationStack {
+        NavigationStack( path: $store.scope(state: \.path, action: \.path)) {
             ZStack(alignment: .top) {
                 HomeViewContent(store: store)
                     .blur(
@@ -139,21 +148,14 @@ struct HomeView: View {
             }
             .navigationTitle("Home")
             .navigationBarTitleDisplayMode(.large)
+        } destination: { store in
+            switch store.case {
+            case .podcastDetails(let store):
+                PodcastDetailsView(store: store)
+            }
         }
         .onAppear {
             store.send(.loadView)
-        }
-        .sheet(
-            store: self.store.scope(
-                state: \.$podcastDetails,
-                action: \.podcastDetails
-            )
-        ) { store in
-            NavigationStack {
-                PodcastDetailsView(store: store)
-                    .navigationTitle(store.podcast.title ?? "")
-                    .navigationBarTitleDisplayMode(.inline)
-            }
         }
     }
 }
@@ -189,7 +191,7 @@ struct HomeViewContent: View {
                 if (store.trendingPodcasts?.podcasts) != nil {
                     horizontalList(data: (store.trendingPodcasts!.podcasts)) { podcast in
                         ListViewHero(imageURL: podcast.image ?? URL(string: "")!)
-                            .frame(width: 300,height: 300)
+                            .frame(width: 300, height: 300)
                     }
                 }
             }, header: {
@@ -209,16 +211,19 @@ struct HomeViewContent: View {
                 LazyVStack(spacing: 24) {
                     if let podcasts = store.trendingPodcasts?.podcasts {
                         ForEach(podcasts, id: \.self) { podcast in
-                            ListViewCell(podcast: podcast)
-                                .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
-                                .onTapGesture {
-                                    store.send(.cellTapped(podcast))
+                            NavigationLink(
+                                state: HomeFeature.Path.State.podcastDetails(
+                                    PodcastDetailsFeature.State(podcast: podcast)
+                                )
+                            ) {
+                                ListViewCell(podcast: podcast)
+                                    .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                            }
+                            .onAppear {
+                                if podcast == podcasts.last {
+                                    store.send(.fetchTrendingPodcasts)
                                 }
-                                .onAppear {
-                                    if podcast == podcasts.last {
-                                        store.send(.fetchTrendingPodcasts)
-                                    }
-                                }
+                            }
                         }
                     }
                 }
@@ -228,7 +233,7 @@ struct HomeViewContent: View {
                         .fontWeight(.semibold)
                     Spacer()
                     Button {
-                       // store.send(.playAudioTapped)
+                        // store.send(.playAudioTapped) Here would be the one with presentation
                     } label: {
                         Text("See more..")
                             .foregroundStyle(Color(.blue))

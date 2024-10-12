@@ -82,7 +82,6 @@ struct PodcastDetailsFeature {
 struct PodcastDetailsView: View {
     @State var store: StoreOf<PodcastDetailsFeature>
     var body: some View {
-        NavigationStack {
             ZStack(alignment: .top) {
                 ScrollView {
                     // TODO: Pagination
@@ -114,7 +113,6 @@ struct PodcastDetailsView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
-        }
         .onAppear {
             store.send(.fetchEpisode)
         }
