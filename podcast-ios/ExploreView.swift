@@ -15,12 +15,18 @@ struct ExploreFeature {
         var podcastsList: PodHub?
         var isLoading: Bool = false
         var selectedPodcast: Item?
+        var searchTerm = ""
+        var searchPodcastResults: PodHub?
+        
     }
 
     enum Action: Equatable {
         case fetchPodcasts
         case fetchPodcastsResponse(PodHub)
         case podcastCellTapped(Item)
+        case searchForPodcastTapped(with: String)
+        case searchTermChanged(String)
+        case podcastSearchResponse(PodHub)
     }
 
     @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
@@ -45,6 +51,28 @@ struct ExploreFeature {
             case .podcastCellTapped(let podcast):
                 state.selectedPodcast = nil
                 state.selectedPodcast = podcast
+                return .none
+            case .searchForPodcastTapped(with: let term):
+                state.searchPodcastResults = nil
+                state.isLoading = true
+                return .run { send in
+                    try await send(
+                        .podcastSearchResponse(
+                            self.podHubManager.searchFor(
+                                searchFor: .podcast,
+                                value: term,
+                                limit: nil,
+                                page: nil
+                            )
+                        )
+                    )
+                }
+            case .podcastSearchResponse(let result):
+                state.searchPodcastResults = result
+                state.isLoading = false
+                return .none
+            case .searchTermChanged(let searchTerm):
+                state.searchTerm = searchTerm
                 return .none
             }
         }
@@ -103,9 +131,33 @@ struct ExloreView: View {
 }
 
 struct ExploreViewContent: View {
-    var store: StoreOf<ExploreFeature>
+    @Bindable var store: StoreOf<ExploreFeature>
     var body: some View {
         ScrollView {
+            ZStack {
+                RoundedRectangle(cornerRadius: 32)
+                    .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
+                    .frame(width: 364, height: 64)
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(.black)
+                        .padding(.leading, 15)
+                    TextField(
+                        "Search the podcast here...",
+                        text: $store.searchTerm.sending(\.searchTermChanged)
+                    )
+                    .padding(.leading, 5)
+                    .onSubmit {
+                        store.send(.searchForPodcastTapped(with: store.searchTerm))
+                    }
+                }
+                .frame(width: 364, height: 64)
+                .clipShape(RoundedRectangle(cornerRadius: 32))
+            }
+            .padding()
+
             Section(content: {
                 if (store.podcastsList?.podcasts) != nil {
                     horizontalList(data: (store.podcastsList!.podcasts)) { podcast in

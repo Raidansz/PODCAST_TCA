@@ -13,24 +13,17 @@ struct HomeFeature {
     @ObservableState
     struct State {
         var trendingPodcasts: PodHub?
-        var searchPodcastResults: PodHub?
         var path = StackState<Path.State>()
         var isLoading: Bool = false
-        var searchTerm = ""
         let limit = 10
         @Presents var destination: Destination.State?
-        var currentPage = 1
     }
 
     enum Action {
-        case podcastSearchResponse(PodHub)
-        case searchForPodcastTapped(with: String)
-        case searchTermChanged(String)
         case fetchTrendingPodcasts
         case loadView
         case trendingPodcastResponse(PodHub)
         case path(StackActionOf<Path>)
-        case updateCurrentPage
         case showMorePodcastsTapped
         case podcastDetailsTapped(Podcast)
         case destination(PresentationAction<Destination.Action>)
@@ -50,28 +43,6 @@ struct HomeFeature {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .podcastSearchResponse(let result):
-                state.searchPodcastResults = result
-                state.isLoading = false
-                return .none
-            case .searchForPodcastTapped(with: let term):
-                state.searchPodcastResults = nil
-                state.isLoading = true
-                return .run { send in
-                    try await send(
-                        .podcastSearchResponse(
-                            self.podHubManager.searchFor(
-                                searchFor: .podcast,
-                                value: term,
-                                limit: nil,
-                                page: nil
-                            )
-                        )
-                    )
-                }
-            case .searchTermChanged(let searchTerm):
-                state.searchTerm = searchTerm
-                return .none
             case .fetchTrendingPodcasts:
                 state.isLoading = true
                 return .run { send in
@@ -87,26 +58,15 @@ struct HomeFeature {
                     )
                 }
             case .trendingPodcastResponse(let result):
-                if let localPodcastList = state.trendingPodcasts {
-                    if localPodcastList.podcasts.count < localPodcastList.totalCount {
-                        state.trendingPodcasts!.podcasts.append(contentsOf: result.podcasts)
-                    }
-                } else {
-                    state.trendingPodcasts = result
-                }
+                state.trendingPodcasts = result
                 state.isLoading = false
-                return .send(.updateCurrentPage)
+                return .none
             case .loadView:
-                state.currentPage = 1
+                if let podcastList = state.trendingPodcasts {
+                    return .none
+                }
                 return .send(.fetchTrendingPodcasts)
             case .path:
-                return .none
-            case .updateCurrentPage:
-                guard let podcastList = state.trendingPodcasts else { return .none }
-                let podcastListTotalCount = podcastList.totalCount
-                if podcastList.podcasts.count < podcastListTotalCount {
-                    state.currentPage += 1
-                }
                 return .none
             case .destination:
                 return .none
@@ -195,35 +155,18 @@ struct HomeViewContent: View {
     @State var store: StoreOf<HomeFeature>
     var body: some View {
         ScrollView {
-            ZStack {
-                RoundedRectangle(cornerRadius: 32)
-                    .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
-                    .frame(width: 364, height: 64)
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .resizable()
-                        .frame(width: 24, height: 24)
-                        .foregroundColor(.black)
-                        .padding(.leading, 15)
-                    TextField(
-                        "Search the podcast here...",
-                        text: $store.searchTerm.sending(\.searchTermChanged)
-                    )
-                    .padding(.leading, 5)
-                    .onSubmit {
-                        store.send(.searchForPodcastTapped(with: store.searchTerm))
-                    }
-                }
-                .frame(width: 364, height: 64)
-                .clipShape(RoundedRectangle(cornerRadius: 32))
-            }
-            .padding()
             Section(content: {
                 if let podcasts = store.trendingPodcasts {
                     horizontalList(data: (podcasts.podcasts.prefix(store.limit))) { podcast in
                         ListViewHero(imageURL: podcast.image ?? URL(string: "")!)
-                            .frame(width: 300, height: 300)
+                            .frame(width: 350, height: 350)
+                            .onTapGesture {
+                                store.send(.podcastDetailsTapped(podcast))
+                            }
                     }
+                    .scrollTargetLayout()
+                    .scrollTargetBehavior(.viewAligned)
+                    
                 }
             }, header: {
                 HStack {
@@ -246,11 +189,6 @@ struct HomeViewContent: View {
                                 .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                                 .onTapGesture {
                                     store.send(.podcastDetailsTapped(podcast))
-                                }
-                                .onAppear {
-                                    if podcast == podcasts.last {
-                                        store.send(.fetchTrendingPodcasts)
-                                    }
                                 }
                         }
                     }

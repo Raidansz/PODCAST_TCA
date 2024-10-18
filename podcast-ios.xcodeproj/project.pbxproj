@@ -20,7 +20,6 @@
 		AA7DE4C92C9F1DA800D51A42 /* ItunesManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4C82C9F1DA500D51A42 /* ItunesManager.swift */; };
 		AA7DE4CB2C9F1E0A00D51A42 /* InjectionKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4CA2C9F1E0600D51A42 /* InjectionKey.swift */; };
 		AA7DE4CD2C9F725200D51A42 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4CC2C9F724D00D51A42 /* PlayerView.swift */; };
-		AA7DE4CF2CA076E200D51A42 /* AudioSliderBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4CE2CA076CD00D51A42 /* AudioSliderBarView.swift */; };
 		AA7DE4D22CA08D4F00D51A42 /* PodcastIndexModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4D12CA08D4C00D51A42 /* PodcastIndexModel.swift */; };
 		AA7DE4D42CA08D8D00D51A42 /* PodcastIndexManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4D32CA08D8900D51A42 /* PodcastIndexManager.swift */; };
 		AA7DE4DA2CA090A400D51A42 /* PodcastIndexKey.pl in Resources */ = {isa = PBXBuildFile; fileRef = AA7DE4D92CA090A400D51A42 /* PodcastIndexKey.pl */; };
@@ -32,6 +31,7 @@
 		AAF16C642CB440690035F9D0 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = AAF16C632CB440690035F9D0 /* FeedKit */; };
 		AAF16C662CB460750035F9D0 /* RSSFeed+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF16C652CB460720035F9D0 /* RSSFeed+Extension.swift */; };
 		AAF16C692CBAB2840035F9D0 /* ShowMorePodcastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF16C682CBAB2550035F9D0 /* ShowMorePodcastView.swift */; };
+		AAF16C6C2CBACF900035F9D0 /* SliderControl in Frameworks */ = {isa = PBXBuildFile; productRef = AAF16C6B2CBACF900035F9D0 /* SliderControl */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,7 +47,6 @@
 		AA7DE4C82C9F1DA500D51A42 /* ItunesManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItunesManager.swift; sourceTree = "<group>"; };
 		AA7DE4CA2C9F1E0600D51A42 /* InjectionKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionKey.swift; sourceTree = "<group>"; };
 		AA7DE4CC2C9F724D00D51A42 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
-		AA7DE4CE2CA076CD00D51A42 /* AudioSliderBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioSliderBarView.swift; sourceTree = "<group>"; };
 		AA7DE4D12CA08D4C00D51A42 /* PodcastIndexModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastIndexModel.swift; sourceTree = "<group>"; };
 		AA7DE4D32CA08D8900D51A42 /* PodcastIndexManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastIndexManager.swift; sourceTree = "<group>"; };
 		AA7DE4D92CA090A400D51A42 /* PodcastIndexKey.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = PodcastIndexKey.pl; sourceTree = "<group>"; };
@@ -67,6 +66,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAF16C642CB440690035F9D0 /* FeedKit in Frameworks */,
+				AAF16C6C2CBACF900035F9D0 /* SliderControl in Frameworks */,
 				AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */,
 				AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */,
 			);
@@ -128,7 +128,6 @@
 				AA45496E2CB43A450055890A /* PodcastDetailsView.swift */,
 				AA1F8E3A2CA8570B009FFC85 /* PodHubManager */,
 				AA7DE4D02CA08D3500D51A42 /* PodcastIndexManager */,
-				AA7DE4CE2CA076CD00D51A42 /* AudioSliderBarView.swift */,
 				AA7DE4CC2C9F724D00D51A42 /* PlayerView.swift */,
 				AA7DE4CA2C9F1E0600D51A42 /* InjectionKey.swift */,
 				AA7DE4C02C9F1C6600D51A42 /* ItunesManager */,
@@ -163,7 +162,6 @@
 				AA92783F2C8F151C00D5CF6D /* Sources */,
 				AA9278402C8F151C00D5CF6D /* Frameworks */,
 				AA9278412C8F151C00D5CF6D /* Resources */,
-				AA7DE4B62C9DF87700D51A42 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -174,6 +172,7 @@
 				AA9278552C8F155C00D5CF6D /* ComposableArchitecture */,
 				AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */,
 				AAF16C632CB440690035F9D0 /* FeedKit */,
+				AAF16C6B2CBACF900035F9D0 /* SliderControl */,
 			);
 			productName = "podcast-ios";
 			productReference = AA9278432C8F151C00D5CF6D /* podcast-ios.app */;
@@ -207,6 +206,7 @@
 				AA9278542C8F155C00D5CF6D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				AAF16C622CB440690035F9D0 /* XCRemoteSwiftPackageReference "FeedKit" */,
+				AAF16C6A2CBACF900035F9D0 /* XCRemoteSwiftPackageReference "SliderControl" */,
 			);
 			productRefGroup = AA9278442C8F151C00D5CF6D /* Products */;
 			projectDirPath = "";
@@ -230,26 +230,6 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
-/* Begin PBXShellScriptBuildPhase section */
-		AA7DE4B62C9DF87700D51A42 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nif command -v swiftlint >/dev/null 2>&1\nthen\n    swiftlint\nelse\n    echo \"warning: `swiftlint` command not found - See https://github.com/realm/SwiftLint#installation for installation instructions.\"\nfi\n";
-		};
-/* End PBXShellScriptBuildPhase section */
-
 /* Begin PBXSourcesBuildPhase section */
 		AA92783F2C8F151C00D5CF6D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -263,7 +243,6 @@
 				AA7DE4BB2C9F0D5800D51A42 /* HomeView.swift in Sources */,
 				AAF16C692CBAB2840035F9D0 /* ShowMorePodcastView.swift in Sources */,
 				AA7DE4CD2C9F725200D51A42 /* PlayerView.swift in Sources */,
-				AA7DE4CF2CA076E200D51A42 /* AudioSliderBarView.swift in Sources */,
 				AA7DE4D22CA08D4F00D51A42 /* PodcastIndexModel.swift in Sources */,
 				AA7DE4C42C9F1D0D00D51A42 /* ItunesModels.swift in Sources */,
 				AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */,
@@ -519,6 +498,14 @@
 				minimumVersion = 9.1.2;
 			};
 		};
+		AAF16C6A2CBACF900035F9D0 /* XCRemoteSwiftPackageReference "SliderControl" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AlexChekel1337/SliderControl.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -536,6 +523,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AAF16C622CB440690035F9D0 /* XCRemoteSwiftPackageReference "FeedKit" */;
 			productName = FeedKit;
+		};
+		AAF16C6B2CBACF900035F9D0 /* SliderControl */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AAF16C6A2CBACF900035F9D0 /* XCRemoteSwiftPackageReference "SliderControl" */;
+			productName = SliderControl;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
