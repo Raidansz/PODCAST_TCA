@@ -36,27 +36,8 @@ struct PlayerFeature {
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-                //TODO: make it less complex
             case .handlePlayAction:
-                switch AudioPlayer.shared.playbackStatePublisher.value {
-                case .waitingForSelection:
-                    state.isPlaying = true
-                    return .run { [state] _ in
-                        await AudioPlayer.shared.play(item: state.episode, action: .playNow)
-                    }
-                case .playing:
-                    state.isPlaying = false
-                    return .run { _ in
-                        await  AudioPlayer.shared.pause()
-                    }
-                case .paused:
-                    state.isPlaying = false
-                    return .run { _ in
-                        await  AudioPlayer.shared.resume()
-                    }
-                default:
-                    return .none
-                }
+                return handlePlayAction(for: &state)
             case .onCurrentTimeChange(let currentTime):
                 state.currentTime = currentTime
                 return .none
@@ -64,6 +45,33 @@ struct PlayerFeature {
                 state.totalTime = totalTime
                 return .none
             }
+        }
+    }
+}
+
+extension PlayerFeature {
+    private func handlePlayAction(for state: inout State) -> Effect<Action> {
+        switch AudioPlayer.shared.playbackStatePublisher.value {
+        case .waitingForSelection:
+            state.isPlaying = true
+            return .run { [state] _ in
+                await AudioPlayer.shared.play(item: state.episode, action: .playNow)
+            }
+            
+        case .playing:
+            state.isPlaying = false
+            return .run { _ in
+                await AudioPlayer.shared.pause()
+            }
+            
+        case .paused:
+            state.isPlaying = false
+            return .run { _ in
+                await AudioPlayer.shared.resume()
+            }
+            
+        default:
+            return .none
         }
     }
 }
