@@ -62,7 +62,7 @@ struct ListEpisodeViewCell: View {
 
     var body: some View {
         HStack(alignment: .top) {
-            AsyncImage(url: URL(string: episode.imageUrl ?? "")) { phase in
+            AsyncImage(url: episode.imageUrl) { phase in
                 if let image = phase.image {
                     image
                         .resizable()

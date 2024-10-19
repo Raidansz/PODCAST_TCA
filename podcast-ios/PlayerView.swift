@@ -8,14 +8,17 @@
 import SwiftUI
 import ComposableArchitecture
 import AVFoundation
+import SliderControl
+import Combine
+
 @Reducer
 struct PlayerFeature {
     @ObservableState
     struct State: Equatable {
         var player: AVPlayer?
-        var isPlaying = false
-        var totalTime: TimeInterval = 0.0
-        var currentTime: TimeInterval = 0.0
+        var isPlaying: Bool = false
+        var currentTime: Double = 0
+        var totalTime: Double = 100
         var audioURL: URL?
         var episode: Episode
 
@@ -25,29 +28,40 @@ struct PlayerFeature {
     }
 
     enum Action: Equatable {
-        case initialize(URL?)
-        case play
-        case pause
+        case handlePlayAction
+        case onCurrentTimeChange(Double)
+        case onTotalTimeChange(Double)
     }
 
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .initialize(let url):
-                if let url {
-                    state.player = AVPlayer(url: url)
-                }
-                return .none
-            case .play:
-                if state.player == nil {
-                    return .send(.initialize(state.audioURL))
-                } else {
+                //TODO: make it less complex
+            case .handlePlayAction:
+                switch AudioPlayer.shared.playbackStatePublisher.value {
+                case .waitingForSelection:
                     state.isPlaying = true
+                    return .run { [state] _ in
+                        await AudioPlayer.shared.play(item: state.episode, action: .playNow)
+                    }
+                case .playing:
+                    state.isPlaying = false
+                    return .run { _ in
+                        await  AudioPlayer.shared.pause()
+                    }
+                case .paused:
+                    state.isPlaying = false
+                    return .run { _ in
+                        await  AudioPlayer.shared.resume()
+                    }
+                default:
                     return .none
                 }
-            case .pause:
-                state.isPlaying = false
-                state.player?.pause()
+            case .onCurrentTimeChange(let currentTime):
+                state.currentTime = currentTime
+                return .none
+            case .onTotalTimeChange(let totalTime):
+                state.totalTime = totalTime
                 return .none
             }
         }
@@ -60,7 +74,7 @@ struct PlayerView: View {
         NavigationStack {
             VStack {
                 ZStack {
-                    ListViewHero(imageURL: URL(string: store.episode.imageUrl ?? "")!)
+                    ListViewHero(imageURL: store.episode.imageUrl.unsafelyUnwrapped)
                         .aspectRatio(contentMode: .fit)
                         .cornerRadius(24)
                         .frame(width: 364, height: 364)
@@ -95,15 +109,29 @@ struct PlayerView: View {
                     Text("15:00")
                 }
                 .padding(.horizontal, 16)
-// TODO: Add slider
+
+                SliderControlView(
+                    value: $store.currentTime.sending(\.onCurrentTimeChange),
+                    in: 0...store.totalTime,
+                    onEditingChanged: onEditingChanged
+                )
+                .progressColor(.blue)
+                .padding(.horizontal, 16)
+                .onReceive(
+                    Publishers.CombineLatest(
+                        AudioPlayer.shared.totalDurationObserver.publisher,
+                        AudioPlayer.shared.elapsedTimeObserver.publisher
+                    )) { totalDuration, elapsedTime in
+                        store.send(.onCurrentTimeChange(elapsedTime))
+                        store.send(.onTotalTimeChange(totalDuration))
+                    }
+
                 ControllButton(store: store)
                     .padding(.top, 40)
+
             }
             .navigationTitle("Now Playing")
             .navigationBarTitleDisplayMode(.inline)
-        }
-        .onAppear {
-            store.send(.initialize(URL(string: store.episode.streamUrl)))
         }
     }
 }
@@ -131,11 +159,8 @@ struct ControllButton: View {
                 }
                 Spacer()
                 Button {
-                    if store.isPlaying {
-                        store.send(.pause)
-                    } else {
-                        store.send(.play)
-                    }
+                    //Play button
+                    store.send(.handlePlayAction)
                 } label: {
                     if store.isPlaying {
                         Image(systemName: "pause.circle.fill")
@@ -165,6 +190,16 @@ struct ControllButton: View {
                 }
                 Spacer()
             }
+        }
+    }
+}
+
+extension PlayerView{
+    func onEditingChanged(editingStarted: Bool) {
+        if editingStarted {
+            AudioPlayer.shared.elapsedTimeObserver.pause(true)
+        } else {
+            AudioPlayer.shared.seek(to: store.currentTime, playerStatus: store.isPlaying)
         }
     }
 }

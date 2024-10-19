@@ -62,7 +62,7 @@ struct HomeFeature {
                 state.isLoading = false
                 return .none
             case .loadView:
-                if let podcastList = state.trendingPodcasts {
+                if let _ = state.trendingPodcasts {
                     return .none
                 }
                 return .send(.fetchTrendingPodcasts)

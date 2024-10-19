@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 @Reducer
-struct ShowMorePodcastFeature{
+struct ShowMorePodcastFeature {
     @ObservableState
     struct State {
         var trendingPodcasts: PodHub

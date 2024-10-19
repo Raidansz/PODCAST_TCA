@@ -98,26 +98,26 @@ extension Collection {
     }
 }
 
-struct Episode: Codable, Identifiable, Equatable, Hashable {
+struct Episode: Codable, Identifiable, Equatable, Hashable, PlayableItemProtocol {
     var id: String
     let title: String
     let pubDate: Date
     let description: String
     let author: String
-    let streamUrl: String
+    let streamURL: URL
 
     var fileUrl: String?
-    var imageUrl: String?
+    var imageUrl: URL?
 
     init(feedItem: RSSFeedItem) {
         self.id = feedItem.guid?.value ?? UUID().uuidString
-        self.streamUrl = feedItem.enclosure?.attributes?.url ?? ""
+        self.streamURL = URL(string: feedItem.enclosure?.attributes?.url ?? "")!
         self.title = feedItem.title ?? "No Title"
         self.pubDate = feedItem.pubDate ?? Date()
         self.description = Episode.cleanHTMLTags(
             from: feedItem.iTunes?.iTunesSubtitle ?? feedItem.description ?? "No Description Available")
         self.author = feedItem.iTunes?.iTunesAuthor ?? "Unknown Author"
-        self.imageUrl = feedItem.iTunes?.iTunesImage?.attributes?.href
+        self.imageUrl = URL(string: (feedItem.iTunes?.iTunesImage?.attributes?.href)!)
     }
 
     private static func cleanHTMLTags(from string: String) -> String {

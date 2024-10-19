@@ -15,7 +15,7 @@ extension RSSFeed {
         items?.forEach { feedItem in
             var episode = Episode(feedItem: feedItem)
             if episode.imageUrl == nil {
-                episode.imageUrl = imageUrl
+                episode.imageUrl = URL(string: imageUrl ?? "")
             }
             episodes.append(episode)
         }

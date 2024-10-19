@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 @Reducer
-struct ExploreFeature {
+struct ExploreFeature : Sendable{
     @ObservableState
     struct State: Equatable {
         var podcastsList: PodHub?
@@ -162,7 +162,7 @@ struct ExploreViewContent: View {
                 if (store.podcastsList?.podcasts) != nil {
                     horizontalList(data: (store.podcastsList!.podcasts)) { podcast in
                         ListViewHero(imageURL: podcast.image ?? URL(string: "")!)
-                            .frame(width: 300,height: 300)
+                            .frame(width: 300, height: 300)
                     }
                 }
             }, header: {
