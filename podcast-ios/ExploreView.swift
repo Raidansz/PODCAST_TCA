@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 @Reducer
-struct ExploreFeature : Sendable{
+struct ExploreFeature: Sendable {
     @ObservableState
     struct State: Equatable {
         var podcastsList: PodHub?
@@ -17,7 +17,6 @@ struct ExploreFeature : Sendable{
         var selectedPodcast: Item?
         var searchTerm = ""
         var searchPodcastResults: PodHub?
-        
     }
 
     enum Action: Equatable {
@@ -176,7 +175,7 @@ struct ExploreViewContent: View {
 
             Section(content: {
                 LazyVStack(spacing: 24) {
-                    if((store.podcastsList?.podcasts) != nil) {
+                    if store.podcastsList?.podcasts != nil {
                         ForEach((store.podcastsList!.podcasts), id: \.self) { response in
                             ListViewCell(podcast: response)
                                 .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)

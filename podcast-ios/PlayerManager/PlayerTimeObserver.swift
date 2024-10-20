@@ -7,7 +7,7 @@
 
 import AVFoundation
 import Combine
-@MainActor
+
 class PlayerElapsedTimeObserver {
     let publisher = PassthroughSubject<TimeInterval, Never>()
     private weak var player: AVPlayer?
@@ -23,7 +23,7 @@ class PlayerElapsedTimeObserver {
             ),
             queue: nil
         ) { [weak self] time in
-            Task { @MainActor in
+              Task { @MainActor in
                 guard let self = self else { return }
                 guard !self.paused else { return }
                 self.publisher.send(time.seconds)
@@ -31,10 +31,7 @@ class PlayerElapsedTimeObserver {
         }
     }
     deinit {
-        // Since the only class that uses the PlayerElapsedTimeObserver is AudioPlayer, that only runs in the main thread, and it is final. So the deinit will always be called in the main thread
-        MainActor.assumeIsolated {
-            unsubscribe()
-        }
+        unsubscribe()
     }
 
     private func unsubscribe() {

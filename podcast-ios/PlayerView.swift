@@ -16,7 +16,7 @@ struct PlayerFeature {
     @ObservableState
     struct State: Equatable {
         var player: AVPlayer?
-        var isPlaying: Bool = false
+        var isPlaying: PlaybackState = .paused
         var currentTime: Double = 0
         var totalTime: Double = 100
         var audioURL: URL?
@@ -31,45 +31,60 @@ struct PlayerFeature {
         case handlePlayAction
         case onCurrentTimeChange(Double)
         case onTotalTimeChange(Double)
+        case updateIsPlaying(PlaybackState)
     }
 
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .handlePlayAction:
-                return handlePlayAction(for: &state)
+                return .run { @MainActor [episode = state.episode] _ in
+                    AudioPlayer.shared.play(item: episode, action: .playNow)
+                }
+              //  return handlePlayAction(for: &state)
             case .onCurrentTimeChange(let currentTime):
                 state.currentTime = currentTime
                 return .none
             case .onTotalTimeChange(let totalTime):
                 state.totalTime = totalTime
                 return .none
+            case .updateIsPlaying(let isPlaying):
+                state.isPlaying = isPlaying
+                return .none
             }
         }
     }
 }
-
+    // TODO: define a sharedStateStorage
 extension PlayerFeature {
     private func handlePlayAction(for state: inout State) -> Effect<Action> {
-        switch AudioPlayer.shared.playbackStatePublisher.value {
-        case .waitingForSelection:
-            state.isPlaying = true
-            return .run { [state] _ in
-                await AudioPlayer.shared.play(item: state.episode, action: .playNow)
-            }
-            
+        switch state.isPlaying {
         case .playing:
-            state.isPlaying = false
-            return .run { _ in
-                await AudioPlayer.shared.pause()
+            if let beingPlayedItem = AudioPlayer.shared.playableItem {
+                if beingPlayedItem.id == state.episode.id {
+                    return .run { @MainActor _ in
+                        AudioPlayer.shared.pause()
+                    }
+                } else {
+                    return .run { @MainActor [episode = state.episode] _ in
+                        AudioPlayer.shared.play(item: episode, action: .playNow)
+                    }
+                }
             }
-            
+            return .none
         case .paused:
-            state.isPlaying = false
-            return .run { _ in
-                await AudioPlayer.shared.resume()
+            if let beingPlayedItem = AudioPlayer.shared.playableItem {
+                if beingPlayedItem.id == state.episode.id {
+                    return .run { _ in
+                        AudioPlayer.shared.resume()
+                    }
+                } else {
+                    return .run { [episode = state.episode] _ in
+                        await AudioPlayer.shared.play(item: episode, action: .playNow)
+                    }
+                }
             }
-            
+            return .none
         default:
             return .none
         }
@@ -133,6 +148,15 @@ struct PlayerView: View {
                         store.send(.onCurrentTimeChange(elapsedTime))
                         store.send(.onTotalTimeChange(totalDuration))
                     }
+                    .onReceive(AudioPlayer.shared.playbackStatePublisher) { state in
+                        if let item = AudioPlayer.shared.playableItem {
+                            if item.id == store.episode.id {
+                                store.send(.updateIsPlaying(state))
+                            } else {
+                                store.send(.updateIsPlaying(.stopped))
+                            }
+                        }
+                    }
 
                 ControllButton(store: store)
                     .padding(.top, 40)
@@ -170,7 +194,7 @@ struct ControllButton: View {
                     //Play button
                     store.send(.handlePlayAction)
                 } label: {
-                    if store.isPlaying {
+                    if store.isPlaying == .playing {
                         Image(systemName: "pause.circle.fill")
                             .resizable()
                             .frame(width: 80, height: 80)
@@ -202,7 +226,7 @@ struct ControllButton: View {
     }
 }
 
-extension PlayerView{
+extension PlayerView {
     func onEditingChanged(editingStarted: Bool) {
         if editingStarted {
             AudioPlayer.shared.elapsedTimeObserver.pause(true)

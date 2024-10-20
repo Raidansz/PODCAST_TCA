@@ -117,7 +117,7 @@ struct Episode: Codable, Identifiable, Equatable, Hashable, PlayableItemProtocol
         self.description = Episode.cleanHTMLTags(
             from: feedItem.iTunes?.iTunesSubtitle ?? feedItem.description ?? "No Description Available")
         self.author = feedItem.iTunes?.iTunesAuthor ?? "Unknown Author"
-        self.imageUrl = URL(string: (feedItem.iTunes?.iTunesImage?.attributes?.href)!)
+        self.imageUrl = URL(string: feedItem.iTunes?.iTunesImage?.attributes?.href ?? "")
     }
 
     private static func cleanHTMLTags(from string: String) -> String {

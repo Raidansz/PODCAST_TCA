@@ -154,10 +154,10 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
         player.seek(to: newTime)
     }
 
-    func seek(to time: Double, playerStatus isPlaying: Bool) {
+    func seek(to time: Double, playerStatus isPlaying: PlaybackState) {
         let targetTime = CMTime(seconds: time, preferredTimescale: 600)
 
-        if isPlaying {
+        if isPlaying == .playing {
             self.elapsedTimeObserver.pause(true)
             self.playbackStatePublisher.send(.buffering)
             player.seek(to: targetTime) { [weak self] _ in
@@ -280,7 +280,7 @@ enum PlayAction {
     case replacePlayableItem(with: any PlayableItemProtocol)
 }
 // MARK: - AudioPlayerProtocol
-@MainActor
+//@MainActor
 protocol AudioPlayerProtocol {
     func updateNowPlayingInfo(playableItem: (any PlayableItemProtocol)?)
     func makePlayableItem(_: any PlayableItemProtocol) -> AVPlayerItem
