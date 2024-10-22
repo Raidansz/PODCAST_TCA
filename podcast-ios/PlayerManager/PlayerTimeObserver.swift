@@ -8,8 +8,8 @@
 import AVFoundation
 import Combine
 
-class PlayerElapsedTimeObserver {
-    let publisher = PassthroughSubject<TimeInterval, Never>()
+class PlayerElapsedTimeObserver: @unchecked Sendable {
+    @MainActor let publisher = PassthroughSubject<TimeInterval, Never>()
     private weak var player: AVPlayer?
     private var timeObservation: Any?
     private var paused = false

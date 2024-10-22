@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 @Reducer
-struct HomeFeature {
+struct HomeFeature: Sendable {
     @ObservableState
     struct State {
         var trendingPodcasts: PodHub?
@@ -62,7 +62,7 @@ struct HomeFeature {
                 state.isLoading = false
                 return .none
             case .loadView:
-                if let _ = state.trendingPodcasts {
+                if state.trendingPodcasts != nil {
                     return .none
                 }
                 return .send(.fetchTrendingPodcasts)
@@ -166,7 +166,6 @@ struct HomeViewContent: View {
                     }
                     .scrollTargetLayout()
                     .scrollTargetBehavior(.viewAligned)
-                    
                 }
             }, header: {
                 HStack {

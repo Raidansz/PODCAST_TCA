@@ -41,7 +41,6 @@ struct PlayerFeature {
                 return .run { @MainActor [episode = state.episode] _ in
                     AudioPlayer.shared.play(item: episode, action: .playNow)
                 }
-              //  return handlePlayAction(for: &state)
             case .onCurrentTimeChange(let currentTime):
                 state.currentTime = currentTime
                 return .none
@@ -76,7 +75,7 @@ extension PlayerFeature {
             if let beingPlayedItem = AudioPlayer.shared.playableItem {
                 if beingPlayedItem.id == state.episode.id {
                     return .run { _ in
-                        AudioPlayer.shared.resume()
+                        await AudioPlayer.shared.resume()
                     }
                 } else {
                     return .run { [episode = state.episode] _ in
@@ -191,7 +190,6 @@ struct ControllButton: View {
                 }
                 Spacer()
                 Button {
-                    //Play button
                     store.send(.handlePlayAction)
                 } label: {
                     if store.isPlaying == .playing {

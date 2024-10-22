@@ -12,13 +12,13 @@ import Combine
 final class AudioPlayer: Sendable, AudioPlayerProtocol {
 
     // MARK: - Properties
-    let playbackStatePublisher = CurrentValueSubject<PlaybackState, Never>(.waitingForSelection)
     static let shared = AudioPlayer()
     private let player = AVPlayer()
-    var elapsedTimeObserver: PlayerElapsedTimeObserver
-    var totalDurationObserver: PlayerTotalDurationObserver
+    @MainActor var elapsedTimeObserver: PlayerElapsedTimeObserver
+    @MainActor var totalDurationObserver: PlayerTotalDurationObserver
     var playableItem: (any PlayableItemProtocol)? // the last dequeued item
     internal var queue: Queue<any PlayableItemProtocol> = .init()
+    let playbackStatePublisher = CurrentValueSubject<PlaybackState, Never>(.waitingForSelection)
     var cancellables: Set<AnyCancellable> = .init()
     var elapsedTime: Double = .zero
     // MARK: - Initializer
@@ -27,7 +27,9 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
         self.totalDurationObserver = PlayerTotalDurationObserver(player: player)
         observeAudioInterruptions()
         observePlaybackProgression()
-        observingElapsedTime()
+        Task { @MainActor in
+            observingElapsedTime()
+        }
     }
 
     // MARK: - Now Playing Info
@@ -98,6 +100,7 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
         }
     }
     // MARK: - Playback Controls
+    @MainActor
     func play(item: any PlayableItemProtocol, action: PlayAction) {
         switch action {
         case .playNow:
@@ -120,7 +123,7 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
             play(item: withItem, action: .playNow)
         }
     }
-
+    @MainActor
     func stop() {
         player.pause()
         replaceRunningItem(with: nil)
@@ -129,13 +132,13 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
         playbackStatePublisher.send(.stopped)
         elapsedTimeObserver.pause(true)
     }
-
+    @MainActor
     func pause() {
         player.pause()
         playbackStatePublisher.send(.paused)
         elapsedTimeObserver.pause(true)
     }
-
+    @MainActor
     func resume() {
         player.play()
         playbackStatePublisher.send(.playing)
@@ -153,7 +156,7 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
         let newTime = CMTimeAdd(currentTime, CMTime(seconds: 15, preferredTimescale: 1))
         player.seek(to: newTime)
     }
-
+    @MainActor
     func seek(to time: Double, playerStatus isPlaying: PlaybackState) {
         let targetTime = CMTime(seconds: time, preferredTimescale: 600)
 
@@ -201,7 +204,7 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
             object: nil
         )
     }
-
+    @MainActor
     @objc private func playNextItem() {
         let (hasNext, nextItem) = dequeue()
         if hasNext, let nextItem = nextItem {
@@ -211,7 +214,7 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
             stop()
         }
     }
-
+    @MainActor
     func observingElapsedTime() {
         elapsedTimeObserver.publisher.sink { [weak self] in
             if let self {
@@ -229,7 +232,7 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
             object: AVAudioSession.sharedInstance()
         )
     }
-
+    @MainActor
     @objc private func handleAudioInterruption(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
               let interruptionTypeValue = userInfo[AVAudioSessionInterruptionTypeKey] as? UInt,
@@ -280,11 +283,10 @@ enum PlayAction {
     case replacePlayableItem(with: any PlayableItemProtocol)
 }
 // MARK: - AudioPlayerProtocol
-//@MainActor
 protocol AudioPlayerProtocol {
     func updateNowPlayingInfo(playableItem: (any PlayableItemProtocol)?)
     func makePlayableItem(_: any PlayableItemProtocol) -> AVPlayerItem
-    func play(item: any PlayableItemProtocol, action: PlayAction)
+    func play(item: any PlayableItemProtocol, action: PlayAction) async
     func configureAudioSession()
     func pause()
     func stop()
