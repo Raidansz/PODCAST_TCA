@@ -38,11 +38,6 @@ struct TabBarView: View {
                 .tabItem {
                     Label("Explore", systemImage: "magnifyingglass")
                 }
-
-            HomeView(store: store)
-                .tabItem {
-                    Label("Settings", systemImage: "gear")
-                }
         }
     }
 }

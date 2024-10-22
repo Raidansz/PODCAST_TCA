@@ -23,8 +23,8 @@ struct HomeFeature: Sendable {
         case fetchTrendingPodcasts
         case loadView
         case trendingPodcastResponse(PodHub)
-        case path(StackActionOf<Path>)
         case showMorePodcastsTapped
+        case path(StackActionOf<Path>)
         case podcastDetailsTapped(Podcast)
         case destination(PresentationAction<Destination.Action>)
     }
