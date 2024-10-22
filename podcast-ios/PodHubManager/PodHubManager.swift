@@ -6,24 +6,59 @@
 //
 
 import Foundation
+import IdentifiedCollections
 
 class PodHubManager: PodHubManagerProtocol {
     @Injected(\.itunesManager) private var itunesManager: ItunesManagerProtocol
     @Injected(\.podcastIndexManager) private var podcastIndexManager: PodcastIndexManagerProtocol
+    private var activeSearchResult: Dictionary<UUID, PaginatedResult> = [:]
 
     func searchFor(
         searchFor mediaType: MediaType,
         value: String,
         limit: Int? = nil,
-        page: Int? = nil
+        page: Int? = nil,
+        id: UUID? = nil
     ) async throws -> PodHub {
+        if let id, let result = activeSearchResult[id] {
+            // activeSearchResult.removeValue(forKey: id)
+            return result.podHub
+        }
+        /// var to hold the final result
+        var finalResult: PodHub
+        /// we default the search with the itunes API
         let result =  try await lookupItunes(searchFor: mediaType, value: value, limit: limit, page: page)
+        ///if the result is empty, then we search with the PocastIndex API
         if result.results.isEmpty {
             let result = try await lookupPodcastIndex(searchFor: mediaType, value: value)
-            return try normalizeResult(result: result, mediaType: mediaType, totalCount: result.count)
+            finalResult = try normalizeResult(result: result, mediaType: mediaType, totalCount: result.count)
         }
-        return try normalizeResult(result: result, mediaType: mediaType, totalCount: result.resultCount)
+        finalResult = try normalizeResult(result: result, mediaType: mediaType, totalCount: result.resultCount)
+        
+        if let id = id {
+            activeSearchResult[id] = PaginatedResult(podHub: finalResult, currentIndex: 0)
+        }
+        finalResult.podcasts = IdentifiedArray(uniqueElements: Array(finalResult.podcasts.prefix(limit ?? 5)))
+        return finalResult
     }
+
+    func loadMoreForSearchResult(withID ID: UUID, with limit: Int = 5) throws -> PodHub {
+        if var paginatedResult = activeSearchResult[ID] {
+            let totalPodcasts = paginatedResult.podHub.podcasts.count
+            let currentIndex = paginatedResult.currentIndex
+
+            let nextIndex = min(currentIndex + limit, totalPodcasts)
+
+            let podcastsToReturn = Array(paginatedResult.podHub.podcasts[0..<nextIndex])
+
+            
+            paginatedResult.currentIndex = nextIndex
+            activeSearchResult[ID] = paginatedResult
+
+            return PodHub(podcasts: IdentifiedArray(uniqueElements: podcastsToReturn), count: podcastsToReturn.count)
+        } else {
+            throw NSError(domain: "SearchResultError", code: 2, userInfo: [NSLocalizedDescriptionKey: "No search result found for the given ID."])
+        }}
 
     private func lookupItunes(
         searchFor: MediaType,
@@ -94,10 +129,16 @@ extension InjectedValues {
 }
 
 protocol PodHubManagerProtocol {
-    func searchFor(searchFor: MediaType, value: String, limit: Int?, page: Int?) async throws -> PodHub
+    func searchFor(searchFor: MediaType, value: String, limit: Int?, page: Int?, id: UUID?) async throws -> PodHub
+    func loadMoreForSearchResult(withID ID: UUID, with limit: Int) throws -> PodHub
 }
 
 enum MediaType {
     case podcast
     case episode
+}
+
+struct PaginatedResult {
+    var podHub: PodHub
+    var currentIndex: Int
 }

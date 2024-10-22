@@ -36,6 +36,7 @@
 		AAF16C662CB460750035F9D0 /* RSSFeed+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF16C652CB460720035F9D0 /* RSSFeed+Extension.swift */; };
 		AAF16C692CBAB2840035F9D0 /* ShowMorePodcastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF16C682CBAB2550035F9D0 /* ShowMorePodcastView.swift */; };
 		AAF16C6C2CBACF900035F9D0 /* SliderControl in Frameworks */ = {isa = PBXBuildFile; productRef = AAF16C6B2CBACF900035F9D0 /* SliderControl */; };
+		AAFED4332CC8143800A9096D /* ExploreSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFED4322CC8143100A9096D /* ExploreSearchView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		AAF16C652CB460720035F9D0 /* RSSFeed+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RSSFeed+Extension.swift"; sourceTree = "<group>"; };
 		AAF16C672CB5D4F00035F9D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AAF16C682CBAB2550035F9D0 /* ShowMorePodcastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowMorePodcastView.swift; sourceTree = "<group>"; };
+		AAFED4322CC8143100A9096D /* ExploreSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreSearchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +143,7 @@
 		AA9278452C8F151C00D5CF6D /* podcast-ios */ = {
 			isa = PBXGroup;
 			children = (
+				AAFED4322CC8143100A9096D /* ExploreSearchView.swift */,
 				AA3098F32CC43CA8003CF32F /* PlayerManager */,
 				AAF16C682CBAB2550035F9D0 /* ShowMorePodcastView.swift */,
 				AAF16C672CB5D4F00035F9D0 /* Info.plist */,
@@ -279,6 +282,7 @@
 				AAAD22772CA31AAB0064F2C5 /* ExploreView.swift in Sources */,
 				AA7DE4C22C9F1C9600D51A42 /* ItunesCallerConstants.swift in Sources */,
 				AAF16C662CB460750035F9D0 /* RSSFeed+Extension.swift in Sources */,
+				AAFED4332CC8143800A9096D /* ExploreSearchView.swift in Sources */,
 				AA7DE4C92C9F1DA800D51A42 /* ItunesManager.swift in Sources */,
 				AA1F8E3C2CA8572C009FFC85 /* PodHubModel.swift in Sources */,
 				AA7DE4BB2C9F0D5800D51A42 /* HomeView.swift in Sources */,

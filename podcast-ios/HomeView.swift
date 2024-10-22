@@ -17,6 +17,7 @@ struct HomeFeature: Sendable {
         var isLoading: Bool = false
         let limit = 10
         @Presents var destination: Destination.State?
+        let uuid = UUID()
     }
 
     enum Action {
@@ -27,6 +28,7 @@ struct HomeFeature: Sendable {
         case path(StackActionOf<Path>)
         case podcastDetailsTapped(Podcast)
         case destination(PresentationAction<Destination.Action>)
+        case paginateFetchResult
     }
 
     @Reducer
@@ -45,14 +47,15 @@ struct HomeFeature: Sendable {
             switch action {
             case .fetchTrendingPodcasts:
                 state.isLoading = true
-                return .run { send in
+                return .run {[limit = state.limit, id = state.uuid] send in
                     try await send(
                         .trendingPodcastResponse(
                             self.podHubManager.searchFor(
                                 searchFor: .podcast,
                                 value: "morning",
-                                limit: nil,
-                                page: nil
+                                limit: limit,
+                                page: nil,
+                                id: id
                             )
                         )
                     )
@@ -79,6 +82,14 @@ struct HomeFeature: Sendable {
             case .podcastDetailsTapped(let podcast):
                 state.path.append(.podcastDetails(PodcastDetailsFeature.State(podcast: podcast)))
                 return .none
+            case .paginateFetchResult:
+                return .run {[limit = state.limit, id = state.uuid] send in
+                    try await send(
+                        .trendingPodcastResponse(
+                            self.podHubManager.loadMoreForSearchResult(withID: id, with: limit)
+                        )
+                    )
+                }
             }
         }
         .ifLet(\.$destination, action: \.destination)
@@ -183,13 +194,19 @@ struct HomeViewContent: View {
             Section(content: {
                 LazyVStack(spacing: 24) {
                     if let podcasts = store.trendingPodcasts?.podcasts {
-                        ForEach(podcasts.prefix(store.limit), id: \.self) { podcast in
-                            ListViewCell(podcast: podcast)
-                                .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
-                                .onTapGesture {
-                                    store.send(.podcastDetailsTapped(podcast))
-                                }
-                        }
+                        ForEach(Array(podcasts.enumerated()), id: \.element) { index, podcast in
+                                ListViewCell(podcast: podcast)
+                                    .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                                    .onTapGesture {
+                                        store.send(.podcastDetailsTapped(podcast))
+                                    }
+                                    .onAppear {
+                                        // Trigger pagination when the user reaches the last visible item
+                                        if index == podcasts.count - 1 {
+                                            store.send(.paginateFetchResult)
+                                        }
+                                    }
+                            }
                     }
                 }
             }, header: {

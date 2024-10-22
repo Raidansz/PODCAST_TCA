@@ -24,6 +24,7 @@ struct ExploreFeature: Sendable {
     @Reducer
     enum Path {
         case podcastDetails(PodcastDetailsFeature)
+        case searchResults(ExploreSearchFeature)
     }
 
     @Reducer
@@ -36,7 +37,7 @@ struct ExploreFeature: Sendable {
         case fetchPodcastsResponse(PodHub)
         case searchForPodcastTapped(with: String)
         case searchTermChanged(String)
-        case podcastSearchResponse(PodHub)
+        case showSearchResults(PodHub, String)
         case path(StackActionOf<Path>)
         case podcastDetailsTapped(Podcast)
         case destination(PresentationAction<Destination.Action>)
@@ -53,7 +54,7 @@ struct ExploreFeature: Sendable {
                 return .run {  send in
                     try await send(
                         .fetchPodcastsResponse(
-                            self.podHubManager.searchFor(searchFor: .podcast, value: "hee", limit: 4, page: 1)
+                            self.podHubManager.searchFor(searchFor: .podcast, value: "hee", limit: 4, page: 1, id: nil)
                         )
                     )
                 }
@@ -62,24 +63,23 @@ struct ExploreFeature: Sendable {
                 state.podcastsList = response
                 return .none
             case .searchForPodcastTapped(with: let term):
-                state.searchPodcastResults = nil
+                if term.isEmpty {
+                    return .none
+                }
                 state.isLoading = true
                 return .run { send in
                     try await send(
-                        .podcastSearchResponse(
+                        .showSearchResults(
                             self.podHubManager.searchFor(
                                 searchFor: .podcast,
                                 value: term,
                                 limit: nil,
-                                page: nil
-                            )
+                                page: nil, id: nil
+                            ),
+                            term
                         )
                     )
                 }
-            case .podcastSearchResponse(let result):
-                state.searchPodcastResults = result
-                state.isLoading = false
-                return .none
             case .searchTermChanged(let searchTerm):
                 state.searchTerm = searchTerm
                 return .none
@@ -89,6 +89,12 @@ struct ExploreFeature: Sendable {
                 state.path.append(.podcastDetails(PodcastDetailsFeature.State(podcast: podcast)))
                 return .none
             case .destination:
+                return .none
+            case .showSearchResults(let result, let initialTerm):
+                state.isLoading = false
+                if state.path.isEmpty {
+                    state.path.append(.searchResults(ExploreSearchFeature.State(searchResult: result, searchTerm: initialTerm)))
+                }
                 return .none
             }
         }
@@ -100,7 +106,7 @@ struct ExploreFeature: Sendable {
 struct ExloreView: View {
     @Bindable var store: StoreOf<ExploreFeature>
     var body: some View {
-        NavigationStack {
+        NavigationStack( path: $store.scope(state: \.path, action: \.path)) {
             ZStack(alignment: .top) {
                 ExploreViewContent(store: store)
                     .blur(
@@ -141,86 +147,12 @@ struct ExloreView: View {
             }
             .navigationTitle("Explore")
             .navigationBarTitleDisplayMode(.large)
-        }
-        .onAppear {
-            store.send(.fetchPodcasts)
-        }
-    }
-}
-
-struct ExploreViewContent: View {
-    @Bindable var store: StoreOf<ExploreFeature>
-    var body: some View {
-        NavigationStack( path: $store.scope(state: \.path, action: \.path)) {
-            ScrollView {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 32)
-                        .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
-                        .frame(width: 364, height: 64)
-                    HStack {
-                        Image(systemName: "magnifyingglass")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                            .foregroundColor(.black)
-                            .padding(.leading, 15)
-                        TextField(
-                            "Search the podcast here...",
-                            text: $store.searchTerm.sending(\.searchTermChanged)
-                        )
-                        .padding(.leading, 5)
-                        .onSubmit {
-                            store.send(.searchForPodcastTapped(with: store.searchTerm))
-                        }
-                    }
-                    .frame(width: 364, height: 64)
-                    .clipShape(RoundedRectangle(cornerRadius: 32))
-                }
-                .padding()
-
-                Section(content: {
-                    if (store.podcastsList?.podcasts) != nil {
-                        horizontalList(data: (store.podcastsList!.podcasts)) { podcast in
-                            ListViewHero(imageURL: podcast.image ?? URL(string: "")!)
-                                .frame(width: 300, height: 300)
-                                .onTapGesture {
-                                    store.send(.podcastDetailsTapped(podcast))
-                                }
-                        }
-                    }
-                }, header: {
-                    HStack {
-                        Text("Today’s Top 5 Podcasts")
-                            .fontWeight(.semibold)
-                        Spacer()
-                    }
-                    .padding(.horizontal, 16)
-                })
-
-                Section(content: {
-                    LazyVStack(spacing: 24) {
-                        if store.podcastsList?.podcasts != nil {
-                            ForEach((store.podcastsList!.podcasts), id: \.self) { response in
-                                ListViewCell(podcast: response)
-                                    .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
-                                    .onTapGesture {
-                                        store.send(.podcastDetailsTapped(response))
-                                    }
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 16)
-                }, header: {
-                    if (store.podcastsList?.podcasts) != nil {
-                        horizontalList(data: (store.podcastsList!.podcasts)) { podcast in
-                            CatagoriesView(label: podcast.title ?? "")
-                        }
-                    }
-                })
-            }
         } destination: { store in
             switch store.case {
             case .podcastDetails(let store):
                 PodcastDetailsView(store: store)
+            case .searchResults(let store):
+                ExploreSearchView(store: store)
             }
         }
         .sheet(
@@ -232,6 +164,80 @@ struct ExploreViewContent: View {
             NavigationStack {
                 ShowMorePodcastView(store: store)
             }
+        }
+        .onAppear {
+            store.send(.fetchPodcasts)
+        }
+    }
+}
+
+struct ExploreViewContent: View {
+    @Bindable var store: StoreOf<ExploreFeature>
+    var body: some View {
+        ScrollView {
+            ZStack {
+                RoundedRectangle(cornerRadius: 32)
+                    .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
+                    .frame(width: 364, height: 64)
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(.black)
+                        .padding(.leading, 15)
+                    TextField(
+                        "Search the podcast here...",
+                        text: $store.searchTerm.sending(\.searchTermChanged)
+                    )
+                    .padding(.leading, 5)
+                    .onSubmit {
+                        store.send(.searchForPodcastTapped(with: store.searchTerm))
+                    }
+                }
+                .frame(width: 364, height: 64)
+                .clipShape(RoundedRectangle(cornerRadius: 32))
+            }
+            .padding()
+
+            Section(content: {
+                if (store.podcastsList?.podcasts) != nil {
+                    horizontalList(data: (store.podcastsList!.podcasts)) { podcast in
+                        ListViewHero(imageURL: podcast.image ?? URL(string: "")!)
+                            .frame(width: 300, height: 300)
+                            .onTapGesture {
+                                store.send(.podcastDetailsTapped(podcast))
+                            }
+                    }
+                }
+            }, header: {
+                HStack {
+                    Text("Today’s Top 5 Podcasts")
+                        .fontWeight(.semibold)
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
+            })
+
+            Section(content: {
+                LazyVStack(spacing: 24) {
+                    if store.podcastsList?.podcasts != nil {
+                        ForEach((store.podcastsList!.podcasts), id: \.self) { response in
+                            ListViewCell(podcast: response)
+                                .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                                .onTapGesture {
+                                    store.send(.podcastDetailsTapped(response))
+                                }
+                        }
+                    }
+                }
+                .padding(.horizontal, 16)
+            }, header: {
+                if (store.podcastsList?.podcasts) != nil {
+                    horizontalList(data: (store.podcastsList!.podcasts)) { podcast in
+                        CatagoriesView(label: podcast.title ?? "")
+                    }
+                }
+            })
         }
     }
 }

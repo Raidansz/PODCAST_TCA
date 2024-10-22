@@ -24,7 +24,7 @@ struct PodcastDetailsFeature {
         case cellTapped(Episode)
         case playEpisode(PresentationAction<PlayerFeature.Action>)
         case episodeResponse(IdentifiedArrayOf<Episode>?)
-        case onDisappear
+//        case onDisappear
     }
 
     private func parseFeed(url: URL?) async throws -> IdentifiedArrayOf<Episode> {
@@ -68,9 +68,9 @@ struct PodcastDetailsFeature {
                 return .none
             case .playEpisode:
                 return .none
-            case .onDisappear:
-                state.episodes = nil
-                return .none
+//            case .onDisappear:
+//                state.episodes = nil
+//                return .none
             }
         }
         .ifLet(\.$playEpisode, action: \.playEpisode) {

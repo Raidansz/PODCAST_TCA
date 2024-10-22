@@ -44,6 +44,11 @@ struct PodHub: Equatable {
 
         throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Result is empty or unrecognized"])
     }
+
+    init(podcasts: IdentifiedArrayOf<Podcast>, count: Int){
+        self.podcasts = podcasts
+        self.totalCount = count
+    }
 }
 
 struct Podcast: Identifiable, Equatable, Hashable {
