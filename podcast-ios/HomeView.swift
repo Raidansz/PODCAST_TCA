@@ -29,6 +29,7 @@ struct HomeFeature: Sendable {
         case podcastDetailsTapped(Podcast)
         case destination(PresentationAction<Destination.Action>)
         case paginateFetchResult
+        case resetPagination
     }
 
     @Reducer
@@ -90,6 +91,11 @@ struct HomeFeature: Sendable {
                         )
                     )
                 }
+            case .resetPagination:
+                let podcasts = state.trendingPodcasts?.podcasts
+                guard let podcasts else { return .none }
+                state.trendingPodcasts?.podcasts = IdentifiedArray(uniqueElements: Array(podcasts.prefix(5)))
+                return .none
             }
         }
         .ifLet(\.$destination, action: \.destination)
@@ -201,9 +207,10 @@ struct HomeViewContent: View {
                                         store.send(.podcastDetailsTapped(podcast))
                                     }
                                     .onAppear {
-                                        // Trigger pagination when the user reaches the last visible item
-                                        if index == podcasts.count - 1 {
+                                        if index >= podcasts.count - 2 {
                                             store.send(.paginateFetchResult)
+                                        } else if index == 0 {
+                                            store.send(.resetPagination)
                                         }
                                     }
                             }
