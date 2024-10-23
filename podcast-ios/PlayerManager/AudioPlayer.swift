@@ -27,6 +27,7 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
         self.totalDurationObserver = PlayerTotalDurationObserver(player: player)
         observeAudioInterruptions()
         observePlaybackProgression()
+        player.automaticallyWaitsToMinimizeStalling = false
         Task { @MainActor in
             observingElapsedTime()
         }

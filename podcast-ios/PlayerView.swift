@@ -38,9 +38,7 @@ struct PlayerFeature {
         Reduce { state, action in
             switch action {
             case .handlePlayAction:
-                return .run { @MainActor [episode = state.episode] _ in
-                    AudioPlayer.shared.play(item: episode, action: .playNow)
-                }
+                return  handlePlayAction(for: &state)
             case .onCurrentTimeChange(let currentTime):
                 state.currentTime = currentTime
                 return .none
@@ -82,8 +80,15 @@ extension PlayerFeature {
                         await AudioPlayer.shared.play(item: episode, action: .playNow)
                     }
                 }
+            } else {
+                return .run { [episode = state.episode] _ in
+                    await AudioPlayer.shared.play(item: episode, action: .playNow)
+                }
             }
-            return .none
+        case .stopped:
+            return .run { [episode = state.episode] _ in
+                await AudioPlayer.shared.play(item: episode, action: .playNow)
+            }
         default:
             return .none
         }
