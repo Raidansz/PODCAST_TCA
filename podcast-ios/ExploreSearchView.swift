@@ -141,11 +141,12 @@ struct ExploreSearchView: View {
                         LazyVStack(spacing: 24) {
                             if let list = store.searchResult?.podcasts {
                                 ForEach(list, id: \.self) { response in
-                                    ListViewCell(podcast: response)
-                                        .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
-                                        .onTapGesture {
-                                           // store.send(.cellTapped(response))
-                                        }
+                                    NavigationLink(
+                                        state: ExploreFeature.Path.State.podcastDetails(PodcastDetailsFeature.State(podcast: response))
+                                    ) {
+                                        ListViewCell(podcast: response)
+                                            .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                                    }
                                 }
                             }
                         }

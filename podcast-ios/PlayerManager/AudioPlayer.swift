@@ -261,7 +261,9 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
 
     // MARK: - Playable Item Creation
     func makePlayableItem(_ playableItem: any PlayableItemProtocol) -> AVPlayerItem {
-        AVPlayerItem(url: playableItem.streamURL)
+        if let url = playableItem.streamURL {
+           return AVPlayerItem(url: url)
+        }
     }
 }
 
@@ -306,6 +308,6 @@ protocol PlayableItemProtocol: Identifiable, Equatable {
     var title: String { get }
     var author: String { get }
     var imageUrl: URL? { get }
-    var streamURL: URL { get }
+    var streamURL: URL? { get }
     var id: String { get }
 }
