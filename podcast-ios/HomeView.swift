@@ -51,13 +51,7 @@ struct HomeFeature: Sendable {
                 return .run {[limit = state.limit, id = state.uuid] send in
                     try await send(
                         .trendingPodcastResponse(
-                            self.podHubManager.searchFor(
-                                searchFor: .podcast,
-                                value: "morning",
-                                limit: limit,
-                                page: nil,
-                                id: id
-                            )
+                            self.podHubManager.getTrendingPodcasts()
                         )
                     )
                 }
@@ -137,7 +131,7 @@ struct HomeView: View {
                             .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
                             .frame(width: 35, height: 35)
                         HStack {
-                            Image(systemName: "bell.fill")
+                            Image(systemName: "gear.circle.fill")
                                 .resizable()
                                 .frame(width: 21, height: 21)
                         }

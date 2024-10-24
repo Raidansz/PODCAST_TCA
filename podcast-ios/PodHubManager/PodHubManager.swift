@@ -13,6 +13,11 @@ class PodHubManager: PodHubManagerProtocol {
     @Injected(\.podcastIndexManager) private var podcastIndexManager: PodcastIndexManagerProtocol
     private var activeSearchResult: Dictionary<UUID, PaginatedResult> = [:]
 
+    func getTrendingPodcasts() async throws -> PodHub {
+        let result = try await podcastIndexManager.performQuery(for: .podcast, .trending, parameter: .lang("en"))
+        return try normalizeResult(result: result, mediaType: .podcast, totalCount: result.count)
+    }
+
     func searchFor(
         searchFor mediaType: MediaType,
         value: String,
@@ -131,6 +136,7 @@ extension InjectedValues {
 protocol PodHubManagerProtocol {
     func searchFor(searchFor: MediaType, value: String, limit: Int?, page: Int?, id: UUID?) async throws -> PodHub
     func loadMoreForSearchResult(withID ID: UUID, with limit: Int) async throws -> PodHub
+    func getTrendingPodcasts() async throws -> PodHub
 }
 
 enum MediaType {

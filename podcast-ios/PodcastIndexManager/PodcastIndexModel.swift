@@ -76,6 +76,7 @@ struct Item: Equatable, Hashable, Identifiable, PodHubConvertable {
     let feedLanguage: String
     let chaptersUrl: URL?
     let transcriptUrl: URL?
+    let url: URL?
     let transcripts: [Transcript]
 
     init(json: JSON) {
@@ -105,6 +106,7 @@ struct Item: Equatable, Hashable, Identifiable, PodHubConvertable {
         self.chaptersUrl = URL(string: json["chaptersUrl"].stringValue)
         self.transcriptUrl = URL(string: json["transcriptUrl"].stringValue)
         self.transcripts = json["transcripts"].arrayValue.map { Transcript(json: $0) }
+        self.url = URL(string: json["url"].stringValue)
     }
 
     static func == (lhs: Item, rhs: Item) -> Bool {

@@ -33,36 +33,21 @@ struct ExploreSearchFeature {
     @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
 
     private func parseFeed(url: URL?) async throws -> IdentifiedArrayOf<Episode> {
-        return try await withCheckedThrowingContinuation { continuation in
-            guard let url else { return }
-            let parser = FeedParser(URL: url)
-            parser.parseAsync { result in
-                switch result {
-                case let .success(feed):
-                    guard let rssFeed = feed.rssFeed else {
-                        continuation.resume(returning: [])
-                        return
-                    }
-                    let episodes = rssFeed.toEpisodes()
-                    continuation.resume(returning: episodes)
-                case let .failure(parserError):
-                    continuation.resume(throwing: parserError)
-                }
-            }
+        guard let url = url else {
+            return []
         }
+        let parser = FeedParser(URL: url)
+        let result = try await parser.parseAsync()
+        guard let rssFeed = result.rssFeed else {
+            return []
+        }
+
+        return rssFeed.toEpisodes()
     }
 
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-//                state.isLoading = true
-//                return .run { [url = state.podcast.feedURL] send in
-//                    try await send(
-//                        .episodeResponse(
-//                            self.parseFeed(url: url)
-//                        )
-//                    )
-//                }
             case .episodeResponse(let response):
                 state.isLoading = false
                 state.episodes = response

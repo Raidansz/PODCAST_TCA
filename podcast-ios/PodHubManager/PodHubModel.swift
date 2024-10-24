@@ -45,7 +45,7 @@ struct PodHub: Equatable {
         throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Result is empty or unrecognized"])
     }
 
-    init(podcasts: IdentifiedArrayOf<Podcast>, count: Int){
+    init(podcasts: IdentifiedArrayOf<Podcast>, count: Int) {
         self.podcasts = podcasts
         self.totalCount = count
     }
@@ -90,7 +90,7 @@ struct Podcast: Identifiable, Equatable, Hashable {
         self.publicationDate = item.datePublished
         self.author = item.feedAuthor
         self.isPodcast = mediaType == .podcast
-        self.feedURL = item.feedUrl
+        self.feedURL = item.feedUrl ?? item.url
         self.type = "index"
     }
 }
@@ -116,7 +116,7 @@ struct Episode: Codable, Identifiable, Equatable, Hashable, PlayableItemProtocol
 
     init(feedItem: RSSFeedItem) {
         self.id = feedItem.guid?.value ?? UUID().uuidString
-        self.streamURL = URL(string: feedItem.enclosure?.attributes?.url ?? "")
+        self.streamURL = URL(string: feedItem.enclosure?.attributes?.url ?? "")!
         self.title = feedItem.title ?? "No Title"
         self.pubDate = feedItem.pubDate ?? Date()
         self.description = Episode.cleanHTMLTags(

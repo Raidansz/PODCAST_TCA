@@ -260,10 +260,11 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
     }
 
     // MARK: - Playable Item Creation
-    func makePlayableItem(_ playableItem: any PlayableItemProtocol) -> AVPlayerItem {
+    func makePlayableItem(_ playableItem: any PlayableItemProtocol) -> AVPlayerItem? {
         if let url = playableItem.streamURL {
            return AVPlayerItem(url: url)
         }
+        return nil
     }
 }
 
@@ -288,7 +289,7 @@ enum PlayAction {
 // MARK: - AudioPlayerProtocol
 protocol AudioPlayerProtocol {
     func updateNowPlayingInfo(playableItem: (any PlayableItemProtocol)?)
-    func makePlayableItem(_: any PlayableItemProtocol) -> AVPlayerItem
+    func makePlayableItem(_: any PlayableItemProtocol) -> AVPlayerItem?
     func play(item: any PlayableItemProtocol, action: PlayAction) async
     func configureAudioSession()
     func pause()

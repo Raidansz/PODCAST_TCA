@@ -38,6 +38,7 @@
 		AAF16C6C2CBACF900035F9D0 /* SliderControl in Frameworks */ = {isa = PBXBuildFile; productRef = AAF16C6B2CBACF900035F9D0 /* SliderControl */; };
 		AAFED4332CC8143800A9096D /* ExploreSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFED4322CC8143100A9096D /* ExploreSearchView.swift */; };
 		AAFED4362CC90EE700A9096D /* CachingPlayerItem in Frameworks */ = {isa = PBXBuildFile; productRef = AAFED4352CC90EE700A9096D /* CachingPlayerItem */; };
+		AAFED4392CC9AE0F00A9096D /* Cache in Frameworks */ = {isa = PBXBuildFile; productRef = AAFED4382CC9AE0F00A9096D /* Cache */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +80,7 @@
 				AAF16C642CB440690035F9D0 /* FeedKit in Frameworks */,
 				AAFED4362CC90EE700A9096D /* CachingPlayerItem in Frameworks */,
 				AAF16C6C2CBACF900035F9D0 /* SliderControl in Frameworks */,
+				AAFED4392CC9AE0F00A9096D /* Cache in Frameworks */,
 				AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */,
 				AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */,
 			);
@@ -200,6 +202,7 @@
 				AAF16C632CB440690035F9D0 /* FeedKit */,
 				AAF16C6B2CBACF900035F9D0 /* SliderControl */,
 				AAFED4352CC90EE700A9096D /* CachingPlayerItem */,
+				AAFED4382CC9AE0F00A9096D /* Cache */,
 			);
 			productName = "podcast-ios";
 			productReference = AA9278432C8F151C00D5CF6D /* podcast-ios.app */;
@@ -235,6 +238,7 @@
 				AAF16C622CB440690035F9D0 /* XCRemoteSwiftPackageReference "FeedKit" */,
 				AAF16C6A2CBACF900035F9D0 /* XCRemoteSwiftPackageReference "SliderControl" */,
 				AAFED4342CC90EE700A9096D /* XCRemoteSwiftPackageReference "CachingPlayerItem" */,
+				AAFED4372CC9AE0F00A9096D /* XCRemoteSwiftPackageReference "Cache" */,
 			);
 			productRefGroup = AA9278442C8F151C00D5CF6D /* Products */;
 			projectDirPath = "";
@@ -567,6 +571,14 @@
 				minimumVersion = 1.1.3;
 			};
 		};
+		AAFED4372CC9AE0F00A9096D /* XCRemoteSwiftPackageReference "Cache" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hyperoslo/Cache.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -594,6 +606,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AAFED4342CC90EE700A9096D /* XCRemoteSwiftPackageReference "CachingPlayerItem" */;
 			productName = CachingPlayerItem;
+		};
+		AAFED4382CC9AE0F00A9096D /* Cache */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AAFED4372CC9AE0F00A9096D /* XCRemoteSwiftPackageReference "Cache" */;
+			productName = Cache;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

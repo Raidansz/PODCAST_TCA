@@ -7,6 +7,7 @@
 
 import FeedKit
 import ComposableArchitecture
+import Foundation
 
 extension RSSFeed {
     func toEpisodes() -> IdentifiedArrayOf<Episode> {
@@ -23,12 +24,12 @@ extension RSSFeed {
     }
 }
 
-import Foundation
-extension FeedParser {
+extension FeedParser: @unchecked @retroactive Sendable {
     public func parseAsync() async throws -> Feed {
         return try await withCheckedThrowingContinuation { continuation in
-            DispatchQueue.global().async {
+            DispatchQueue.global(qos: .userInitiated).async {
                 let result = self.parse()
+
                 switch result {
                 case .success(let feed):
                     continuation.resume(returning: feed)
