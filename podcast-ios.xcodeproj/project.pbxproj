@@ -33,6 +33,7 @@
 		AA92784E2C8F151D00D5CF6D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784D2C8F151D00D5CF6D /* Preview Assets.xcassets */; };
 		AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = AA9278552C8F155C00D5CF6D /* ComposableArchitecture */; };
 		AAAD22772CA31AAB0064F2C5 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAD22762CA31AAB0064F2C5 /* ExploreView.swift */; };
+		AAAFD49D2CCC3B3E006E2A89 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAFD49C2CCC3B37006E2A89 /* HapticManager.swift */; };
 		AAF16C642CB440690035F9D0 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = AAF16C632CB440690035F9D0 /* FeedKit */; };
 		AAF16C662CB460750035F9D0 /* RSSFeed+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF16C652CB460720035F9D0 /* RSSFeed+Extension.swift */; };
 		AAF16C692CBAB2840035F9D0 /* ShowMorePodcastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF16C682CBAB2550035F9D0 /* ShowMorePodcastView.swift */; };
@@ -67,6 +68,7 @@
 		AA92784A2C8F151D00D5CF6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA92784D2C8F151D00D5CF6D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		AAAD22762CA31AAB0064F2C5 /* ExploreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreView.swift; sourceTree = "<group>"; };
+		AAAFD49C2CCC3B37006E2A89 /* HapticManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticManager.swift; sourceTree = "<group>"; };
 		AAF16C652CB460720035F9D0 /* RSSFeed+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RSSFeed+Extension.swift"; sourceTree = "<group>"; };
 		AAF16C672CB5D4F00035F9D0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		AAF16C682CBAB2550035F9D0 /* ShowMorePodcastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowMorePodcastView.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 		AA9278452C8F151C00D5CF6D /* podcast-ios */ = {
 			isa = PBXGroup;
 			children = (
+				AAAFD49C2CCC3B37006E2A89 /* HapticManager.swift */,
 				AAFED4322CC8143100A9096D /* ExploreSearchView.swift */,
 				AA3098F32CC43CA8003CF32F /* PlayerManager */,
 				AAF16C682CBAB2550035F9D0 /* ShowMorePodcastView.swift */,
@@ -301,6 +304,7 @@
 				AAF16C692CBAB2840035F9D0 /* ShowMorePodcastView.swift in Sources */,
 				AA7DE4CD2C9F725200D51A42 /* PlayerView.swift in Sources */,
 				AA7DE4D22CA08D4F00D51A42 /* PodcastIndexModel.swift in Sources */,
+				AAAFD49D2CCC3B3E006E2A89 /* HapticManager.swift in Sources */,
 				AA3098F82CC43CCD003CF32F /* AudioPlayer.swift in Sources */,
 				AA3098F92CC43CCD003CF32F /* PlayerTimeObserver.swift in Sources */,
 				AA3098FA2CC43CCD003CF32F /* Queue.swift in Sources */,

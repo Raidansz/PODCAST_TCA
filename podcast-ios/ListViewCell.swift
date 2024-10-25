@@ -51,14 +51,21 @@ struct ListViewCell: View {
                     .frame(width: 100, height: 100)
                     .cornerRadius(24)
                 } else {
-                    Image(systemName: "play.circle.fill")
-                        .resizable()
-                        .frame(width: 40, height: 40)
-                        .cornerRadius(24)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 24)
-                                .stroke(lineWidth: 0.5)
-                        )
+//                    VStack {
+//                        Spacer()
+//                        //Image(systemName: "play.circle.fill")
+//                        Text("Play")
+//                            .overlay(content: {
+//                                RoundedRectangle(cornerRadius: 24)
+//                                    
+//                                    .stroke(lineWidth: 0.5)
+//                                    .frame(width: 60, height: 60)
+//                            })
+//                           // .resizable()
+//                            .frame(width: 60, height: 60)
+//                            .cornerRadius(24)
+//                    }
+//                    .padding(.leading, 16)
                 }
 
                 VStack(alignment: .leading, spacing: 16) {
@@ -67,7 +74,7 @@ struct ListViewCell: View {
                     Text(title ?? "")
                         .font(.headline)
                         .bold()
-                        .lineLimit(1)
+                        .lineLimit(2)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Text(author ?? "")
                         .font(.subheadline)
@@ -89,50 +96,14 @@ struct ListViewCell: View {
                 .background(Color(.systemGray))
         }
         .contentShape(Rectangle())
-        .onAppear {
-            prepareHaptics()
-        }
         .onLongPressGesture {
             withAnimation(.spring()) {
                 isDisclosed.toggle()
             }
-            complexSuccess()
+            RootModule.hapticManager.fireHaptic.send()
         }
         .onDisappear {
             isDisclosed = false
-        }
-    }
-}
-extension ListViewCell {
-    func complexSuccess() {
-        // make sure that the device supports haptics
-        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
-        var events = [CHHapticEvent]()
-
-        // create one intense, sharp tap
-        let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 1)
-        let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 1)
-        let event = CHHapticEvent(eventType: .hapticTransient, parameters: [intensity, sharpness], relativeTime: 0)
-        events.append(event)
-
-        // convert those events into a pattern and play it immediately
-        do {
-            let pattern = try CHHapticPattern(events: events, parameters: [])
-            let player = try engine?.makePlayer(with: pattern)
-            try player?.start(atTime: 0)
-        } catch {
-            print("Failed to play pattern: \(error.localizedDescription).")
-        }
-    }
-
-    func prepareHaptics() {
-        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
-
-        do {
-            engine = try CHHapticEngine()
-            try engine?.start()
-        } catch {
-            print("There was an error creating the engine: \(error.localizedDescription)")
         }
     }
 }

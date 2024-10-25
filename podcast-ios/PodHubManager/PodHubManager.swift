@@ -14,7 +14,7 @@ class PodHubManager: PodHubManagerProtocol {
 //    private var activeSearchResult: Dictionary<UUID, PaginatedResult> = [:]
 
     func getTrendingPodcasts() async throws -> PodHub {
-        let result = try await podcastIndexManager.performQuery(for: .podcast, .trending, parameter: .lang("en"))
+        let result = try await podcastIndexManager.performQuery(for: .podcast, .trending, parameter: .max(10))
         return try normalizeResult(result: result, mediaType: .podcast, totalCount: result.count)
     }
 

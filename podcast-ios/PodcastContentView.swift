@@ -9,35 +9,25 @@ import SwiftUI
 import ComposableArchitecture
 
 @main
-struct PodcastContentView: App {
+struct RootModule: App {
+    static let hapticManager: HapticManagerProtocol = podcast_ios.HapticManager()
     var body: some Scene {
         WindowGroup {
-            TabBarView(store: Store(initialState: HomeFeature.State()) {
-                HomeFeature()
-                   // ._printChanges()
-            }, exploreStore: Store(initialState: ExploreFeature.State()) {
-                ExploreFeature()
-                   // ._printChanges()
-            })
-        }
-    }
-}
-
-struct TabBarView: View {
-    let store: StoreOf<HomeFeature>
-    let exploreStore: StoreOf<ExploreFeature>
-
-    var body: some View {
-        TabView {
-            HomeView(store: store)
+            TabView {
+                HomeView(store: Store(initialState: HomeFeature.State()) {
+                    HomeFeature()
+                })
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
 
-            ExloreView(store: exploreStore)
+                ExloreView(store: Store(initialState: ExploreFeature.State()) {
+                    ExploreFeature()
+                })
                 .tabItem {
                     Label("Explore", systemImage: "magnifyingglass")
                 }
+            }
         }
     }
 }

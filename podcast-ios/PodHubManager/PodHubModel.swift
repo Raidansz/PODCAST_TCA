@@ -86,7 +86,7 @@ struct Podcast: Identifiable, Equatable, Hashable {
         }
         self.title = item.title
         self.description = item.description
-        self.image = item.image ?? item.feedImage!
+        self.image = item.image ?? item.feedImage ?? URL("")!
         self.publicationDate = item.datePublished
         self.author = item.feedAuthor
         self.isPodcast = mediaType == .podcast
