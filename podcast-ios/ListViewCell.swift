@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CachedAsyncImage
+import CoreHaptics
 
 struct ListViewCell: View {
     let imageURL: URLRequest?
@@ -15,6 +16,7 @@ struct ListViewCell: View {
     let isPodcast: Bool
     let description: String?
     @State var isDisclosed = false
+    @State private var engine: CHHapticEngine?
 
     init(imageURL: URL?, author: String?, title: String?, isPodcast: Bool, description: String?) {
         self.imageURL = URLRequest(url: imageURL ?? URL(filePath: "")!)
@@ -86,13 +88,51 @@ struct ListViewCell: View {
             Divider()
                 .background(Color(.systemGray))
         }
+        .contentShape(Rectangle())
+        .onAppear {
+            prepareHaptics()
+        }
         .onLongPressGesture {
             withAnimation(.spring()) {
                 isDisclosed.toggle()
             }
+            complexSuccess()
         }
         .onDisappear {
             isDisclosed = false
+        }
+    }
+}
+extension ListViewCell {
+    func complexSuccess() {
+        // make sure that the device supports haptics
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+        var events = [CHHapticEvent]()
+
+        // create one intense, sharp tap
+        let intensity = CHHapticEventParameter(parameterID: .hapticIntensity, value: 1)
+        let sharpness = CHHapticEventParameter(parameterID: .hapticSharpness, value: 1)
+        let event = CHHapticEvent(eventType: .hapticTransient, parameters: [intensity, sharpness], relativeTime: 0)
+        events.append(event)
+
+        // convert those events into a pattern and play it immediately
+        do {
+            let pattern = try CHHapticPattern(events: events, parameters: [])
+            let player = try engine?.makePlayer(with: pattern)
+            try player?.start(atTime: 0)
+        } catch {
+            print("Failed to play pattern: \(error.localizedDescription).")
+        }
+    }
+
+    func prepareHaptics() {
+        guard CHHapticEngine.capabilitiesForHardware().supportsHaptics else { return }
+
+        do {
+            engine = try CHHapticEngine()
+            try engine?.start()
+        } catch {
+            print("There was an error creating the engine: \(error.localizedDescription)")
         }
     }
 }
@@ -130,5 +170,5 @@ struct ContentView: View {
 }
 
 extension URLCache {
-    static let imageCache = URLCache(memoryCapacity: 512_000_000, diskCapacity: 10_000_000_000)
+    static let imageCache = URLCache(memoryCapacity: 50_000_000, diskCapacity: 2_000_000_000)
 }

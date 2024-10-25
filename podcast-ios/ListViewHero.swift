@@ -36,5 +36,6 @@ struct ListViewHero: View {
             }
             .cornerRadius(20)
         }
+        .contentShape(Rectangle())
     }
 }
