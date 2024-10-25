@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA1798452CCBD702008B57AB /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = AA1798442CCBD702008B57AB /* CachedAsyncImage */; };
 		AA1F8E3C2CA8572C009FFC85 /* PodHubModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1F8E3B2CA8571F009FFC85 /* PodHubModel.swift */; };
 		AA1F8E3E2CA8573E009FFC85 /* PodHubManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1F8E3D2CA85737009FFC85 /* PodHubManager.swift */; };
 		AA3098F82CC43CCD003CF32F /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3098F42CC43CCD003CF32F /* AudioPlayer.swift */; };
@@ -81,6 +82,7 @@
 				AAFED4362CC90EE700A9096D /* CachingPlayerItem in Frameworks */,
 				AAF16C6C2CBACF900035F9D0 /* SliderControl in Frameworks */,
 				AAFED4392CC9AE0F00A9096D /* Cache in Frameworks */,
+				AA1798452CCBD702008B57AB /* CachedAsyncImage in Frameworks */,
 				AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */,
 				AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */,
 			);
@@ -203,6 +205,7 @@
 				AAF16C6B2CBACF900035F9D0 /* SliderControl */,
 				AAFED4352CC90EE700A9096D /* CachingPlayerItem */,
 				AAFED4382CC9AE0F00A9096D /* Cache */,
+				AA1798442CCBD702008B57AB /* CachedAsyncImage */,
 			);
 			productName = "podcast-ios";
 			productReference = AA9278432C8F151C00D5CF6D /* podcast-ios.app */;
@@ -239,6 +242,7 @@
 				AAF16C6A2CBACF900035F9D0 /* XCRemoteSwiftPackageReference "SliderControl" */,
 				AAFED4342CC90EE700A9096D /* XCRemoteSwiftPackageReference "CachingPlayerItem" */,
 				AAFED4372CC9AE0F00A9096D /* XCRemoteSwiftPackageReference "Cache" */,
+				AA1798432CCBD701008B57AB /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
 			);
 			productRefGroup = AA9278442C8F151C00D5CF6D /* Products */;
 			projectDirPath = "";
@@ -531,6 +535,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		AA1798432CCBD701008B57AB /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.1;
+			};
+		};
 		AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
@@ -582,6 +594,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AA1798442CCBD702008B57AB /* CachedAsyncImage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA1798432CCBD701008B57AB /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
+			productName = CachedAsyncImage;
+		};
 		AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;

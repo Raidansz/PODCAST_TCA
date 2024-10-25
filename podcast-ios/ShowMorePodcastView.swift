@@ -29,8 +29,13 @@ struct ShowMorePodcastView: View {
         ScrollView {
             LazyVStack {
                 ForEach(store.trendingPodcasts.podcasts) { podcast in
-                    ListViewCell(podcast: podcast)
-                        .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                    ListViewCell(
+                        imageURL: podcast.image,
+                        author: podcast.author, title: podcast.title,
+                        isPodcast: true,
+                        description: podcast.description
+                    )
+                    .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                 }
             }
             .padding(.horizontal, 16)

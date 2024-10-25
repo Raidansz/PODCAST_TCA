@@ -222,11 +222,16 @@ struct ExploreViewContent: View {
                 LazyVStack(spacing: 24) {
                     if store.podcastsList?.podcasts != nil {
                         ForEach((store.podcastsList!.podcasts), id: \.self) { response in
-                            ListViewCell(podcast: response)
-                                .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
-                                .onTapGesture {
-                                    store.send(.podcastDetailsTapped(response))
-                                }
+                            ListViewCell(
+                                imageURL: response.image,
+                                author: response.author, title: response.title,
+                                isPodcast: true,
+                                description: response.description
+                            )
+                            .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                            .onTapGesture {
+                                store.send(.podcastDetailsTapped(response))
+                            }
                         }
                     }
                 }

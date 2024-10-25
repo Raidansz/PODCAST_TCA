@@ -28,7 +28,6 @@ struct HomeFeature: Sendable {
         case path(StackActionOf<Path>)
         case podcastDetailsTapped(Podcast)
         case destination(PresentationAction<Destination.Action>)
-        case paginateFetchResult
         case resetPagination
     }
 
@@ -77,14 +76,6 @@ struct HomeFeature: Sendable {
             case .podcastDetailsTapped(let podcast):
                 state.path.append(.podcastDetails(PodcastDetailsFeature.State(podcast: podcast)))
                 return .none
-            case .paginateFetchResult:
-                return .run {[limit = state.limit, id = state.uuid] send in
-                    try await send(
-                        .trendingPodcastResponse(
-                            self.podHubManager.loadMoreForSearchResult(withID: id, with: limit)
-                        )
-                    )
-                }
             case .resetPagination:
                 let podcasts = state.trendingPodcasts?.podcasts
                 guard let podcasts else { return .none }
@@ -195,19 +186,18 @@ struct HomeViewContent: View {
                 LazyVStack(spacing: 24) {
                     if let podcasts = store.trendingPodcasts?.podcasts {
                         ForEach(Array(podcasts.enumerated()), id: \.element) { index, podcast in
-                                ListViewCell(podcast: podcast)
-                                    .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
-                                    .onTapGesture {
-                                        store.send(.podcastDetailsTapped(podcast))
-                                    }
-                                    .onAppear {
-                                        if index >= podcasts.count - 2 {
-                                            store.send(.paginateFetchResult)
-                                        } else if index == 0 {
-                                            store.send(.resetPagination)
-                                        }
-                                    }
+                            ListViewCell(
+                                imageURL: podcast.image,
+                                author: podcast.author,
+                                title: podcast.title,
+                                isPodcast: true,
+                                description: podcast.description
+                            )
+                            .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                            .onTapGesture {
+                                store.send(.podcastDetailsTapped(podcast))
                             }
+                        }
                     }
                 }
             }, header: {

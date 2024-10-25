@@ -6,103 +6,129 @@
 //
 
 import SwiftUI
+import CachedAsyncImage
 
 struct ListViewCell: View {
-    let podcast: Podcast
+    let imageURL: URLRequest?
+    let author: String?
+    let title: String?
+    let isPodcast: Bool
+    let description: String?
+    @State var isDisclosed = false
+
+    init(imageURL: URL?, author: String?, title: String?, isPodcast: Bool, description: String?) {
+        self.imageURL = URLRequest(url: imageURL ?? URL(filePath: "")!)
+        self.author = author
+        self.title = title
+        self.isPodcast = isPodcast
+        self.description = description
+    }
 
     var body: some View {
-        HStack(alignment: .top) {
-            AsyncImage(url: podcast.image) { phase in
-                if let image = phase.image {
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 100, height: 100)
-                        .cornerRadius(24)
-                        .clipped()
+        VStack {
+            HStack(alignment: .top) {
+                if isPodcast {
+                    CachedAsyncImage(urlRequest: imageURL, urlCache: .imageCache) { phase in
+                        if let image = phase.image {
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 100, height: 100)
+                                .cornerRadius(24)
+                                .clipped()
+                        } else {
+                            Image(systemName: "waveform.badge.mic")
+                                .frame(width: 100, height: 100)
+                                .cornerRadius(24)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 24)
+                                        .stroke(Color.gray, lineWidth: 0.5)
+                                )
+                        }
+                    }
+                    .frame(width: 100, height: 100)
+                    .cornerRadius(24)
                 } else {
-                    Image(systemName: "waveform.badge.mic")
-                        .frame(width: 100, height: 100)
+                    Image(systemName: "play.circle.fill")
+                        .resizable()
+                        .frame(width: 40, height: 40)
                         .cornerRadius(24)
                         .overlay(
                             RoundedRectangle(cornerRadius: 24)
-                                .stroke(Color.gray, lineWidth: 0.5)
+                                .stroke(lineWidth: 0.5)
                         )
                 }
-            }
-            .frame(width: 100, height: 100)
-            .cornerRadius(24)
 
-            VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 16) {
+                    Spacer()
+                        .frame(maxHeight: 4)
+                    Text(title ?? "")
+                        .font(.headline)
+                        .bold()
+                        .lineLimit(1)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Text(author ?? "")
+                        .font(.subheadline)
+                        .lineLimit(2)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding(.leading, 8)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
                 Spacer()
-                    .frame(maxHeight: 4)
-                Text(podcast.title ?? "")
-                    .font(.headline)
-                    .bold()
-                    .lineLimit(1)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Text(podcast.author ?? "")
-                    .font(.subheadline)
-                    .lineLimit(2)
-                    .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.leading, 8)
-            .frame(maxWidth: .infinity, alignment: .leading)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
 
-            Spacer()
+            if let safeDescription = description, !isPodcast {
+                    ContentView(isDisclosed: $isDisclosed, description: safeDescription)
+            }
+
+            Divider()
+                .background(Color(.systemGray))
         }
-        .frame(alignment: .center)
-        Divider()
-            .background(Color(.systemGray))
+        .onLongPressGesture {
+            withAnimation(.spring()) {
+                isDisclosed.toggle()
+            }
+        }
+        .onDisappear {
+            isDisclosed = false
+        }
     }
 }
 
-struct ListEpisodeViewCell: View {
-    let episode: Episode
-
+struct ContentView: View {
+    @Binding var isDisclosed: Bool
+    let description: String
     var body: some View {
-        HStack(alignment: .top) {
-            AsyncImage(url: episode.imageUrl) { phase in
-                if let image = phase.image {
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(width: 100, height: 100)
-                        .cornerRadius(24)
-                        .clipped()
+        VStack {
+            HStack {
+                Spacer()
+                if isDisclosed {
+                    Image(systemName: "chevron.compact.down")
+                        .foregroundStyle(Color(.systemBlue))
+                        .font(.system(size: 24))
                 } else {
-                    Image(systemName: "waveform.badge.mic")
-                        .frame(width: 100, height: 100)
-                        .cornerRadius(24)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 24)
-                                .stroke(Color.gray, lineWidth: 0.5)
-                        )
+                    Image(systemName: "chevron.compact.up")
+                        .foregroundStyle(Color(.systemBlue))
+                        .font(.system(size: 24))
                 }
             }
-            .frame(width: 100, height: 100)
-            .cornerRadius(24)
-
-            VStack(alignment: .leading, spacing: 16) {
-                Spacer()
-                    .frame(maxHeight: 4)
-                Text(episode.title)
-                    .font(.headline)
-                    .bold()
-                    .lineLimit(1)
+            VStack {
+                Text(description)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                Text(episode.description)
                     .font(.subheadline)
-                    .lineLimit(2)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding()
             }
-            .padding(.leading, 8)
-            .frame(maxWidth: .infinity, alignment: .leading)
-
-            Spacer()
+            .frame(height: isDisclosed ? nil : 0, alignment: .leading)
+            .clipped()
+            .animation(.spring(), value: isDisclosed)
         }
-        .frame(alignment: .center)
-        Divider()
-            .background(Color(.systemGray))
+        .frame(maxWidth: .infinity)
+        .padding()
     }
+}
+
+extension URLCache {
+    static let imageCache = URLCache(memoryCapacity: 512_000_000, diskCapacity: 10_000_000_000)
 }

@@ -116,7 +116,7 @@ struct Episode: Codable, Identifiable, Equatable, Hashable, PlayableItemProtocol
 
     init(feedItem: RSSFeedItem) {
         self.id = feedItem.guid?.value ?? UUID().uuidString
-        self.streamURL = URL(string: feedItem.enclosure?.attributes?.url ?? "")!
+        self.streamURL = URL(string: feedItem.enclosure?.attributes?.url ?? "") ?? URL(filePath: "")!
         self.title = feedItem.title ?? "No Title"
         self.pubDate = feedItem.pubDate ?? Date()
         self.description = Episode.cleanHTMLTags(

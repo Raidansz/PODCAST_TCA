@@ -6,13 +6,17 @@
 //
 
 import SwiftUI
+import CachedAsyncImage
 
 struct ListViewHero: View {
-    let imageURL: URL
+    let imageURL: URLRequest?
 
+    init(imageURL: URL?) {
+        self.imageURL = URLRequest(url: imageURL ?? URL(filePath: "")!)
+    }
     var body: some View {
         VStack {
-            AsyncImage(url: imageURL) { phase in
+            CachedAsyncImage(urlRequest: imageURL, urlCache: .imageCache) { phase in
                 if let image = phase.image {
                     image
                         .resizable()

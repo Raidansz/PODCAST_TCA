@@ -89,7 +89,12 @@ struct PodcastDetailsView: View {
                         LazyVStack(spacing: 24) {
                             if (store.episodes) != nil {
                                 ForEach((store.episodes!), id: \.self) { response in
-                                    ListEpisodeViewCell(episode: response)
+                                    ListViewCell(
+                                        imageURL: response.imageUrl,
+                                        author: response.author, title: response.title,
+                                        isPodcast: false,
+                                        description: response.description
+                                    )
                                         .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                                         .onTapGesture {
                                             store.send(.cellTapped(response))

@@ -123,18 +123,23 @@ struct ExploreSearchView: View {
                     }
                     .padding()
                     // TODO: Pagination
-                        LazyVStack(spacing: 24) {
-                            if let list = store.searchResult?.podcasts {
-                                ForEach(list, id: \.self) { response in
-                                    NavigationLink(
-                                        state: ExploreFeature.Path.State.podcastDetails(PodcastDetailsFeature.State(podcast: response))
-                                    ) {
-                                        ListViewCell(podcast: response)
-                                            .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
-                                    }
+                    LazyVStack(spacing: 24) {
+                        if let list = store.searchResult?.podcasts {
+                            ForEach(list, id: \.self) { response in
+                                NavigationLink(
+                                    state: ExploreFeature.Path.State.podcastDetails(PodcastDetailsFeature.State(podcast: response))
+                                ) {
+                                    ListViewCell(
+                                        imageURL: response.image,
+                                        author: response.author, title: response.title,
+                                        isPodcast: false,
+                                        description: response.description
+                                    )
+                                    .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                                 }
                             }
                         }
+                    }
                     .padding(.horizontal, 16)
                 }
                 .blur(
