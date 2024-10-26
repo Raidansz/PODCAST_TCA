@@ -10,7 +10,7 @@ import ComposableArchitecture
 import SwiftyJSON
 import FeedKit
 
-struct PodHub: Equatable {
+struct PodHub: Equatable, Codable {
     static func == (lhs: PodHub, rhs: PodHub) -> Bool {
         lhs.id == rhs.id
     }
@@ -51,7 +51,7 @@ struct PodHub: Equatable {
     }
 }
 
-struct Podcast: Identifiable, Equatable, Hashable {
+struct Podcast: Identifiable, Equatable, Hashable, Codable {
     var id: UUID
     var title: String?
     var description: String?

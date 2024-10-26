@@ -10,24 +10,28 @@ import ComposableArchitecture
 
 @main
 struct RootModule: App {
-    static let hapticManager: HapticManagerProtocol = podcast_ios.HapticManager()
     var body: some Scene {
         WindowGroup {
-            TabView {
-                HomeView(store: Store(initialState: HomeFeature.State()) {
-                    HomeFeature()
+            SharedStateFileStorageView(
+                store: Store(initialState: SharedStateFileStorage.State()) {
+                  SharedStateFileStorage()
                 })
-                .tabItem {
-                    Label("Home", systemImage: "house")
-                }
-
-                ExloreView(store: Store(initialState: ExploreFeature.State()) {
-                    ExploreFeature()
-                })
-                .tabItem {
-                    Label("Explore", systemImage: "magnifyingglass")
-                }
-            }
+//            TabView {
+//                HomeView(store: Store(initialState: HomeFeature.State()) {
+//                    HomeFeature()
+//                })
+//                .tabItem {
+//                    Label("Home", systemImage: "house")
+//                }
+//
+//                ExloreView(store: Store(initialState: ExploreFeature.State()) {
+//                    ExploreFeature()
+//                })
+//                .tabItem {
+//                    Label("Explore", systemImage: "magnifyingglass")
+//                }
+//            }
         }
     }
 }
+//

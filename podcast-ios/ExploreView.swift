@@ -8,111 +8,16 @@
 import SwiftUI
 import ComposableArchitecture
 
-@Reducer
-struct ExploreFeature: Sendable {
-    @ObservableState
-    struct State {
-        var podcastsList: PodHub?
-        var isLoading: Bool = false
-        var selectedPodcast: Item?
-        var searchTerm = ""
-        var searchPodcastResults: PodHub?
-        var path = StackState<Path.State>()
-        @Presents var destination: Destination.State?
-    }
-
-    @Reducer
-    enum Path {
-        case podcastDetails(PodcastDetailsFeature)
-        case searchResults(ExploreSearchFeature)
-    }
-
-    @Reducer
-    enum Destination {
-        case showMorePodcasts(ShowMorePodcastFeature)
-    }
-
-    enum Action {
-        case fetchPodcasts
-        case fetchPodcastsResponse(PodHub)
-        case searchForPodcastTapped(with: String)
-        case searchTermChanged(String)
-        case showSearchResults(PodHub, String)
-        case path(StackActionOf<Path>)
-        case podcastDetailsTapped(Podcast)
-        case destination(PresentationAction<Destination.Action>)
-    }
-
-    @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
-
-    var body: some ReducerOf<Self> {
-        Reduce { state, action in
-            switch action {
-            case .fetchPodcasts:
-                state.podcastsList = nil
-                state.isLoading = true
-                return .run {  send in
-                    try await send(
-                        .fetchPodcastsResponse(
-                            self.podHubManager.searchFor(searchFor: .podcast, value: "hee", limit: 4, page: 1, id: nil)
-                        )
-                    )
-                }
-            case .fetchPodcastsResponse(let response):
-                state.isLoading = false
-                state.podcastsList = response
-                return .none
-            case .searchForPodcastTapped(with: let term):
-                if term.isEmpty {
-                    return .none
-                }
-                state.isLoading = true
-                return .run { send in
-                    try await send(
-                        .showSearchResults(
-                            self.podHubManager.searchFor(
-                                searchFor: .podcast,
-                                value: term,
-                                limit: nil,
-                                page: nil, id: nil
-                            ),
-                            term
-                        )
-                    )
-                }
-            case .searchTermChanged(let searchTerm):
-                state.searchTerm = searchTerm
-                return .none
-            case .path:
-                return .none
-            case .podcastDetailsTapped(let podcast):
-                state.path.append(.podcastDetails(PodcastDetailsFeature.State(podcast: podcast)))
-                return .none
-            case .destination:
-                return .none
-            case .showSearchResults(let result, let initialTerm):
-                state.isLoading = false
-                if state.path.isEmpty {
-                    state.path.append(.searchResults(ExploreSearchFeature.State(searchResult: result, searchTerm: initialTerm)))
-                }
-                return .none
-            }
-        }
-        .ifLet(\.$destination, action: \.destination)
-        .forEach(\.path, action: \.path)
-    }
-}
-
 struct ExloreView: View {
-    @Bindable var store: StoreOf<ExploreFeature>
+    @Bindable var store: StoreOf<SharedStateFileStorage.ExploreTab>
     var body: some View {
-        NavigationStack( path: $store.scope(state: \.path, action: \.path)) {
+      //  NavigationStack( path: $store.scope(state: \.path, action: \.path)) {
             ZStack(alignment: .top) {
                 ExploreViewContent(store: store)
                     .blur(
-                        radius: store.isLoading ? 5 : 0
+                        radius: store.stats.isScreenLoading ? 5 : 0
                     )
-                if store.isLoading {
+                if store.stats.isScreenLoading {
                     ProgressView("Please wait")
                         .progressViewStyle(CircularProgressViewStyle(tint: .blue))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -147,32 +52,32 @@ struct ExloreView: View {
             }
             .navigationTitle("Explore")
             .navigationBarTitleDisplayMode(.large)
-        } destination: { store in
-            switch store.case {
-            case .podcastDetails(let store):
-                PodcastDetailsView(store: store)
-            case .searchResults(let store):
-                ExploreSearchView(store: store)
-            }
-        }
-        .sheet(
-            item: $store.scope(
-                state: \.destination?.showMorePodcasts,
-                action: \.destination.showMorePodcasts
-            )
-        ) { store in
-            NavigationStack {
-                ShowMorePodcastView(store: store)
-            }
-        }
-        .onAppear {
-            store.send(.fetchPodcasts)
-        }
+//        } destination: { store in
+//            switch store.case {
+//            case .podcastDetails(let store):
+//                PodcastDetailsView(store: store)
+//            case .searchResults(let store):
+//                ExploreSearchView(store: store)
+//            }
+//        }
+//        .sheet(
+//            item: $store.scope(
+//                state: \.destination?.showMorePodcasts,
+//                action: \.destination.showMorePodcasts
+//            )
+//        ) { store in
+//            NavigationStack {
+//                ShowMorePodcastView(store: store)
+//            }
+//        }
+//        .onAppear {
+//            store.send(.fetchPodcasts)
+//        }
     }
 }
 
 struct ExploreViewContent: View {
-    @Bindable var store: StoreOf<ExploreFeature>
+    @Bindable var store: StoreOf<SharedStateFileStorage.ExploreTab>
     var body: some View {
         ScrollView {
             ZStack {
@@ -187,11 +92,11 @@ struct ExploreViewContent: View {
                         .padding(.leading, 15)
                     TextField(
                         "Search the podcast here...",
-                        text: $store.searchTerm.sending(\.searchTermChanged)
+                        text: $store.stats.searchTerm.sending(\.searchTermChanged)
                     )
                     .padding(.leading, 5)
                     .onSubmit {
-                        store.send(.searchForPodcastTapped(with: store.searchTerm))
+                       // store.send(.searchForPodcastTapped(with: store.searchTerm))
                     }
                 }
                 .frame(width: 364, height: 64)
@@ -200,12 +105,12 @@ struct ExploreViewContent: View {
             .padding()
 
             Section(content: {
-                if (store.podcastsList?.podcasts) != nil {
-                    horizontalList(data: (store.podcastsList!.podcasts)) { podcast in
+                if (store.stats.trendingPodcasts?.podcasts) != nil {
+                    horizontalList(data: (store.stats.trendingPodcasts!.podcasts)) { podcast in
                         ListViewHero(imageURL: podcast.image ?? URL(string: "")!)
                             .frame(width: 300, height: 300)
                             .onTapGesture {
-                                store.send(.podcastDetailsTapped(podcast))
+                              //  store.send(.podcastDetailsTapped(podcast))
                             }
                     }
                 }
@@ -220,8 +125,8 @@ struct ExploreViewContent: View {
 
             Section(content: {
                 LazyVStack(spacing: 24) {
-                    if store.podcastsList?.podcasts != nil {
-                        ForEach((store.podcastsList!.podcasts), id: \.self) { response in
+                    if store.stats.trendingPodcasts?.podcasts != nil {
+                        ForEach((store.stats.trendingPodcasts!.podcasts), id: \.self) { response in
                             ListViewCell(
                                 imageURL: response.image,
                                 author: response.author, title: response.title,
@@ -230,15 +135,15 @@ struct ExploreViewContent: View {
                             )
                             .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                             .onTapGesture {
-                                store.send(.podcastDetailsTapped(response))
+                             //   store.send(.podcastDetailsTapped(response))
                             }
                         }
                     }
                 }
                 .padding(.horizontal, 16)
             }, header: {
-                if (store.podcastsList?.podcasts) != nil {
-                    horizontalList(data: (store.podcastsList!.podcasts)) { podcast in
+                if (store.stats.trendingPodcasts?.podcasts) != nil {
+                    horizontalList(data: (store.stats.trendingPodcasts!.podcasts)) { podcast in
                         CatagoriesView(label: podcast.title ?? "")
                     }
                 }

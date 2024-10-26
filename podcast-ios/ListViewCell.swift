@@ -100,10 +100,7 @@ struct ListViewCell: View {
             withAnimation(.spring()) {
                 isDisclosed.toggle()
             }
-            RootModule.hapticManager.fireHaptic.send()
-        }
-        .onDisappear {
-            isDisclosed = false
+//            RootModule.hapticManager.fireHaptic.send()
         }
     }
 }
