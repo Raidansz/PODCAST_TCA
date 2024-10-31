@@ -11,11 +11,13 @@ import IdentifiedCollections
 class PodHubManager: PodHubManagerProtocol {
     @Injected(\.itunesManager) private var itunesManager: ItunesManagerProtocol
     @Injected(\.podcastIndexManager) private var podcastIndexManager: PodcastIndexManagerProtocol
+    @Injected(\.rssFeedGeneratorManager) private var rSSFeedGeneratorManager: RSSFeedGeneratorManagerProtocol
 //    private var activeSearchResult: Dictionary<UUID, PaginatedResult> = [:]
 
     func getTrendingPodcasts() async throws -> PodHub {
-        let result = try await podcastIndexManager.performQuery(for: .podcast, .trending, parameter: .max(10))
-        return try normalizeResult(result: result, mediaType: .podcast, totalCount: result.count)
+        let fetchedIds = try await rSSFeedGeneratorManager.getTopChartedPodcast(limit: 50, country: .saudiArabia)
+        let result = try await itunesManager.lookupPodcasts(ids: fetchedIds)
+        return try normalizeResult(result: result, mediaType: .podcast, totalCount: result.resultCount)
     }
 
     func searchFor(

@@ -24,6 +24,19 @@ extension RSSFeed {
     }
 }
 
+extension RSSFeed {
+    func toPodcasts() -> IdentifiedArrayOf<Podcast> {
+        let imageUrl = iTunes?.iTunesImage?.attributes?.href
+        var podcasts = IdentifiedArrayOf<Podcast>()
+        items?.forEach { feedItem in
+            var podcast = Podcast(feedItem: feedItem)
+            podcast.image = URL(string: imageUrl ?? "")
+            podcasts.append(podcast)
+        }
+        return podcasts
+    }
+}
+
 extension FeedParser: @unchecked @retroactive Sendable {
     public func parseAsync() async throws -> Feed {
         return try await withCheckedThrowingContinuation { continuation in

@@ -160,7 +160,7 @@ struct HomeViewContent: View {
             Section(content: {
                 if let podcasts = store.trendingPodcasts {
                     horizontalList(data: (podcasts.podcasts.prefix(store.limit))) { podcast in
-                        ListViewHero(imageURL: podcast.image ?? URL(string: "")!)
+                        ListViewHero(imageURL: podcast.image ?? URL(string: ""))
                             .frame(width: 350, height: 350)
                             .onTapGesture {
                                 store.send(.podcastDetailsTapped(podcast))
@@ -190,8 +190,7 @@ struct HomeViewContent: View {
                                 imageURL: podcast.image,
                                 author: podcast.author,
                                 title: podcast.title,
-                                isPodcast: true,
-                                description: podcast.description
+                                isPodcast: true
                             )
                             .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                             .onTapGesture {

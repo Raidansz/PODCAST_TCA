@@ -103,7 +103,7 @@ struct PodcastDetailsView: View {
                             }
                         }
                     }, header: {
-                        ListViewHero(imageURL: store.podcast.image ?? URL(string: "")!)
+                        ListViewHero(imageURL: store.podcast.image ?? URL(string: ""))
                             .frame(width: 380, height: 380)
                             .padding(.bottom, 20)
                     })

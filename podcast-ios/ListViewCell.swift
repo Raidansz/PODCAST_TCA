@@ -16,9 +16,8 @@ struct ListViewCell: View {
     let isPodcast: Bool
     let description: String?
     @State var isDisclosed = false
-    @State private var engine: CHHapticEngine?
 
-    init(imageURL: URL?, author: String?, title: String?, isPodcast: Bool, description: String?) {
+    init(imageURL: URL?, author: String?, title: String?, isPodcast: Bool, description: String? = nil) {
         self.imageURL = URLRequest(url: imageURL ?? URL(filePath: "")!)
         self.author = author
         self.title = title
@@ -88,55 +87,13 @@ struct ListViewCell: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
 
-            if let safeDescription = description, !isPodcast {
-                    ContentView(isDisclosed: $isDisclosed, description: safeDescription)
-            }
-
             Divider()
                 .background(Color(.systemGray))
         }
         .contentShape(Rectangle())
         .onLongPressGesture {
-            withAnimation(.spring()) {
-                isDisclosed.toggle()
-            }
             RootModule.hapticManager.fireHaptic.send()
         }
-        .onDisappear {
-            isDisclosed = false
-        }
-    }
-}
-
-struct ContentView: View {
-    @Binding var isDisclosed: Bool
-    let description: String
-    var body: some View {
-        VStack {
-            HStack {
-                Spacer()
-                if isDisclosed {
-                    Image(systemName: "chevron.compact.down")
-                        .foregroundStyle(Color(.systemBlue))
-                        .font(.system(size: 24))
-                } else {
-                    Image(systemName: "chevron.compact.up")
-                        .foregroundStyle(Color(.systemBlue))
-                        .font(.system(size: 24))
-                }
-            }
-            VStack {
-                Text(description)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.subheadline)
-                    .padding()
-            }
-            .frame(height: isDisclosed ? nil : 0, alignment: .leading)
-            .clipped()
-            .animation(.spring(), value: isDisclosed)
-        }
-        .frame(maxWidth: .infinity)
-        .padding()
     }
 }
 

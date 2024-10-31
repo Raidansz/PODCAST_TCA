@@ -83,6 +83,8 @@ protocol ItunesManagerProtocol {
     func searchPodcasts(term: String, entity: Entity, limit: Int?, page: Int?) async throws -> SearchResults
 
     func searchPodcasts(term: String, limit: Int?, page: Int?) async throws -> SearchResults
+
+    func lookupPodcasts(ids: [String]) async throws -> SearchResults
 }
 
 // MARK: Search for Podcast / Episode
@@ -185,6 +187,24 @@ extension ItunesManager {
         }
 
         return try await performQueryWithPagination(urlComponents?.url, limit: limit, page: page)
+    }
+
+    func lookupPodcasts(ids: [String]) async throws -> SearchResults {
+       let rootURL = "https://itunes.apple.com/lookup"
+        guard !ids.isEmpty else {
+            throw URLError(.badURL)
+        }
+
+        let idString = ids.joined(separator: ",")
+
+        var queryItems = [URLQueryItem]()
+        queryItems.append(URLQueryItem(name: "id", value: idString))
+        queryItems.append(URLQueryItem(name: Constants.media.rawValue, value: "podcast"))
+
+        var urlComponents = URLComponents(string: rootURL)
+        urlComponents?.queryItems = queryItems
+
+        return try await performQuery(urlComponents?.url)
     }
 }
 

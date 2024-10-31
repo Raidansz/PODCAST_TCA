@@ -225,8 +225,7 @@ struct ExploreViewContent: View {
                             ListViewCell(
                                 imageURL: response.image,
                                 author: response.author, title: response.title,
-                                isPodcast: true,
-                                description: response.description
+                                isPodcast: true
                             )
                             .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                             .onTapGesture {

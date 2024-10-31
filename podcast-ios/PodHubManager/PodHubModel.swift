@@ -52,9 +52,8 @@ struct PodHub: Equatable {
 }
 
 struct Podcast: Identifiable, Equatable, Hashable {
-    var id: UUID
+    var id: String
     var title: String?
-    var description: String?
     var image: URL?
     var publicationDate: Date?
     var author: String?
@@ -63,14 +62,9 @@ struct Podcast: Identifiable, Equatable, Hashable {
     var type: String
 
     init(item: SearchResult, mediaType: MediaType) {
-        if let uuid = UUID(uuidString: "\(item.id)") {
-            self.id = uuid
-        } else {
-            self.id = UUID()
-        }
+        self.id = "\(item.id)"
         self.title = item.trackName
-        self.description = "TBCH"
-        self.image = item.artworkUrl600 ?? item.artworkUrl100!
+        self.image = item.artworkUrl600 ?? item.artworkUrl100 ?? URL(filePath: "")!
         self.publicationDate = item.releaseDate
         self.author = item.artistName ?? ""
         self.isPodcast = mediaType == .podcast
@@ -78,15 +72,22 @@ struct Podcast: Identifiable, Equatable, Hashable {
         self.type = "it"
     }
 
+    init(feedItem: RSSFeedItem) {
+        self.id = feedItem.guid?.value ?? UUID().uuidString
+        self.feedURL = URL(string: feedItem.enclosure?.attributes?.url ?? "") ?? URL(filePath: "")!
+        self.title = feedItem.title ?? "No Title"
+        self.publicationDate = feedItem.pubDate ?? Date()
+        self.author = feedItem.iTunes?.iTunesAuthor ?? "Unknown Author"
+        self.image = URL(string: feedItem.link ?? "")
+        self.type = "RSSFeedGenerator"
+        self.isPodcast = true
+        let descriptionText =  feedItem.iTunes?.iTunesSubtitle ?? feedItem.description ?? "No Description Available"
+    }
+
     init(item: Item, mediaType: MediaType) {
-        if let uuid = UUID(uuidString: "\(item.id)") {
-            self.id = uuid
-        } else {
-            self.id = UUID()
-        }
+        self.id = "\(item.id)"
         self.title = item.title
-        self.description = item.description
-        self.image = item.image ?? item.feedImage ?? URL("")!
+        self.image = item.image ?? item.feedImage ?? URL(filePath: "")!
         self.publicationDate = item.datePublished
         self.author = item.feedAuthor
         self.isPodcast = mediaType == .podcast
@@ -119,23 +120,9 @@ struct Episode: Codable, Identifiable, Equatable, Hashable, PlayableItemProtocol
         self.streamURL = URL(string: feedItem.enclosure?.attributes?.url ?? "") ?? URL(filePath: "")!
         self.title = feedItem.title ?? "No Title"
         self.pubDate = feedItem.pubDate ?? Date()
-        self.description = Episode.cleanHTMLTags(
-            from: feedItem.iTunes?.iTunesSubtitle ?? feedItem.description ?? "No Description Available")
         self.author = feedItem.iTunes?.iTunesAuthor ?? "Unknown Author"
         self.imageUrl = URL(string: feedItem.iTunes?.iTunesImage?.attributes?.href ?? "")
-    }
-
-    private static func cleanHTMLTags(from string: String) -> String {
-        let regex = try? NSRegularExpression(pattern: "<[^>]+>", options: .caseInsensitive)
-        let range = NSMakeRange(0, string.count)
-        let htmlLessString = regex?.stringByReplacingMatches(in: string, options: [], range: range, withTemplate: "")
-        let cleanedString = htmlLessString?
-            .replacingOccurrences(of: "&amp;", with: "&")
-            .replacingOccurrences(of: "&lt;", with: "<")
-            .replacingOccurrences(of: "&gt;", with: ">")
-            .replacingOccurrences(of: "&quot;", with: "\"")
-            .replacingOccurrences(of: "&#39;", with: "'")
-
-        return cleanedString?.trimmingCharacters(in: .whitespacesAndNewlines) ?? string
+        let descriptionText = feedItem.iTunes?.iTunesSubtitle ?? feedItem.description ?? "No Description Available"
+        self.description = descriptionText.cleanHTMLTags()
     }
 }
