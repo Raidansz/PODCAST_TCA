@@ -6,11 +6,11 @@
 //
 
 import SwiftUI
-import CachedAsyncImage
+import Kingfisher
 import CoreHaptics
 
 struct ListViewCell: View {
-    let imageURL: URLRequest?
+    let imageURL: URL?
     let author: String?
     let title: String?
     let isPodcast: Bool
@@ -18,7 +18,7 @@ struct ListViewCell: View {
     @State var isDisclosed = false
 
     init(imageURL: URL?, author: String?, title: String?, isPodcast: Bool, description: String? = nil) {
-        self.imageURL = URLRequest(url: imageURL ?? URL(filePath: "")!)
+        self.imageURL = imageURL
         self.author = author
         self.title = title
         self.isPodcast = isPodcast
@@ -29,15 +29,16 @@ struct ListViewCell: View {
         VStack {
             HStack(alignment: .top) {
                 if isPodcast {
-                    CachedAsyncImage(urlRequest: imageURL, urlCache: .imageCache) { phase in
-                        if let image = phase.image {
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 100, height: 100)
-                                .cornerRadius(24)
-                                .clipped()
-                        } else {
+                    KFImage(imageURL)
+                        .resizable()
+                        .serialize(as: .PNG)
+                        .onSuccess { result in
+                            print("Image loaded from cache: \(result.cacheType)")
+                        }
+                        .onFailure { error in
+                            print("Error: \(error)")
+                        }
+                        .placeholder {
                             Image(systemName: "waveform.badge.mic")
                                 .frame(width: 100, height: 100)
                                 .cornerRadius(24)
@@ -46,25 +47,10 @@ struct ListViewCell: View {
                                         .stroke(Color.gray, lineWidth: 0.5)
                                 )
                         }
-                    }
-                    .frame(width: 100, height: 100)
-                    .cornerRadius(24)
-                } else {
-//                    VStack {
-//                        Spacer()
-//                        //Image(systemName: "play.circle.fill")
-//                        Text("Play")
-//                            .overlay(content: {
-//                                RoundedRectangle(cornerRadius: 24)
-//                                    
-//                                    .stroke(lineWidth: 0.5)
-//                                    .frame(width: 60, height: 60)
-//                            })
-//                           // .resizable()
-//                            .frame(width: 60, height: 60)
-//                            .cornerRadius(24)
-//                    }
-//                    .padding(.leading, 16)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 100, height: 100)
+                        .cornerRadius(24)
+                        .clipped()
                 }
 
                 VStack(alignment: .leading, spacing: 16) {

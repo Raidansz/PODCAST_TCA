@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AA1798452CCBD702008B57AB /* CachedAsyncImage in Frameworks */ = {isa = PBXBuildFile; productRef = AA1798442CCBD702008B57AB /* CachedAsyncImage */; };
 		AA1F8E3C2CA8572C009FFC85 /* PodHubModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1F8E3B2CA8571F009FFC85 /* PodHubModel.swift */; };
 		AA1F8E3E2CA8573E009FFC85 /* PodHubManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1F8E3D2CA85737009FFC85 /* PodHubManager.swift */; };
 		AA3098F82CC43CCD003CF32F /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3098F42CC43CCD003CF32F /* AudioPlayer.swift */; };
@@ -36,6 +35,7 @@
 		AAAFD49D2CCC3B3E006E2A89 /* HapticManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAFD49C2CCC3B37006E2A89 /* HapticManager.swift */; };
 		AAAFD52E2CD2E505006E2A89 /* RSSFeedGeneratorManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAFD52D2CD2E4FA006E2A89 /* RSSFeedGeneratorManager.swift */; };
 		AAAFD5302CD308BB006E2A89 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAFD52F2CD308B5006E2A89 /* String+Extension.swift */; };
+		AAAFD55C2CD40228006E2A89 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = AAAFD55B2CD40228006E2A89 /* Kingfisher */; };
 		AAF16C642CB440690035F9D0 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = AAF16C632CB440690035F9D0 /* FeedKit */; };
 		AAF16C662CB460750035F9D0 /* RSSFeed+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF16C652CB460720035F9D0 /* RSSFeed+Extension.swift */; };
 		AAF16C692CBAB2840035F9D0 /* ShowMorePodcastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF16C682CBAB2550035F9D0 /* ShowMorePodcastView.swift */; };
@@ -86,9 +86,9 @@
 			files = (
 				AAF16C642CB440690035F9D0 /* FeedKit in Frameworks */,
 				AAFED4362CC90EE700A9096D /* CachingPlayerItem in Frameworks */,
+				AAAFD55C2CD40228006E2A89 /* Kingfisher in Frameworks */,
 				AAF16C6C2CBACF900035F9D0 /* SliderControl in Frameworks */,
 				AAFED4392CC9AE0F00A9096D /* Cache in Frameworks */,
-				AA1798452CCBD702008B57AB /* CachedAsyncImage in Frameworks */,
 				AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */,
 				AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */,
 			);
@@ -214,7 +214,7 @@
 				AAF16C6B2CBACF900035F9D0 /* SliderControl */,
 				AAFED4352CC90EE700A9096D /* CachingPlayerItem */,
 				AAFED4382CC9AE0F00A9096D /* Cache */,
-				AA1798442CCBD702008B57AB /* CachedAsyncImage */,
+				AAAFD55B2CD40228006E2A89 /* Kingfisher */,
 			);
 			productName = "podcast-ios";
 			productReference = AA9278432C8F151C00D5CF6D /* podcast-ios.app */;
@@ -251,7 +251,7 @@
 				AAF16C6A2CBACF900035F9D0 /* XCRemoteSwiftPackageReference "SliderControl" */,
 				AAFED4342CC90EE700A9096D /* XCRemoteSwiftPackageReference "CachingPlayerItem" */,
 				AAFED4372CC9AE0F00A9096D /* XCRemoteSwiftPackageReference "Cache" */,
-				AA1798432CCBD701008B57AB /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */,
+				AAAFD55A2CD40228006E2A89 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = AA9278442C8F151C00D5CF6D /* Products */;
 			projectDirPath = "";
@@ -547,14 +547,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		AA1798432CCBD701008B57AB /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/lorenzofiamingo/swiftui-cached-async-image.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.1;
-			};
-		};
 		AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
@@ -569,6 +561,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.15.2;
+			};
+		};
+		AAAFD55A2CD40228006E2A89 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.1.0;
 			};
 		};
 		AAF16C622CB440690035F9D0 /* XCRemoteSwiftPackageReference "FeedKit" */ = {
@@ -606,11 +606,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		AA1798442CCBD702008B57AB /* CachedAsyncImage */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AA1798432CCBD701008B57AB /* XCRemoteSwiftPackageReference "swiftui-cached-async-image" */;
-			productName = CachedAsyncImage;
-		};
 		AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
@@ -620,6 +615,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AA9278542C8F155C00D5CF6D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
+		};
+		AAAFD55B2CD40228006E2A89 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AAAFD55A2CD40228006E2A89 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 		AAF16C632CB440690035F9D0 /* FeedKit */ = {
 			isa = XCSwiftPackageProductDependency;

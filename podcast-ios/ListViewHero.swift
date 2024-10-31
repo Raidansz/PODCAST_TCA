@@ -6,25 +6,21 @@
 //
 
 import SwiftUI
-import CachedAsyncImage
+import Kingfisher
 
 struct ListViewHero: View {
-    let imageURL: URLRequest?
+    let imageURL: URL?
 
     init(imageURL: URL?) {
-        self.imageURL = URLRequest(url: imageURL ?? URL(filePath: "")!)
+        self.imageURL = imageURL
     }
     var body: some View {
         VStack {
-            CachedAsyncImage(urlRequest: imageURL, urlCache: .imageCache) { phase in
-                if let image = phase.image {
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .cornerRadius(20)
-                        .clipped()
-                } else {
+            KFImage(imageURL)
+                .resizable()
+                .serialize(as: .PNG)
+                
+                .placeholder({
                     Image(systemName: "waveform.badge.mic")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                         .cornerRadius(20)
@@ -32,8 +28,16 @@ struct ListViewHero: View {
                             RoundedRectangle(cornerRadius: 24)
                                 .stroke(Color.gray, lineWidth: 0.5)
                         )
+                })
+                .onSuccess { result in
+                    print("Image loaded from cache: \(result.cacheType)")
                 }
-            }
+                .onFailure { error in
+                    print("Error: \(error)")
+                }
+                .aspectRatio(contentMode: .fit)
+                .cornerRadius(20)
+                .clipped()
             .cornerRadius(20)
         }
         .contentShape(Rectangle())
