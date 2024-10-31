@@ -19,7 +19,6 @@ struct ListViewHero: View {
             KFImage(imageURL)
                 .resizable()
                 .serialize(as: .PNG)
-                
                 .placeholder({
                     Image(systemName: "waveform.badge.mic")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)

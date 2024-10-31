@@ -10,7 +10,6 @@ import ComposableArchitecture
 
 @main
 struct RootModule: App {
-    static let hapticManager: HapticManagerProtocol = podcast_ios.HapticManager()
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
     var body: some Scene {

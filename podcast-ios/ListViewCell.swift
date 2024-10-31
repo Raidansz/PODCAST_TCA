@@ -77,12 +77,5 @@ struct ListViewCell: View {
                 .background(Color(.systemGray))
         }
         .contentShape(Rectangle())
-        .onLongPressGesture {
-            RootModule.hapticManager.fireHaptic.send()
-        }
     }
-}
-
-extension URLCache {
-    static let imageCache = URLCache(memoryCapacity: 50_000_000, diskCapacity: 2_000_000_000)
 }
