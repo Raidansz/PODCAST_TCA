@@ -8,6 +8,7 @@ import AVFoundation
 import UIKit
 import MediaPlayer
 import Combine
+import Kingfisher
 
 final class AudioPlayer: Sendable, AudioPlayerProtocol {
 
@@ -47,13 +48,16 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
 
         if let imageURL = playableItem.imageUrl {
             Task {
-                let (data, _) = try await URLSession.shared.data(from: imageURL)
-                guard let artworkImage = UIImage(data: data) else {
-                    print("Failed to convert data to UIImage")
-                    return
+
+                let result = try? await KingfisherManager.shared.retrieveImage(with: imageURL)
+                if let cachedImage = result?.image {
+
+                    let artwork = MPMediaItemArtwork(boundsSize: cachedImage.size) { _ in cachedImage }
+                    nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+                } else {
+                    print("Failed to retrieve image from cache.")
                 }
-                let artwork = MPMediaItemArtwork(boundsSize: artworkImage.size) { _ in artworkImage }
-                nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
+
                 MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
             }
         } else {
