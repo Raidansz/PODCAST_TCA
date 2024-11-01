@@ -1,5 +1,5 @@
 {
-  "originHash" : "8f9f0ba6c8b7039fdbacb94ad2e4f7aadda0a2d40862f24f120c36513a20b642",
+  "originHash" : "d1907ad085dd6c10f88340e7e88efc5b7cbaabc59b28ccfd2cfe9195408d5dbc",
   "pins" : [
     {
       "identity" : "cache",
@@ -44,15 +44,6 @@
       "state" : {
         "revision" : "c0940e241945e6378c01fbd45fd3815579d47ef5",
         "version" : "8.1.0"
-      }
-    },
-    {
-      "identity" : "slidercontrol",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/AlexChekel1337/SliderControl.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "6a14984daeb7b41243b50aad9e5943fb9ba68860"
       }
     },
     {

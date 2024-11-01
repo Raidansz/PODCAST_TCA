@@ -40,7 +40,6 @@
 		AAF16C642CB440690035F9D0 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = AAF16C632CB440690035F9D0 /* FeedKit */; };
 		AAF16C662CB460750035F9D0 /* RSSFeed+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF16C652CB460720035F9D0 /* RSSFeed+Extension.swift */; };
 		AAF16C692CBAB2840035F9D0 /* ShowMorePodcastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF16C682CBAB2550035F9D0 /* ShowMorePodcastView.swift */; };
-		AAF16C6C2CBACF900035F9D0 /* SliderControl in Frameworks */ = {isa = PBXBuildFile; productRef = AAF16C6B2CBACF900035F9D0 /* SliderControl */; };
 		AAFED4332CC8143800A9096D /* ExploreSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFED4322CC8143100A9096D /* ExploreSearchView.swift */; };
 		AAFED4362CC90EE700A9096D /* CachingPlayerItem in Frameworks */ = {isa = PBXBuildFile; productRef = AAFED4352CC90EE700A9096D /* CachingPlayerItem */; };
 		AAFED4392CC9AE0F00A9096D /* Cache in Frameworks */ = {isa = PBXBuildFile; productRef = AAFED4382CC9AE0F00A9096D /* Cache */; };
@@ -89,7 +88,6 @@
 				AAF16C642CB440690035F9D0 /* FeedKit in Frameworks */,
 				AAFED4362CC90EE700A9096D /* CachingPlayerItem in Frameworks */,
 				AAAFD55C2CD40228006E2A89 /* Kingfisher in Frameworks */,
-				AAF16C6C2CBACF900035F9D0 /* SliderControl in Frameworks */,
 				AAFED4392CC9AE0F00A9096D /* Cache in Frameworks */,
 				AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */,
 				AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */,
@@ -214,7 +212,6 @@
 				AA9278552C8F155C00D5CF6D /* ComposableArchitecture */,
 				AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */,
 				AAF16C632CB440690035F9D0 /* FeedKit */,
-				AAF16C6B2CBACF900035F9D0 /* SliderControl */,
 				AAFED4352CC90EE700A9096D /* CachingPlayerItem */,
 				AAFED4382CC9AE0F00A9096D /* Cache */,
 				AAAFD55B2CD40228006E2A89 /* Kingfisher */,
@@ -251,7 +248,6 @@
 				AA9278542C8F155C00D5CF6D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				AAF16C622CB440690035F9D0 /* XCRemoteSwiftPackageReference "FeedKit" */,
-				AAF16C6A2CBACF900035F9D0 /* XCRemoteSwiftPackageReference "SliderControl" */,
 				AAFED4342CC90EE700A9096D /* XCRemoteSwiftPackageReference "CachingPlayerItem" */,
 				AAFED4372CC9AE0F00A9096D /* XCRemoteSwiftPackageReference "Cache" */,
 				AAAFD55A2CD40228006E2A89 /* XCRemoteSwiftPackageReference "Kingfisher" */,
@@ -463,7 +459,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"podcast-ios/Preview Content\"";
-				DEVELOPMENT_TEAM = 534SAT4S5S;
+				DEVELOPMENT_TEAM = Q3584JB8R5;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -499,7 +495,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"podcast-ios/Preview Content\"";
-				DEVELOPMENT_TEAM = 534SAT4S5S;
+				DEVELOPMENT_TEAM = Q3584JB8R5;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -583,14 +579,6 @@
 				minimumVersion = 9.1.2;
 			};
 		};
-		AAF16C6A2CBACF900035F9D0 /* XCRemoteSwiftPackageReference "SliderControl" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/AlexChekel1337/SliderControl.git";
-			requirement = {
-				branch = main;
-				kind = branch;
-			};
-		};
 		AAFED4342CC90EE700A9096D /* XCRemoteSwiftPackageReference "CachingPlayerItem" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sukov/CachingPlayerItem.git";
@@ -629,11 +617,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AAF16C622CB440690035F9D0 /* XCRemoteSwiftPackageReference "FeedKit" */;
 			productName = FeedKit;
-		};
-		AAF16C6B2CBACF900035F9D0 /* SliderControl */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AAF16C6A2CBACF900035F9D0 /* XCRemoteSwiftPackageReference "SliderControl" */;
-			productName = SliderControl;
 		};
 		AAFED4352CC90EE700A9096D /* CachingPlayerItem */ = {
 			isa = XCSwiftPackageProductDependency;

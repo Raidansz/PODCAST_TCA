@@ -8,7 +8,6 @@
 import SwiftUI
 import ComposableArchitecture
 import AVFoundation
-import SliderControl
 import Combine
 
 @Reducer
@@ -96,53 +95,35 @@ extension PlayerFeature {
 }
 
 struct PlayerView: View {
-    @State var store: StoreOf<PlayerFeature>
+    @Bindable var store: StoreOf<PlayerFeature>
     var body: some View {
         NavigationStack {
             VStack {
-                ZStack {
-                    ListViewHero(imageURL: store.episode.imageUrl.unsafelyUnwrapped)
-                        .aspectRatio(contentMode: .fit)
-                        .cornerRadius(24)
-                        .frame(width: 364, height: 364)
+                ListViewHero(imageURL: store.episode.imageUrl.unsafelyUnwrapped)
+                    .aspectRatio(contentMode: .fit)
+                    .cornerRadius(24)
+                    .frame(width: 364, height: 364)
 
-                    VStack {
-                        Spacer()
-                            .frame(height: 359)
-
-                        RoundedRectangle(cornerRadius: 48)
-                            .fill(Color.blue.opacity(0.2))
-
-                            .blur(radius: 5)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 48)
-                                    .stroke(Color.white.opacity(0.7), lineWidth: 1)
-                            )
-                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 5)
-                            .frame(width: 266, height: 72)
-                    }
-                }
                 Spacer()
                 VStack {
-                    Text("Sunday Vibes - Rift")
+                    Text(store.episode.title)
                         .font(.headline)
-                    Text("Entertainment")
+                    Text(store.episode.author)
                         .font(.subheadline)
                 }
                 Spacer()
                 HStack {
-                    Text("07:00")
+                    Text(formatTime(seconds: store.currentTime))
                     Spacer()
-                    Text("15:00")
+                    Text(formatTime(seconds: store.totalTime))
                 }
                 .padding(.horizontal, 16)
 
-                SliderControlView(
+                Slider(
                     value: $store.currentTime.sending(\.onCurrentTimeChange),
                     in: 0...store.totalTime,
                     onEditingChanged: onEditingChanged
                 )
-                .progressColor(.blue)
                 .padding(.horizontal, 16)
                 .onReceive(
                     Publishers.CombineLatest(
@@ -170,10 +151,16 @@ struct PlayerView: View {
             .navigationBarTitleDisplayMode(.inline)
         }
     }
+
+    private func formatTime(seconds: Double) -> String {
+        let minutes = Int(seconds) / 60
+        let seconds = Int(seconds) % 60
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
 }
 
 struct ControllButton: View {
-    @State var store: StoreOf<PlayerFeature>
+    @Bindable var store: StoreOf<PlayerFeature>
     var body: some View {
         VStack {
             HStack {

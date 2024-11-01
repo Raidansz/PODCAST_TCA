@@ -23,11 +23,9 @@ class PlayerElapsedTimeObserver: @unchecked Sendable {
             ),
             queue: nil
         ) { [weak self] time in
-              Task { @MainActor in
                 guard let self = self else { return }
                 guard !self.paused else { return }
                 self.publisher.send(time.seconds)
-            }
         }
     }
     deinit {
