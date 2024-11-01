@@ -10,7 +10,7 @@ import Foundation
 extension String {
     func cleanHTMLTags() -> String {
         let regex = try? NSRegularExpression(pattern: "<[^>]+>", options: .caseInsensitive)
-        let range = NSMakeRange(0, self.count)
+        let range = NSRange(location: 0, length: self.count)
         let htmlLessString = regex?.stringByReplacingMatches(in: self, options: [], range: range, withTemplate: "")
         let cleanedString = htmlLessString?
             .replacingOccurrences(of: "&amp;", with: "&")

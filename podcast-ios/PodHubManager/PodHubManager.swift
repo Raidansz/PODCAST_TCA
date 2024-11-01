@@ -15,7 +15,7 @@ final class PodHubManager: PodHubManagerProtocol {
 //    private var activeSearchResult: Dictionary<UUID, PaginatedResult> = [:]
 
     func getTrendingPodcasts() async throws -> PodHub {
-        let fetchedIds = try await rSSFeedGeneratorManager.getTopChartedPodcast(limit: 50, country: .saudiArabia)
+        let fetchedIds = try await rSSFeedGeneratorManager.getTopChartedPodcast(limit: 50, country: .unitedStates)
         let result = try await itunesManager.lookupPodcasts(ids: fetchedIds)
         return try normalizeResult(result: result, mediaType: .podcast, totalCount: result.resultCount)
     }

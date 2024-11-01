@@ -309,7 +309,7 @@ protocol AudioPlayerProtocol {
 }
 
 // MARK: - PlayableItemProtocol
-protocol PlayableItemProtocol: Identifiable, Equatable {
+protocol PlayableItemProtocol: Sendable, Identifiable, Equatable {
     var title: String { get }
     var author: String { get }
     var imageUrl: URL? { get }

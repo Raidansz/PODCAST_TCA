@@ -11,7 +11,7 @@ import FeedKit
 @Reducer
 struct ExploreSearchFeature {
     @ObservableState
-    struct State: Equatable {
+    struct State {
         var searchResult: PodHub?
         var episodes: IdentifiedArrayOf<Episode>?
         var isLoading: Bool = false
@@ -158,7 +158,7 @@ struct ExploreSearchView: View {
         ) { store in
             NavigationStack {
                 PlayerView(store: store)
-                    .navigationTitle(store.episode.title)
+                    .navigationTitle(store.runningItem.episode?.title ?? "Player")
                     .navigationBarTitleDisplayMode(.inline)
             }
         }

@@ -13,16 +13,14 @@ import Combine
 @Reducer
 struct PlayerFeature {
     @ObservableState
-    struct State: Equatable {
+    struct State {
         var player: AVPlayer?
         var isPlaying: PlaybackState = .paused
-        var currentTime: Double = 0
-        var totalTime: Double = 100
         var audioURL: URL?
-        var episode: Episode
+        @Shared(.runningItem) var runningItem = RunningItem()
 
         init(episode: Episode) {
-            self.episode = episode
+            runningItem.setEpisode(episode: episode)
         }
     }
 
@@ -39,10 +37,10 @@ struct PlayerFeature {
             case .handlePlayAction:
                 return  handlePlayAction(for: &state)
             case .onCurrentTimeChange(let currentTime):
-                state.currentTime = currentTime
+                state.runningItem.setCurrentTime(value: currentTime)
                 return .none
             case .onTotalTimeChange(let totalTime):
-                state.totalTime = totalTime
+                state.runningItem.setTotalTime(value: totalTime)
                 return .none
             case .updateIsPlaying(let isPlaying):
                 state.isPlaying = isPlaying
@@ -57,12 +55,13 @@ extension PlayerFeature {
         switch state.isPlaying {
         case .playing:
             if let beingPlayedItem = AudioPlayer.shared.playableItem {
-                if beingPlayedItem.id == state.episode.id {
+                if beingPlayedItem.id == state.runningItem.episode?.id {
                     return .run { @MainActor _ in
                         AudioPlayer.shared.pause()
                     }
                 } else {
-                    return .run { @MainActor [episode = state.episode] _ in
+                    return .run { @MainActor [episode = state.runningItem.episode] _ in
+                        guard let episode else { return }
                         AudioPlayer.shared.play(item: episode, action: .playNow)
                     }
                 }
@@ -70,22 +69,25 @@ extension PlayerFeature {
             return .none
         case .paused:
             if let beingPlayedItem = AudioPlayer.shared.playableItem {
-                if beingPlayedItem.id == state.episode.id {
+                if beingPlayedItem.id == state.runningItem.episode?.id {
                     return .run { _ in
                         await AudioPlayer.shared.resume()
                     }
                 } else {
-                    return .run { [episode = state.episode] _ in
+                    return .run { [episode = state.runningItem.episode] _ in
+                        guard let episode else { return }
                         await AudioPlayer.shared.play(item: episode, action: .playNow)
                     }
                 }
             } else {
-                return .run { [episode = state.episode] _ in
+                return .run { [episode = state.runningItem.episode] _ in
+                    guard let episode else { return }
                     await AudioPlayer.shared.play(item: episode, action: .playNow)
                 }
             }
         case .stopped:
-            return .run { [episode = state.episode] _ in
+            return .run { [episode = state.runningItem.episode] _ in
+                guard let episode else { return }
                 await AudioPlayer.shared.play(item: episode, action: .playNow)
             }
         default:
@@ -99,29 +101,29 @@ struct PlayerView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                ListViewHero(imageURL: store.episode.imageUrl.unsafelyUnwrapped)
+                ListViewHero(imageURL: store.runningItem.episode?.imageUrl)
                     .aspectRatio(contentMode: .fit)
                     .cornerRadius(24)
                     .frame(width: 364, height: 364)
 
                 Spacer()
                 VStack {
-                    Text(store.episode.title)
+                    Text(store.runningItem.episode?.title ?? "")
                         .font(.headline)
-                    Text(store.episode.author)
+                    Text(store.runningItem.episode?.author ?? "")
                         .font(.subheadline)
                 }
                 Spacer()
                 HStack {
-                    Text(formatTime(seconds: store.currentTime))
+                    Text(formatTime(seconds: store.runningItem.currentTime))
                     Spacer()
-                    Text(formatTime(seconds: store.totalTime))
+                    Text(formatTime(seconds: store.runningItem.totalTime))
                 }
                 .padding(.horizontal, 16)
 
                 Slider(
-                    value: $store.currentTime.sending(\.onCurrentTimeChange),
-                    in: 0...store.totalTime,
+                    value: $store.runningItem.currentTime.sending(\.onCurrentTimeChange),
+                    in: 0...store.runningItem.totalTime,
                     onEditingChanged: onEditingChanged
                 )
                 .padding(.horizontal, 16)
@@ -135,7 +137,7 @@ struct PlayerView: View {
                     }
                     .onReceive(AudioPlayer.shared.playbackStatePublisher) { state in
                         if let item = AudioPlayer.shared.playableItem {
-                            if item.id == store.episode.id {
+                            if item.id == store.runningItem.episode?.id {
                                 store.send(.updateIsPlaying(state))
                             } else {
                                 store.send(.updateIsPlaying(.stopped))
@@ -221,7 +223,7 @@ extension PlayerView {
         if editingStarted {
             AudioPlayer.shared.elapsedTimeObserver.pause(true)
         } else {
-            AudioPlayer.shared.seek(to: store.currentTime, playerStatus: store.isPlaying)
+            AudioPlayer.shared.seek(to: store.runningItem.currentTime, playerStatus: store.isPlaying)
         }
     }
 }

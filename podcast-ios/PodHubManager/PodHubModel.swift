@@ -10,7 +10,7 @@ import ComposableArchitecture
 import SwiftyJSON
 import FeedKit
 
-struct PodHub: Equatable {
+struct PodHub: Sendable, Equatable {
     static func == (lhs: PodHub, rhs: PodHub) -> Bool {
         lhs.id == rhs.id
     }
@@ -81,7 +81,6 @@ struct Podcast: Identifiable, Equatable, Hashable {
         self.image = URL(string: feedItem.link ?? "")
         self.type = "RSSFeedGenerator"
         self.isPodcast = true
-        let descriptionText =  feedItem.iTunes?.iTunesSubtitle ?? feedItem.description ?? "No Description Available"
     }
 
     init(item: Item, mediaType: MediaType) {

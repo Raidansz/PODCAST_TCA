@@ -11,12 +11,13 @@ import FeedKit
 @Reducer
 struct PodcastDetailsFeature {
     @ObservableState
-    struct State: Equatable {
+    struct State {
         let podcast: Podcast
         var episodes: IdentifiedArrayOf<Episode>?
         var isLoading: Bool = false
         @Presents var playEpisode: PlayerFeature.State?
         var episodeURL: URL?
+        @Shared(.runningItem) var runningItem = RunningItem()
     }
 
     enum Action: Equatable {
@@ -24,7 +25,6 @@ struct PodcastDetailsFeature {
         case cellTapped(Episode)
         case playEpisode(PresentationAction<PlayerFeature.Action>)
         case episodeResponse(IdentifiedArrayOf<Episode>?)
-//        case onDisappear
     }
 
     private func parseFeed(url: URL?) async throws -> IdentifiedArrayOf<Episode> {
@@ -68,9 +68,6 @@ struct PodcastDetailsFeature {
                 return .none
             case .playEpisode:
                 return .none
-//            case .onDisappear:
-//                state.episodes = nil
-//                return .none
             }
         }
         .ifLet(\.$playEpisode, action: \.playEpisode) {
@@ -129,7 +126,7 @@ struct PodcastDetailsView: View {
         ) { store in
             NavigationStack {
                 PlayerView(store: store)
-                    .navigationTitle(store.episode.title)
+                    .navigationTitle(store.runningItem.episode?.title ?? "Player")
                     .navigationBarTitleDisplayMode(.inline)
             }
         }
