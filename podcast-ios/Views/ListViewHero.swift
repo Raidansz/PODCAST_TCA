@@ -29,10 +29,10 @@ struct ListViewHero: View {
                         )
                 })
                 .onSuccess { result in
-                    print("Image loaded from cache: \(result.cacheType)")
+                    PODLogInfo("Image loaded from cache: \(result.cacheType)")
                 }
                 .onFailure { error in
-                    print("Error: \(error)")
+                    PODLogError("Error: \(error)")
                 }
                 .aspectRatio(contentMode: .fit)
                 .cornerRadius(10)

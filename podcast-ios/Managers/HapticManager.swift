@@ -23,6 +23,9 @@ final class HapticManager: HapticManagerProtocol, @unchecked Sendable {
         }
         .store(in: &cancellables)
     }
+    deinit {
+        PODLogInfo("HapticManager was deinitialized")
+    }
 }
 
 extension HapticManager {
@@ -33,7 +36,7 @@ extension HapticManager {
             engine = try CHHapticEngine()
             try engine?.start()
         } catch {
-            print("There was an error creating the engine: \(error.localizedDescription)")
+            PODLogError("There was an error creating the engine: \(error.localizedDescription)")
         }
     }
 
@@ -51,7 +54,7 @@ extension HapticManager {
             let player = try engine?.makePlayer(with: pattern)
             try player?.start(atTime: 0)
         } catch {
-            print("Failed to play pattern: \(error.localizedDescription).")
+            PODLogError("Failed to play pattern: \(error.localizedDescription).")
         }
     }
 }

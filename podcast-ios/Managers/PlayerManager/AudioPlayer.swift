@@ -35,6 +35,9 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
             observingElapsedTime()
         }
     }
+    deinit {
+        PODLogInfo("ItunesManager was deinitialized")
+    }
 
     // MARK: - Now Playing Info
     func updateNowPlayingInfo(playableItem: (any PlayableItemProtocol)?) {
@@ -57,7 +60,7 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
                     let artwork = MPMediaItemArtwork(boundsSize: cachedImage.size) { _ in cachedImage }
                     nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
                 } else {
-                    print("Failed to retrieve image from cache.")
+                    PODLogError("Failed to retrieve image from cache.")
                 }
 
                 MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
@@ -73,15 +76,15 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
         do {
             try audioSession.setCategory(.playback, mode: .default, options: [])
             try audioSession.setActive(true)
-            print("Audio session configured successfully for background playback.")
+            PODLogInfo("Audio session configured successfully for background playback.")
         } catch {
-            print("Failed to configure the audio session: \(error.localizedDescription)")
+            PODLogError("Failed to configure the audio session: \(error.localizedDescription)")
             handleAudioSessionError(error)
         }
     }
 
     func handleAudioSessionError(_ error: Error) {
-        print("Handling audio session error: \(error)")
+        PODLogError("Handling audio session error: \(error)")
     }
 
     func configureRemoteCommandCenter() {
@@ -249,7 +252,7 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
         switch interruptionType {
         case .began:
             pause()
-            print("Audio interrupted. Pausing playback.")
+            PODLogInfo("Audio interrupted. Pausing playback.")
         case .ended:
             handleInterruptionEnded(with: userInfo)
         @unknown default:
@@ -348,6 +351,6 @@ class StreamingResourceLoaderDelegate: NSObject, AVAssetResourceLoaderDelegate {
     }
 
     func resourceLoader(_ resourceLoader: AVAssetResourceLoader, didCancel loadingRequest: AVAssetResourceLoadingRequest) {
-        print("Loading request canceled.")
+        PODLogInfo("Loading request canceled.")
     }
 }

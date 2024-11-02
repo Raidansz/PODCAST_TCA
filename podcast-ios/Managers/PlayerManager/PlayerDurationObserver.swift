@@ -21,6 +21,7 @@ class PlayerTotalDurationObserver: Equatable {
     }
     deinit {
         cancellable?.cancel()
+        PODLogInfo("PlayerTotalDurationObserver was deinitialized")
     }
     static func == (lhs: PlayerTotalDurationObserver, rhs: PlayerTotalDurationObserver) -> Bool {
         return lhs.cancellable === rhs.cancellable

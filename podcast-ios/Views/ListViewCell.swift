@@ -32,10 +32,10 @@ struct ListViewCell: View {
                         .resizable()
                         .serialize(as: .PNG)
                         .onSuccess { result in
-                            print("Image loaded from cache: \(result.cacheType)")
+                            PODLogInfo("Image loaded from cache: \(result.cacheType)")
                         }
                         .onFailure { error in
-                            print("Error: \(error)")
+                            PODLogError("Error: \(error)")
                         }
                         .placeholder {
                             Image(systemName: "waveform.badge.mic")

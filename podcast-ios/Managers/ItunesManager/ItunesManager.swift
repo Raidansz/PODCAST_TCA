@@ -26,6 +26,7 @@ class ItunesManager: ItunesManagerProtocol {
 
     private func performQuery(_ url: URL?) async throws -> SearchResults {
         guard let url = url else {
+            PODLogError("\(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))")
             throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
         }
 
@@ -45,6 +46,7 @@ class ItunesManager: ItunesManagerProtocol {
 
     private func performQueryWithPagination(_ url: URL?, limit: Int, page: Int) async throws -> SearchResults {
         guard let url = url else {
+            PODLogError("\(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))")
             throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
         }
 
@@ -62,6 +64,10 @@ class ItunesManager: ItunesManagerProtocol {
         )
 
         return searchResultsModel
+    }
+
+    deinit {
+        PODLogInfo("ItunesManager was deinitialized")
     }
 }
 

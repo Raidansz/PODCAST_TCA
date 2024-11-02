@@ -216,6 +216,7 @@
 				AAAFD52D2CD2E4FA006E2A89 /* RSSFeedGeneratorManager.swift */,
 				AAAFD49C2CCC3B37006E2A89 /* HapticManager.swift */,
 				AA42C1972CD55C7400DDF645 /* SharedStateFeature.swift */,
+				AA42C2232CD68F2B00DDF645 /* LoggingManager */,
 			);
 			path = Managers;
 			sourceTree = "<group>";
@@ -330,6 +331,14 @@
 			path = Presentation;
 			sourceTree = "<group>";
 		};
+		AA42C2232CD68F2B00DDF645 /* LoggingManager */ = {
+			isa = PBXGroup;
+			children = (
+				AA42C2212CD68D9A00DDF645 /* Logger.swift */,
+			);
+			path = LoggingManager;
+			sourceTree = "<group>";
+		};
 		AA7DE4C02C9F1C6600D51A42 /* ItunesManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -369,7 +378,6 @@
 		AA9278452C8F151C00D5CF6D /* podcast-ios */ = {
 			isa = PBXGroup;
 			children = (
-				AA42C2212CD68D9A00DDF645 /* Logger.swift */,
 				AA42C20F2CD6899600DDF645 /* Other */,
 				AA42C20C2CD6895B00DDF645 /* RootModule.swift */,
 				AA42C20B2CD6892600DDF645 /* Views */,

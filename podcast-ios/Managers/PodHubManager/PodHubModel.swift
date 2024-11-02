@@ -40,7 +40,7 @@ struct PodHub: Sendable, Equatable {
                 return
             }
         }
-
+        PODLogError("\(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Result is empty or unrecognized"]))")
         throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Result is empty or unrecognized"])
     }
 

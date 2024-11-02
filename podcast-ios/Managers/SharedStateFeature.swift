@@ -38,7 +38,7 @@ extension PersistenceReaderKey where Self == InMemoryKey<RunningItem> {
 @MainActor func clearAllAppCache() -> Bool {
     // Clear URLCache
     URLCache.shared.removeAllCachedResponses()
-    print("URL cache cleared")
+    PODLogInfo("URL cache cleared")
 
     // Clear temporary files
     let tempDirectory = FileManager.default.temporaryDirectory
@@ -47,9 +47,9 @@ extension PersistenceReaderKey where Self == InMemoryKey<RunningItem> {
         for file in tempFiles {
             try FileManager.default.removeItem(at: file)
         }
-        print("Temporary files cleared")
+        PODLogInfo("Temporary files cleared")
     } catch {
-        print("Error clearing temporary files: \(error.localizedDescription)")
+        PODLogError("Error clearing temporary files: \(error.localizedDescription)")
     }
 
     // Clear files in Documents directory
@@ -59,9 +59,9 @@ extension PersistenceReaderKey where Self == InMemoryKey<RunningItem> {
         for file in documentFiles {
             try FileManager.default.removeItem(at: file)
         }
-        print("Documents directory cleared")
+        PODLogInfo("Documents directory cleared")
     } catch {
-        print("Error clearing documents directory: \(error.localizedDescription)")
+        PODLogError("Error clearing documents directory: \(error.localizedDescription)")
     }
 
     // Clear AVPlayer download tasks using a background session
@@ -77,7 +77,7 @@ extension PersistenceReaderKey where Self == InMemoryKey<RunningItem> {
         for task in tasks {
             task.cancel()
         }
-        print("AVPlayer download tasks cleared")
+        PODLogInfo("AVPlayer download tasks cleared")
     }
 
     // clear image cache

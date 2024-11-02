@@ -30,6 +30,7 @@ class PlayerElapsedTimeObserver: @unchecked Sendable {
     }
     deinit {
         unsubscribe()
+        PODLogInfo("PlayerElapsedTimeObserver was deinitialized")
     }
 
     private func unsubscribe() {

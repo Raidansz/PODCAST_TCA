@@ -57,6 +57,10 @@ final class RSSFeedGeneratorManager: RSSFeedGeneratorManagerProtocol {
         let parser = FeedParser(URL: url)
         return try await parser.parseAsync().rssFeed
     }
+
+    deinit {
+        PODLogInfo("RSSFeedGeneratorManager was deinitialized")
+    }
 }
 
 protocol RSSFeedGeneratorManagerProtocol {

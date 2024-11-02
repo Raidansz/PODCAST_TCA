@@ -18,7 +18,6 @@ final class PodcastIndexManager: PodcastIndexManagerProtocol {
     async throws -> PodcastIndexResponse {
         let url = try constructURL(type: type, getBy: query, with: parameter ?? .max(5))
         var request = URLRequest(url: url)
-      //  print(url)
         request.httpMethod = "GET"
         try setAuthorizationHeaders(for: &request)
 
@@ -27,6 +26,10 @@ final class PodcastIndexManager: PodcastIndexManagerProtocol {
         try validateResponse(response)
         return try parseResponseData(data)
     }
+
+    deinit {
+        PODLogInfo("PodcastIndexManager was deinitialized")
+    }
 }
 
 private extension PodcastIndexManager {
@@ -34,7 +37,7 @@ private extension PodcastIndexManager {
     func loadApiKeys() -> (apiKey: String, apiSecret: String)? {
         guard let path = Bundle.main.path(forResource: "PodcastIndexKey", ofType: "pl"),
               let xml = FileManager.default.contents(atPath: path) else {
-           // print("Error: PodcastIndexKey.plist not found.")
+            PODLogError("Error: PodcastIndexKey.plist not found.")
             return nil
         }
 
@@ -45,11 +48,11 @@ private extension PodcastIndexManager {
                let apiSecret = plistDict["ApiSecret"] as? String {
                 return (apiKey, apiSecret)
             } else {
-                print("Error: PodcastIndexKeys.plist is not in the expected format.")
+                PODLogError("Error: PodcastIndexKeys.plist is not in the expected format.")
                 return nil
             }
         } catch {
-            print("Error: Unable to read PodcastIndexKeys.plist: \(error)")
+            PODLogError("Error: Unable to read PodcastIndexKeys.plist: \(error)")
             return nil
         }
     }

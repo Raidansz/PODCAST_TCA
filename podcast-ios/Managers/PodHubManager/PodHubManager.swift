@@ -12,7 +12,10 @@ final class PodHubManager: PodHubManagerProtocol {
     @Injected(\.itunesManager) private var itunesManager: ItunesManagerProtocol
     @Injected(\.podcastIndexManager) private var podcastIndexManager: PodcastIndexManagerProtocol
     @Injected(\.rssFeedGeneratorManager) private var rSSFeedGeneratorManager: RSSFeedGeneratorManagerProtocol
-//    private var activeSearchResult: Dictionary<UUID, PaginatedResult> = [:]
+
+    deinit {
+        PODLogInfo("PodHubManager was deinitialized")
+    }
 
     func getTrendingPodcasts() async throws -> PodHub {
         let fetchedIds = try await rSSFeedGeneratorManager.getTopChartedPodcast(limit: 50, country: .unitedStates)
@@ -46,9 +49,10 @@ final class PodHubManager: PodHubManagerProtocol {
         let searchResult: SearchResults
         let encodedValuee = value.replacingOccurrences(of: " ", with: "+")
         
-        guard let encodedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)?
+        guard let encodedValue = encodedValuee.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)?
                 .replacingOccurrences(of: "%20", with: "+") else {
-            throw URLError(.badURL)  // Handle encoding failure
+            PODLogError("\(URLError(.badURL))")
+            throw URLError(.badURL)
         }
         
         if searchFor == .podcast {
@@ -81,7 +85,8 @@ final class PodHubManager: PodHubManagerProtocol {
 
         guard let encodedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)?
                 .replacingOccurrences(of: "%20", with: "+") else {
-            throw URLError(.badURL)  // Handle encoding failure
+            PODLogError("\(URLError(.badURL))")
+            throw URLError(.badURL)
         }
 
         if searchFor == .podcast {
@@ -119,7 +124,6 @@ extension InjectedValues {
 
 protocol PodHubManagerProtocol {
     func searchFor(searchFor: MediaType, value: String, limit: Int?, page: Int?, id: UUID?) async throws -> PodHub
-  //  func loadMoreForSearchResult(withID ID: UUID, with limit: Int) async throws -> PodHub
     func getTrendingPodcasts() async throws -> PodHub
 }
 
