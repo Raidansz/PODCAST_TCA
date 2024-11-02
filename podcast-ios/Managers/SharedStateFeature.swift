@@ -4,7 +4,6 @@
 //
 //  Created by Raidan on 2024. 11. 01..
 //
-import SwiftUI
 import ComposableArchitecture
 import AVFoundation
 import Kingfisher

@@ -5,7 +5,6 @@
 //  Created by Raidan on 2024. 09. 21..
 //
 
-import Foundation
 public protocol InjectionKey {
 
     /// The associated type representing the type of the dependency injection key's value.

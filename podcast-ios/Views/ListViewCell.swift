@@ -7,7 +7,6 @@
 
 import SwiftUI
 import Kingfisher
-import CoreHaptics
 
 struct ListViewCell: View {
     let imageURL: URL?

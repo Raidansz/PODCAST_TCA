@@ -7,7 +7,6 @@
 
 import Foundation
 import ComposableArchitecture
-import SwiftyJSON
 import FeedKit
 
 struct PodHub: Sendable, Equatable {

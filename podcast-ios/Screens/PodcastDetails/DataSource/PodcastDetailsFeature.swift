@@ -4,10 +4,10 @@
 //
 //  Created by Raidan on 2024. 11. 02..
 //
-
-import SwiftUI
+import Foundation
 import ComposableArchitecture
 import FeedKit
+
 @Reducer
 struct PodcastDetailsFeature {
     @ObservableState
