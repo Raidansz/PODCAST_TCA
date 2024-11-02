@@ -64,7 +64,7 @@ struct PodcastDetailsFeature {
                 state.episodes = response
                 return .none
             case .cellTapped(let episode):
-                state.playEpisode = PlayerFeature.State(episode: episode)
+                state.runningItem.setEpisode(episode: episode)
                 return .none
             case .playEpisode:
                 return .none

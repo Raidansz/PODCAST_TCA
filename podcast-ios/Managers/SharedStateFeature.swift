@@ -12,12 +12,18 @@ struct RunningItem: Codable {
     private(set) var episode: Episode?
     private(set) var currentTime: Double = 0
     private(set) var totalTime: Double = 100
-    mutating func setEpisode(episode: Episode) {
+    mutating func setEpisode(episode: Episode?) {
+        guard let episode else {
+            self.episode = nil
+            return
+        }
+
         if self.episode?.id != episode.id {
             currentTime = 0
             totalTime = 0
             self.episode = episode
         }
+        PlayerShould.shared.shouldShowPlayer.send(true)
     }
 
     mutating func setCurrentTime(value: Double) {

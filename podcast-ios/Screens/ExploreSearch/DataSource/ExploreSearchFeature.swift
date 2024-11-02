@@ -18,6 +18,7 @@ struct ExploreSearchFeature {
         @Presents var playEpisode: PlayerFeature.State?
         var episodeURL: URL?
         var searchTerm: String = ""
+        @Shared(.runningItem) var runningItem = RunningItem()
     }
 
     enum Action: Equatable {
@@ -53,7 +54,8 @@ struct ExploreSearchFeature {
                 state.episodes = response
                 return .none
             case .cellTapped(let episode):
-                state.playEpisode = PlayerFeature.State(episode: episode)
+//                state.playEpisode = PlayerFeature.State(episode: episode)
+                state.runningItem.setEpisode(episode: episode)
                 return .none
             case .playEpisode:
                 return .none

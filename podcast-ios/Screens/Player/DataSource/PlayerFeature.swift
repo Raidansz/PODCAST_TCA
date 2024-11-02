@@ -8,6 +8,7 @@
 import ComposableArchitecture
 import AVFoundation
 import Combine
+import UIKit
 
 @Reducer
 struct PlayerFeature {
@@ -16,10 +17,16 @@ struct PlayerFeature {
         var player: AVPlayer?
         var isPlaying: PlaybackState = .paused
         var audioURL: URL?
+        var hideMiniPlayer: Bool = true
+        /// View Properties
+        var expandPlayer: Bool = false
+        var offsetY: CGFloat = 0
+        var mainWindow: UIWindow?
+        var windowProgress: CGFloat = 0
         @Shared(.runningItem) var runningItem = RunningItem()
-
-        init(episode: Episode) {
-            runningItem.setEpisode(episode: episode)
+        
+        init() {
+          
         }
     }
 
@@ -29,6 +36,10 @@ struct PlayerFeature {
         case onTotalTimeChange(Double)
         case updateIsPlaying(PlaybackState)
         case immeditelyPlay
+        case updateOffsetY(CGFloat)
+        case updateWindowProgress(CGFloat)
+        case updateExpandPlayer(Bool)
+        case updateMainWindow(UIWindow?)
     }
 
     var body: some ReducerOf<Self> {
@@ -53,6 +64,18 @@ struct PlayerFeature {
                         AudioPlayer.shared.play(item: episode, action: .playNow)
                     }
                 }
+                return .none
+            case .updateOffsetY(let value):
+                state.offsetY = value
+                return .none
+            case .updateWindowProgress(let value):
+                state.windowProgress = value
+                return .none
+            case .updateExpandPlayer(let value):
+                state.expandPlayer = value
+                return .none
+            case .updateMainWindow(let value):
+                state.mainWindow = value
                 return .none
             }
         }
