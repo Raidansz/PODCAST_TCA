@@ -7,10 +7,6 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct SharedStateManager {
-    
-}
-
 struct RunningItem: Codable {
     private(set) var episode: Episode?
     private(set) var currentTime: Double = 0

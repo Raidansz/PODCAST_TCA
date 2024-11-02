@@ -12,14 +12,14 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        print("App has launched")
+
         let cache = ImageCache.default
 
         // Constrain Memory Cache to 20 MB
-        cache.memoryStorage.config.totalCostLimit = 1024 * 1024 * 20
+        cache.memoryStorage.config.totalCostLimit = 1024 * 1024 * 10
 
         // Constrain Disk Cache to 200 MB
-        cache.diskStorage.config.sizeLimit = 1024 * 1024 * 200
+        cache.diskStorage.config.sizeLimit = 1024 * 1024 * 30
         return true
     }
 

@@ -44,7 +44,13 @@ final class PodHubManager: PodHubManagerProtocol {
         page: Int? = nil
     ) async throws -> SearchResults {
         let searchResult: SearchResults
-        let encodedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let encodedValuee = value.replacingOccurrences(of: " ", with: "+")
+        
+        guard let encodedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)?
+                .replacingOccurrences(of: "%20", with: "+") else {
+            throw URLError(.badURL)  // Handle encoding failure
+        }
+        
         if searchFor == .podcast {
             searchResult = try await itunesManager.searchPodcasts(
                 term: encodedValue,
@@ -71,7 +77,13 @@ final class PodHubManager: PodHubManagerProtocol {
     }
 
     private func lookupPodcastIndex(searchFor: MediaType, value: String) async throws -> PodcastIndexResponse {
-        let encodedValue = value.replacingOccurrences(of: " ", with: "+")
+        let encodedValuee = value.replacingOccurrences(of: " ", with: "+")
+
+        guard let encodedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)?
+                .replacingOccurrences(of: "%20", with: "+") else {
+            throw URLError(.badURL)  // Handle encoding failure
+        }
+
         if searchFor == .podcast {
             return   try await podcastIndexManager.performQuery(for: .podcast, .title(encodedValue), parameter: nil)
         } else {

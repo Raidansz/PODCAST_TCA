@@ -1,5 +1,5 @@
 {
-  "originHash" : "d1907ad085dd6c10f88340e7e88efc5b7cbaabc59b28ccfd2cfe9195408d5dbc",
+  "originHash" : "29485124ca32158ca2ebfb9327f29e9a628f3465c0dc831fc1b03e3d6889b128",
   "pins" : [
     {
       "identity" : "cache",
@@ -8,15 +8,6 @@
       "state" : {
         "revision" : "24e47109e31b2031cb26e25cc1b81b607496066c",
         "version" : "7.4.0"
-      }
-    },
-    {
-      "identity" : "cachingplayeritem",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/sukov/CachingPlayerItem.git",
-      "state" : {
-        "revision" : "4fd9bfc4b79f5aca434e1a7020606a28ef442d41",
-        "version" : "1.1.3"
       }
     },
     {

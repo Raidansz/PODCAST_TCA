@@ -13,7 +13,7 @@ struct ListViewCell: View {
     let imageURL: URL?
     let author: String?
     let title: String?
-    let isPodcast: Bool
+    let shouldShowIcon: Bool
     let description: String?
     @State var isDisclosed = false
 
@@ -21,14 +21,14 @@ struct ListViewCell: View {
         self.imageURL = imageURL
         self.author = author
         self.title = title
-        self.isPodcast = isPodcast
+        self.shouldShowIcon = isPodcast
         self.description = description
     }
 
     var body: some View {
         VStack {
             HStack(alignment: .top) {
-                if isPodcast {
+                if shouldShowIcon {
                     KFImage(imageURL)
                         .resizable()
                         .serialize(as: .PNG)

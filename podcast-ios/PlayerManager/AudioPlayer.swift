@@ -15,6 +15,8 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
     // MARK: - Properties
     static let shared = AudioPlayer()
     private let player = AVPlayer()
+    private var resourceLoaderDelegate: StreamingResourceLoaderDelegate?
+
     @MainActor var elapsedTimeObserver: PlayerElapsedTimeObserver
     @MainActor var totalDurationObserver: PlayerTotalDurationObserver
     var playableItem: (any PlayableItemProtocol)? // the last dequeued item
@@ -43,7 +45,7 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
         nowPlayingInfo[MPMediaItemPropertyTitle] = playableItem.title
         nowPlayingInfo[MPMediaItemPropertyArtist] = playableItem.author
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player.rate
-        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.currentTime().seconds
+        nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elapsedTime
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = player.currentItem?.duration.seconds
 
         if let imageURL = playableItem.imageUrl {
@@ -132,6 +134,7 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
     func stop() {
         player.pause()
         replaceRunningItem(with: nil)
+        URLCache.shared.removeAllCachedResponses()
         playableItem = nil
         player.seek(to: .zero)
         playbackStatePublisher.send(.stopped)
@@ -266,9 +269,30 @@ final class AudioPlayer: Sendable, AudioPlayerProtocol {
     // MARK: - Playable Item Creation
     func makePlayableItem(_ playableItem: any PlayableItemProtocol) -> AVPlayerItem? {
         if let url = playableItem.streamURL {
-           return AVPlayerItem(url: url)
+            let asset = AVURLAsset(url: url, options: [
+                "AVURLAssetAllowsCellularAccessKey": true,
+                "AVURLAssetPreferPreciseDurationAndTimingKey": false
+            ])
+
+            resourceLoaderDelegate = StreamingResourceLoaderDelegate()
+
+            asset.resourceLoader.setDelegate(resourceLoaderDelegate, queue: DispatchQueue.main)
+
+            let playerItem = AVPlayerItem(asset: asset)
+            playerItem.preferredForwardBufferDuration = 1
+            NotificationCenter.default.addObserver(
+                self,
+                selector: #selector(playerDidFinishPlaying),
+                name: .AVPlayerItemDidPlayToEndTime,
+                object: playerItem
+            )
+            return playerItem
         }
         return nil
+    }
+
+    @objc func playerDidFinishPlaying(notification: Notification) {
+        URLCache.shared.removeAllCachedResponses()
     }
 }
 
@@ -315,4 +339,15 @@ protocol PlayableItemProtocol: Sendable, Identifiable, Equatable {
     var imageUrl: URL? { get }
     var streamURL: URL? { get }
     var id: String { get }
+}
+
+class StreamingResourceLoaderDelegate: NSObject, AVAssetResourceLoaderDelegate {
+    func resourceLoader(_ resourceLoader: AVAssetResourceLoader, shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
+        loadingRequest.finishLoading()
+        return true
+    }
+
+    func resourceLoader(_ resourceLoader: AVAssetResourceLoader, didCancel loadingRequest: AVAssetResourceLoadingRequest) {
+        print("Loading request canceled.")
+    }
 }

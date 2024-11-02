@@ -132,7 +132,7 @@ struct ExploreSearchView: View {
                                     ListViewCell(
                                         imageURL: response.image,
                                         author: response.author, title: response.title,
-                                        isPodcast: false
+                                        isPodcast: true
                                     )
                                     .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                                 }

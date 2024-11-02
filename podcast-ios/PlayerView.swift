@@ -100,64 +100,72 @@ struct PlayerView: View {
     @Bindable var store: StoreOf<PlayerFeature>
     var body: some View {
         NavigationStack {
-            VStack {
-                ListViewHero(imageURL: store.runningItem.episode?.imageUrl)
-                    .aspectRatio(contentMode: .fit)
-                    .cornerRadius(24)
-                    .frame(width: 364, height: 364)
-
-                Spacer()
+            GeometryReader { proxy in
                 VStack {
-                    Text(store.runningItem.episode?.title ?? "")
-                        .font(.headline)
-                    Text(store.runningItem.episode?.author ?? "")
-                        .font(.subheadline)
-                }
-                Spacer()
-                HStack {
-                    Text(formatTime(seconds: store.runningItem.currentTime))
-                    Spacer()
-                    Text(formatTime(seconds: store.runningItem.totalTime))
-                }
-                .padding(.horizontal, 16)
+                    ListViewHero(imageURL: store.runningItem.episode?.imageUrl)
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: proxy.size.width, height: proxy.size.height * 0.5) // 382
+                        .clipped()
+                        .shadow(color: Color.black.opacity(0.3), radius: 10, x: 10, y: 10)
 
-                Slider(
-                    value: $store.runningItem.currentTime.sending(\.onCurrentTimeChange),
-                    in: 0...store.runningItem.totalTime,
-                    onEditingChanged: onEditingChanged
-                )
-                .padding(.horizontal, 16)
-                .onReceive(
-                    Publishers.CombineLatest(
-                        AudioPlayer.shared.totalDurationObserver.publisher,
-                        AudioPlayer.shared.elapsedTimeObserver.publisher
-                    )) { totalDuration, elapsedTime in
-                        store.send(.onCurrentTimeChange(elapsedTime))
-                        store.send(.onTotalTimeChange(totalDuration))
+                    Spacer()
+                    VStack {
+                        Text(store.runningItem.episode?.title ?? "")
+                            .font(.headline)
+                        Text(store.runningItem.episode?.author ?? "")
+                            .font(.subheadline)
                     }
-                    .onReceive(AudioPlayer.shared.playbackStatePublisher) { state in
-                        if let item = AudioPlayer.shared.playableItem {
-                            if item.id == store.runningItem.episode?.id {
-                                store.send(.updateIsPlaying(state))
-                            } else {
-                                store.send(.updateIsPlaying(.stopped))
+                    Spacer()
+                    HStack {
+                        Text(formatTime(seconds: store.runningItem.currentTime))
+                        Spacer()
+                        Text(formatTime(seconds: store.runningItem.totalTime))
+                    }
+                    .padding(.horizontal, 16)
+
+                    Slider(
+                        value: $store.runningItem.currentTime.sending(\.onCurrentTimeChange),
+                        in: 0...store.runningItem.totalTime,
+                        onEditingChanged: onEditingChanged
+                    )
+                    .padding(.horizontal, 16)
+                    .onReceive(
+                        Publishers.CombineLatest(
+                            AudioPlayer.shared.totalDurationObserver.publisher,
+                            AudioPlayer.shared.elapsedTimeObserver.publisher
+                        )) { totalDuration, elapsedTime in
+                            store.send(.onCurrentTimeChange(elapsedTime))
+                            store.send(.onTotalTimeChange(totalDuration))
+                        }
+                        .onReceive(AudioPlayer.shared.playbackStatePublisher) { state in
+                            if let item = AudioPlayer.shared.playableItem {
+                                if item.id == store.runningItem.episode?.id {
+                                    store.send(.updateIsPlaying(state))
+                                } else {
+                                    store.send(.updateIsPlaying(.stopped))
+                                }
                             }
                         }
-                    }
 
-                ControllButton(store: store)
-                    .padding(.top, 40)
-
+                    ControllButton(store: store)
+                        .padding(.top, 40)
+                }
+                .navigationTitle("Now Playing")
+                .navigationBarTitleDisplayMode(.inline)
             }
-            .navigationTitle("Now Playing")
-            .navigationBarTitleDisplayMode(.inline)
         }
     }
 
     private func formatTime(seconds: Double) -> String {
-        let minutes = Int(seconds) / 60
+        let hours = Int(seconds) / 3600
+        let minutes = (Int(seconds) % 3600) / 60
         let seconds = Int(seconds) % 60
-        return String(format: "%02d:%02d", minutes, seconds)
+
+        if hours > 0 {
+            return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+        } else {
+            return String(format: "%02d:%02d", minutes, seconds)
+        }
     }
 }
 
@@ -170,9 +178,9 @@ struct ControllButton: View {
                 Button {
                     ()
                 } label: {
-                    Image(systemName: "shuffle")
+                    Image(systemName: "line.3.horizontal.circle.fill")
                         .resizable()
-                        .frame(width: 32, height: 32)
+                        .frame(width: 20, height: 20)
                 }
                 Spacer()
                 Button {
@@ -180,7 +188,7 @@ struct ControllButton: View {
                 } label: {
                     Image(systemName: "gobackward.15")
                         .resizable()
-                        .frame(width: 32, height: 32)
+                        .frame(width: 30, height: 30)
                 }
                 Spacer()
                 Button {
@@ -189,11 +197,11 @@ struct ControllButton: View {
                     if store.isPlaying == .playing {
                         Image(systemName: "pause.circle.fill")
                             .resizable()
-                            .frame(width: 80, height: 80)
+                            .frame(width: 60, height: 60)
                     } else {
                         Image(systemName: "play.circle.fill")
                             .resizable()
-                            .frame(width: 80, height: 80)
+                            .frame(width: 60, height: 60)
                     }
                 }
                 Spacer()
@@ -202,15 +210,15 @@ struct ControllButton: View {
                 } label: {
                     Image(systemName: "goforward.15")
                         .resizable()
-                        .frame(width: 32, height: 32)
+                        .frame(width: 30, height: 30)
                 }
                 Spacer()
                 Button {
                     ()
                 } label: {
-                    Image(systemName: "water.waves.and.arrow.down")
+                    Image(systemName: "moon.zzz.fill")
                         .resizable()
-                        .frame(width: 32, height: 32)
+                        .frame(width: 20, height: 20)
                 }
                 Spacer()
             }

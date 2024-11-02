@@ -22,7 +22,7 @@ struct ListViewHero: View {
                 .placeholder({
                     Image(systemName: "waveform.badge.mic")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .cornerRadius(20)
+                        .cornerRadius(10)
                         .overlay(
                             RoundedRectangle(cornerRadius: 24)
                                 .stroke(Color.gray, lineWidth: 0.5)
@@ -35,10 +35,8 @@ struct ListViewHero: View {
                     print("Error: \(error)")
                 }
                 .aspectRatio(contentMode: .fit)
-                .cornerRadius(20)
+                .cornerRadius(10)
                 .clipped()
-            .cornerRadius(20)
         }
-        .contentShape(Rectangle())
     }
 }
