@@ -66,8 +66,14 @@ extension PersistenceReaderKey where Self == InMemoryKey<RunningItem> {
     }
 
     // Clear AVPlayer download tasks using a background session
-    let backgroundConfig = URLSessionConfiguration.background(withIdentifier: "com.yourApp.downloadSession")
-    let downloadSession = AVAssetDownloadURLSession(configuration: backgroundConfig, assetDownloadDelegate: nil, delegateQueue: .main)
+    //THIS MIGHT BE USELESS
+    let backgroundConfig = URLSessionConfiguration.background(withIdentifier: "com.podcast-ios.downloadSession")
+    let downloadSession = AVAssetDownloadURLSession(
+        configuration: backgroundConfig,
+        assetDownloadDelegate: nil,
+        delegateQueue: .main
+    )
+
     downloadSession.getAllTasks { tasks in
         for task in tasks {
             task.cancel()

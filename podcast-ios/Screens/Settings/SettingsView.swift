@@ -27,6 +27,7 @@ struct SettingFeature {
     enum Alert {
       case cacheRemovedComfirmedTapped
     }
+
     @CasePathable
     enum ConfirmationDialog {
       case removeCacheButtonTapped

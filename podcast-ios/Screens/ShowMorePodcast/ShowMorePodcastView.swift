@@ -16,7 +16,6 @@ struct ShowMorePodcastFeature {
         var trendingPodcasts: PodHub
         var isLoading: Bool = false
     }
-
     @Reducer
     enum Path {
         case podcastDetails(PodcastDetailsFeature)

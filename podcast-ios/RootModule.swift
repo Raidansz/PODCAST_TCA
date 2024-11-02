@@ -1,8 +1,8 @@
 //
-//  PodcastContentView.swift
+//  RootModule.swift
 //  podcast-ios
 //
-//  Created by Raidan on 09/09/2024.
+//  Created by Raidan on 2024. 11. 02..
 //
 
 import SwiftUI
