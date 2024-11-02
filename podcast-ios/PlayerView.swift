@@ -29,6 +29,7 @@ struct PlayerFeature {
         case onCurrentTimeChange(Double)
         case onTotalTimeChange(Double)
         case updateIsPlaying(PlaybackState)
+        case immeditelyPlay
     }
 
     var body: some ReducerOf<Self> {
@@ -44,6 +45,15 @@ struct PlayerFeature {
                 return .none
             case .updateIsPlaying(let isPlaying):
                 state.isPlaying = isPlaying
+                return .none
+            case .immeditelyPlay:
+                guard let episode = state.runningItem.episode else { return .none }
+                if episode.id != AudioPlayer.shared.playableItem?.id {
+                    return .run { @MainActor _ in
+                        AudioPlayer.shared.stop()
+                        AudioPlayer.shared.play(item: episode, action: .playNow)
+                    }
+                }
                 return .none
             }
         }
@@ -150,6 +160,9 @@ struct PlayerView: View {
                     ControllButton(store: store)
                         .padding(.top, 40)
                 }
+                .onAppear {
+                    store.send(.immeditelyPlay)
+                }
                 .navigationTitle("Now Playing")
                 .navigationBarTitleDisplayMode(.inline)
             }
@@ -178,16 +191,18 @@ struct ControllButton: View {
                 Button {
                     ()
                 } label: {
-                    Image(systemName: "line.3.horizontal.circle.fill")
+                    Image(systemName: "line.3.horizontal")
                         .resizable()
+                        .foregroundStyle(Color.blue.opacity(0.8))
                         .frame(width: 20, height: 20)
                 }
                 Spacer()
                 Button {
-                    ()
+                    AudioPlayer.shared.seekBackward()
                 } label: {
                     Image(systemName: "gobackward.15")
                         .resizable()
+                        .foregroundStyle(Color.blue.opacity(0.9))
                         .frame(width: 30, height: 30)
                 }
                 Spacer()
@@ -206,10 +221,11 @@ struct ControllButton: View {
                 }
                 Spacer()
                 Button {
-                    ()
+                    AudioPlayer.shared.seekForward()
                 } label: {
                     Image(systemName: "goforward.15")
                         .resizable()
+                        .foregroundStyle(Color.blue.opacity(0.9))
                         .frame(width: 30, height: 30)
                 }
                 Spacer()
@@ -218,6 +234,7 @@ struct ControllButton: View {
                 } label: {
                     Image(systemName: "moon.zzz.fill")
                         .resizable()
+                        .foregroundStyle(Color.blue.opacity(0.8))
                         .frame(width: 20, height: 20)
                 }
                 Spacer()

@@ -30,6 +30,7 @@ struct ExploreFeature: Sendable {
     @Reducer
     enum Destination {
         case showMorePodcasts(ShowMorePodcastFeature)
+        case settings(SettingFeature)
     }
 
     enum Action {
@@ -38,6 +39,7 @@ struct ExploreFeature: Sendable {
         case searchForPodcastTapped(with: String)
         case searchTermChanged(String)
         case showSearchResults(PodHub, String)
+        case settingsTapped
         case path(StackActionOf<Path>)
         case podcastDetailsTapped(Podcast)
         case destination(PresentationAction<Destination.Action>)
@@ -96,6 +98,9 @@ struct ExploreFeature: Sendable {
                     state.path.append(.searchResults(ExploreSearchFeature.State(searchResult: result, searchTerm: initialTerm)))
                 }
                 return .none
+            case .settingsTapped:
+                state.destination = .settings(SettingFeature.State())
+                return .none
             }
         }
         .ifLet(\.$destination, action: \.destination)
@@ -130,6 +135,9 @@ struct ExloreView: View {
                                 .frame(width: 21, height: 21)
                         }
                     }
+                    .onTapGesture {
+                        store.send(.settingsTapped)
+                    }
                 }
 
                 ToolbarItem(placement: .topBarLeading) {
@@ -163,6 +171,16 @@ struct ExloreView: View {
         ) { store in
             NavigationStack {
                 ShowMorePodcastView(store: store)
+            }
+        }
+        .sheet(
+            item: $store.scope(
+                state: \.destination?.settings,
+                action: \.destination.settings
+            )
+        ) { store in
+            NavigationStack {
+                SettingsView(store: store)
             }
         }
         .onAppear {

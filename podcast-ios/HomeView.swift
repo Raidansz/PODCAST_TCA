@@ -128,66 +128,8 @@ struct HomeView: View {
         }
     }
 }
-import AVFoundation
-struct HomeViewContent: View {
 
-
-    func clearAllAppCache() {
-        // Clear URLCache
-        URLCache.shared.removeAllCachedResponses()
-        print("URL cache cleared")
-        
-        // Clear temporary files
-        let tempDirectory = FileManager.default.temporaryDirectory
-        do {
-            let tempFiles = try FileManager.default.contentsOfDirectory(at: tempDirectory, includingPropertiesForKeys: nil)
-            for file in tempFiles {
-                try FileManager.default.removeItem(at: file)
-            }
-            print("Temporary files cleared")
-        } catch {
-            print("Error clearing temporary files: \(error.localizedDescription)")
-        }
-        
-        // Clear files in Documents directory
-        let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        do {
-            let documentFiles = try FileManager.default.contentsOfDirectory(at: documentsDirectory, includingPropertiesForKeys: nil)
-            for file in documentFiles {
-                try FileManager.default.removeItem(at: file)
-            }
-            print("Documents directory cleared")
-        } catch {
-            print("Error clearing documents directory: \(error.localizedDescription)")
-        }
-        
-        // Clear AVPlayer download tasks using a background session
-        let backgroundConfig = URLSessionConfiguration.background(withIdentifier: "com.yourApp.downloadSession")
-        let downloadSession = AVAssetDownloadURLSession(configuration: backgroundConfig, assetDownloadDelegate: nil, delegateQueue: .main)
-        downloadSession.getAllTasks { tasks in
-            for task in tasks {
-                task.cancel()
-            }
-            print("AVPlayer download tasks cleared")
-        }
-        
-        // Provide user feedback that cache was cleared
-        showCacheClearedAlert()
-    }
-
-    func showCacheClearedAlert() {
-        // Display a simple alert to inform the user that cache was cleared.
-        // Note: This function requires being inside a view controller.
-        let alert = UIAlertController(title: "Cache Cleared", message: "All cached data has been removed.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        
-        // Assuming this function is called within a view controller
-        if let topController = UIApplication.shared.keyWindow?.rootViewController {
-            topController.present(alert, animated: true, completion: nil)
-        }
-    }
-
-    
+struct HomeViewContent: View {    
     @State var store: StoreOf<HomeFeature>
     var body: some View {
         ScrollView {

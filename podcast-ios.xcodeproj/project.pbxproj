@@ -14,6 +14,8 @@
 		AA3098FA2CC43CCD003CF32F /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3098F72CC43CCD003CF32F /* Queue.swift */; };
 		AA3098FB2CC43CCD003CF32F /* PlayerDurationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3098F52CC43CCD003CF32F /* PlayerDurationObserver.swift */; };
 		AA42C1982CD55C7E00DDF645 /* SharedStateFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42C1972CD55C7400DDF645 /* SharedStateFeature.swift */; };
+		AA42C1F52CD66E6D00DDF645 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42C1F42CD66E6700DDF645 /* SettingsView.swift */; };
+		AA42C1F72CD67F9C00DDF645 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AA42C1F62CD67F9C00DDF645 /* Settings.bundle */; };
 		AA45496F2CB43A5C0055890A /* PodcastDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA45496E2CB43A450055890A /* PodcastDetailsView.swift */; };
 		AA7DE4BB2C9F0D5800D51A42 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B72C9F0D5800D51A42 /* HomeView.swift */; };
 		AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */; };
@@ -53,6 +55,8 @@
 		AA3098F62CC43CCD003CF32F /* PlayerTimeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTimeObserver.swift; sourceTree = "<group>"; };
 		AA3098F72CC43CCD003CF32F /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		AA42C1972CD55C7400DDF645 /* SharedStateFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateFeature.swift; sourceTree = "<group>"; };
+		AA42C1F42CD66E6700DDF645 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		AA42C1F62CD67F9C00DDF645 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		AA45496E2CB43A450055890A /* PodcastDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastDetailsView.swift; sourceTree = "<group>"; };
 		AA7DE4B72C9F0D5800D51A42 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewCell.swift; sourceTree = "<group>"; };
@@ -139,6 +143,7 @@
 		AA92783A2C8F151C00D5CF6D = {
 			isa = PBXGroup;
 			children = (
+				AA42C1F62CD67F9C00DDF645 /* Settings.bundle */,
 				AA9278452C8F151C00D5CF6D /* podcast-ios */,
 				AA9278442C8F151C00D5CF6D /* Products */,
 			);
@@ -155,6 +160,7 @@
 		AA9278452C8F151C00D5CF6D /* podcast-ios */ = {
 			isa = PBXGroup;
 			children = (
+				AA42C1F42CD66E6700DDF645 /* SettingsView.swift */,
 				AA42C1972CD55C7400DDF645 /* SharedStateFeature.swift */,
 				AAAFD55D2CD405B8006E2A89 /* AppDelegate.swift */,
 				AAAFD52F2CD308B5006E2A89 /* String+Extension.swift */,
@@ -265,6 +271,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA42C1F72CD67F9C00DDF645 /* Settings.bundle in Resources */,
 				AA7DE4DA2CA090A400D51A42 /* PodcastIndexKey.pl in Resources */,
 				AA92784E2C8F151D00D5CF6D /* Preview Assets.xcassets in Resources */,
 				AA92784B2C8F151D00D5CF6D /* Assets.xcassets in Resources */,
@@ -316,6 +323,7 @@
 				AA3098F92CC43CCD003CF32F /* PlayerTimeObserver.swift in Sources */,
 				AA3098FA2CC43CCD003CF32F /* Queue.swift in Sources */,
 				AA3098FB2CC43CCD003CF32F /* PlayerDurationObserver.swift in Sources */,
+				AA42C1F52CD66E6D00DDF645 /* SettingsView.swift in Sources */,
 				AA7DE4C42C9F1D0D00D51A42 /* ItunesModels.swift in Sources */,
 				AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */,
 				AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */,

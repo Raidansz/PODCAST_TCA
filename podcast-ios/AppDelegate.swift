@@ -30,4 +30,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
         KingfisherManager.shared.cache.clearCache()
     }
+
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
+        if url.scheme == "myapp" && url.host == "clearcache" {
+            // Navigate to your clear cache functionality in the app
+            print("dddonne")
+            return true
+        }
+        return false
+    }
 }

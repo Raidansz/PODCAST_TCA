@@ -28,6 +28,13 @@ struct RootModule: App {
                 .tabItem {
                     Label("Explore", systemImage: "magnifyingglass")
                 }
+
+                SettingsView(store: Store(initialState: SettingFeature.State()) {
+                    SettingFeature()
+                })
+                .tabItem {
+                    Label("Setting", systemImage: "gear")
+                }
             }
         }
     }
