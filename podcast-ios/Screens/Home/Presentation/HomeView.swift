@@ -33,16 +33,6 @@ struct HomeView: View {
         .onAppear {
             store.send(.loadView)
         }
-        .sheet(
-            item: $store.scope(
-                state: \.destination?.showMorePodcasts,
-                action: \.destination.showMorePodcasts
-            )
-        ) { store in
-            NavigationStack {
-                ShowMorePodcastView(store: store)
-            }
-        }
     }
 }
 

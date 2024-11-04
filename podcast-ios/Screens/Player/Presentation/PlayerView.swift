@@ -9,7 +9,6 @@ import SwiftUI
 import ComposableArchitecture
 import Combine
 
-
 struct PlayerView: View {
     @Bindable var store: StoreOf<PlayerFeature>
     var body: some View {
@@ -93,7 +92,7 @@ struct ControllButton: View {
             HStack {
                 Spacer()
                 Button {
-                    ()
+                    DownloadManager.shared.downloadAudio(item: store.runningItem.episode)
                 } label: {
                     Image(systemName: "line.3.horizontal")
                         .resizable()
@@ -134,7 +133,7 @@ struct ControllButton: View {
                 }
                 Spacer()
                 Button {
-                    ()
+                    DownloadManager.shared.deleteAllRecords()
                 } label: {
                     Image(systemName: "moon.zzz.fill")
                         .resizable()

@@ -123,4 +123,16 @@ struct Episode: Codable, Identifiable, Equatable, Hashable, PlayableItemProtocol
         let descriptionText = feedItem.iTunes?.iTunesSubtitle ?? feedItem.description ?? "No Description Available"
         self.description = descriptionText.cleanHTMLTags()
     }
+
+    init(audio: Audio) {
+        self.id = "\(String(describing: audio.id))"
+        self.streamURL = URL(string: audio.filePath ?? "")
+        self.fileUrl = audio.filePath
+        self.title = audio.title ?? "title"
+        self.pubDate = audio.date ?? Date()
+        self.author = "Unknown Author"
+        self.imageUrl = URL(string: "")
+        let descriptionText = "No Description Available"
+        self.description = descriptionText.cleanHTMLTags()
+    }
 }

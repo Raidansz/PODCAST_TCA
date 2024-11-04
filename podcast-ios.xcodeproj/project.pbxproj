@@ -24,6 +24,12 @@
 		AA42C21D2CD68A9800DDF645 /* ExploreSearchFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42C21C2CD68A9700DDF645 /* ExploreSearchFeature.swift */; };
 		AA42C2202CD68AEF00DDF645 /* ExploreFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42C21F2CD68AE700DDF645 /* ExploreFeature.swift */; };
 		AA42C2222CD68D9D00DDF645 /* Logger.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42C2212CD68D9A00DDF645 /* Logger.swift */; };
+		AA42C24F2CD6DC1600DDF645 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42C24E2CD6DC0E00DDF645 /* DownloadManager.swift */; };
+		AA42C25D2CD6E43C00DDF645 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42C25C2CD6E43600DDF645 /* CoreDataManager.swift */; };
+		AA42C2682CD6EA0600DDF645 /* AudioModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AA42C2662CD6EA0600DDF645 /* AudioModel.xcdatamodeld */; };
+		AA42C26B2CD6EA7700DDF645 /* Audio+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42C2692CD6EA7700DDF645 /* Audio+CoreDataClass.swift */; };
+		AA42C26C2CD6EA7700DDF645 /* Audio+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42C26A2CD6EA7700DDF645 /* Audio+CoreDataProperties.swift */; };
+		AA42C26F2CD6EB9200DDF645 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = AA42C26E2CD6EB9200DDF645 /* Alamofire */; };
 		AA45496F2CB43A5C0055890A /* PodcastDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA45496E2CB43A450055890A /* PodcastDetailsView.swift */; };
 		AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */; };
 		AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */; };
@@ -71,6 +77,11 @@
 		AA42C21C2CD68A9700DDF645 /* ExploreSearchFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreSearchFeature.swift; sourceTree = "<group>"; };
 		AA42C21F2CD68AE700DDF645 /* ExploreFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreFeature.swift; sourceTree = "<group>"; };
 		AA42C2212CD68D9A00DDF645 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		AA42C24E2CD6DC0E00DDF645 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
+		AA42C25C2CD6E43600DDF645 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		AA42C2672CD6EA0600DDF645 /* AudioModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = AudioModel.xcdatamodel; sourceTree = "<group>"; };
+		AA42C2692CD6EA7700DDF645 /* Audio+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Audio+CoreDataClass.swift"; sourceTree = "<group>"; };
+		AA42C26A2CD6EA7700DDF645 /* Audio+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Audio+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		AA45496E2CB43A450055890A /* PodcastDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastDetailsView.swift; sourceTree = "<group>"; };
 		AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewCell.swift; sourceTree = "<group>"; };
 		AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewHero.swift; sourceTree = "<group>"; };
@@ -105,6 +116,7 @@
 				AAF16C642CB440690035F9D0 /* FeedKit in Frameworks */,
 				AAAFD55C2CD40228006E2A89 /* Kingfisher in Frameworks */,
 				AAFED4392CC9AE0F00A9096D /* Cache in Frameworks */,
+				AA42C26F2CD6EB9200DDF645 /* Alamofire in Frameworks */,
 				AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */,
 				AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */,
 			);
@@ -361,6 +373,8 @@
 		AA92783A2C8F151C00D5CF6D = {
 			isa = PBXGroup;
 			children = (
+				AA42C2692CD6EA7700DDF645 /* Audio+CoreDataClass.swift */,
+				AA42C26A2CD6EA7700DDF645 /* Audio+CoreDataProperties.swift */,
 				AA42C1F62CD67F9C00DDF645 /* Settings.bundle */,
 				AA9278452C8F151C00D5CF6D /* podcast-ios */,
 				AA9278442C8F151C00D5CF6D /* Products */,
@@ -378,6 +392,8 @@
 		AA9278452C8F151C00D5CF6D /* podcast-ios */ = {
 			isa = PBXGroup;
 			children = (
+				AA42C25C2CD6E43600DDF645 /* CoreDataManager.swift */,
+				AA42C24E2CD6DC0E00DDF645 /* DownloadManager.swift */,
 				AA42C20F2CD6899600DDF645 /* Other */,
 				AA42C20C2CD6895B00DDF645 /* RootModule.swift */,
 				AA42C20B2CD6892600DDF645 /* Views */,
@@ -388,6 +404,7 @@
 				AA92784A2C8F151D00D5CF6D /* Assets.xcassets */,
 				AA92784C2C8F151D00D5CF6D /* Preview Content */,
 				AA7DE4D92CA090A400D51A42 /* PodcastIndexKey.pl */,
+				AA42C2662CD6EA0600DDF645 /* AudioModel.xcdatamodeld */,
 			);
 			path = "podcast-ios";
 			sourceTree = "<group>";
@@ -423,6 +440,7 @@
 				AAF16C632CB440690035F9D0 /* FeedKit */,
 				AAFED4382CC9AE0F00A9096D /* Cache */,
 				AAAFD55B2CD40228006E2A89 /* Kingfisher */,
+				AA42C26E2CD6EB9200DDF645 /* Alamofire */,
 			);
 			productName = "podcast-ios";
 			productReference = AA9278432C8F151C00D5CF6D /* podcast-ios.app */;
@@ -458,6 +476,7 @@
 				AAF16C622CB440690035F9D0 /* XCRemoteSwiftPackageReference "FeedKit" */,
 				AAFED4372CC9AE0F00A9096D /* XCRemoteSwiftPackageReference "Cache" */,
 				AAAFD55A2CD40228006E2A89 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				AA42C26D2CD6EB9200DDF645 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = AA9278442C8F151C00D5CF6D /* Products */;
 			projectDirPath = "";
@@ -513,7 +532,9 @@
 				AA42C1FD2CD687F900DDF645 /* HomeView.swift in Sources */,
 				AAFED4332CC8143800A9096D /* ExploreSearchView.swift in Sources */,
 				AA42C21D2CD68A9800DDF645 /* ExploreSearchFeature.swift in Sources */,
+				AA42C2682CD6EA0600DDF645 /* AudioModel.xcdatamodeld in Sources */,
 				AA7DE4C92C9F1DA800D51A42 /* ItunesManager.swift in Sources */,
+				AA42C24F2CD6DC1600DDF645 /* DownloadManager.swift in Sources */,
 				AA1F8E3C2CA8572C009FFC85 /* PodHubModel.swift in Sources */,
 				AA42C2172CD68A1B00DDF645 /* PlayerFeature.swift in Sources */,
 				AAAFD5302CD308BB006E2A89 /* String+Extension.swift in Sources */,
@@ -541,6 +562,9 @@
 				AA7DE4D42CA08D8D00D51A42 /* PodcastIndexManager.swift in Sources */,
 				AA7DE4BE2C9F0D5800D51A42 /* ListViewHero.swift in Sources */,
 				AA7DE4CB2C9F1E0A00D51A42 /* InjectionKey.swift in Sources */,
+				AA42C26B2CD6EA7700DDF645 /* Audio+CoreDataClass.swift in Sources */,
+				AA42C26C2CD6EA7700DDF645 /* Audio+CoreDataProperties.swift in Sources */,
+				AA42C25D2CD6E43C00DDF645 /* CoreDataManager.swift in Sources */,
 				AA42C1FF2CD6881F00DDF645 /* HomeFeature.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -680,6 +704,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "podcast-ios/Info.plist";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to improve your experience.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -716,6 +741,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "podcast-ios/Info.plist";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to improve your experience.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -763,6 +789,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		AA42C26D2CD6EB9200DDF645 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.1;
+			};
+		};
 		AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
@@ -806,6 +840,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AA42C26E2CD6EB9200DDF645 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA42C26D2CD6EB9200DDF645 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
 		AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
@@ -832,6 +871,19 @@
 			productName = Cache;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		AA42C2662CD6EA0600DDF645 /* AudioModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				AA42C2672CD6EA0600DDF645 /* AudioModel.xcdatamodel */,
+			);
+			currentVersion = AA42C2672CD6EA0600DDF645 /* AudioModel.xcdatamodel */;
+			path = AudioModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = AA92783B2C8F151C00D5CF6D /* Project object */;
 }

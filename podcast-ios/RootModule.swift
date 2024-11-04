@@ -29,6 +29,13 @@ struct RootModule: App {
                     Label("Explore", systemImage: "magnifyingglass")
                 }
 
+                DownloadsView(store: Store(initialState: DownloadsFeature.State()) {
+                    DownloadsFeature()
+                })
+                .tabItem {
+                    Label("Downloads", systemImage: "square.and.arrow.down.on.square")
+                }
+
                 SettingsView(store: Store(initialState: SettingFeature.State()) {
                     SettingFeature()
                 })

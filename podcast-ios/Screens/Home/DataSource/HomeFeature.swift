@@ -25,7 +25,6 @@ struct HomeFeature: Sendable {
         case fetchTrendingPodcasts
         case loadView
         case trendingPodcastResponse(PodHub)
-        case showMorePodcastsTapped
         case path(StackActionOf<Path>)
         case podcastDetailsTapped(Podcast)
         case destination(PresentationAction<Destination.Action>)
@@ -39,7 +38,7 @@ struct HomeFeature: Sendable {
 
     @Reducer
     enum Destination {
-        case showMorePodcasts(ShowMorePodcastFeature)
+    
     }
 
     @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
@@ -67,12 +66,6 @@ struct HomeFeature: Sendable {
             case .path:
                 return .none
             case .destination:
-                return .none
-            case .showMorePodcastsTapped:
-                guard let podcasts = state.trendingPodcasts else { return .none }
-                if state.limit < podcasts.podcasts.count {
-                    state.destination = .showMorePodcasts(ShowMorePodcastFeature.State(trendingPodcasts: podcasts))
-                }
                 return .none
             case .podcastDetailsTapped(let podcast):
                 state.path.append(.podcastDetails(PodcastDetailsFeature.State(podcast: podcast)))
