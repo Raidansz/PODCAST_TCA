@@ -48,7 +48,7 @@ struct HomeFeature: Sendable {
             switch action {
             case .fetchTrendingPodcasts:
                 state.isLoading = true
-                return .run {[limit = state.limit, id = state.uuid] send in
+                return .run { send in
                     try await send(
                         .trendingPodcastResponse(
                             self.podHubManager.getTrendingPodcasts()

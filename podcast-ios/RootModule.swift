@@ -25,6 +25,7 @@ struct RootModule: App {
                 ExloreView(store: Store(initialState: ExploreFeature.State()) {
                     ExploreFeature()
                 })
+                .toolbar(.hidden, for: .navigationBar)
                 .tabItem {
                     Label("Explore", systemImage: "magnifyingglass")
                 }

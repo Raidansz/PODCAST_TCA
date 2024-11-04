@@ -13,7 +13,7 @@ struct ExloreView: View {
     var body: some View {
         NavigationStack( path: $store.scope(state: \.path, action: \.path)) {
             ZStack(alignment: .top) {
-                ExploreViewContent(store: store)
+                ExploreViewContent(podcastList: store.podcastsList?.podcasts)
                     .blur(
                         radius: store.isLoading ? 5 : 0
                     )
@@ -23,38 +23,6 @@ struct ExloreView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 32)
-                            .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
-                            .frame(width: 35, height: 35)
-                        HStack {
-                            Image(systemName: "person.fill")
-                                .resizable()
-                                .frame(width: 21, height: 21)
-                        }
-                    }
-                    .onTapGesture {
-                        store.send(.settingsTapped)
-                    }
-                }
-
-                ToolbarItem(placement: .topBarLeading) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 32)
-                            .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
-                            .frame(width: 35, height: 35)
-                        HStack {
-                            Image(systemName: "bell.fill")
-                                .resizable()
-                                .frame(width: 21, height: 21)
-                        }
-                    }
-                }
-            }
-            .navigationTitle("Explore")
-            .navigationBarTitleDisplayMode(.large)
         } destination: { store in
             switch store.case {
             case .podcastDetails(let store):
@@ -90,91 +58,133 @@ struct ExloreView: View {
 }
 
 struct ExploreViewContent: View {
-    @Bindable var store: StoreOf<ExploreFeature>
+    var podcastList: IdentifiedArrayOf<Podcast>?
+    var coordinator: UICoordinator = .init()
     var body: some View {
-        ScrollView {
-            ZStack {
-                RoundedRectangle(cornerRadius: 32)
-                    .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
-                    .frame(width: 364, height: 64)
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .resizable()
-                        .frame(width: 24, height: 24)
-                        .foregroundColor(.black)
-                        .padding(.leading, 15)
-                    TextField(
-                        "Search the podcast here...",
-                        text: $store.searchTerm.sending(\.searchTermChanged)
-                    )
-                    .padding(.leading, 5)
-                    .onSubmit {
-                        store.send(.searchForPodcastTapped(with: store.searchTerm))
-                    }
-                }
-                .frame(width: 364, height: 64)
-                .clipShape(RoundedRectangle(cornerRadius: 32))
-            }
-            .padding()
-
-            Section(content: {
-                if (store.podcastsList?.podcasts) != nil {
-                    horizontalList(data: (store.podcastsList!.podcasts)) { podcast in
-                        ListViewHero(imageURL: podcast.image ?? URL(string: "")!)
-                            .frame(width: 300, height: 300)
-                            .onTapGesture {
-                                store.send(.podcastDetailsTapped(podcast))
-                            }
-                    }
-                }
-            }, header: {
-                HStack {
-                    Text("Today’s Top 5 Podcasts")
-                        .fontWeight(.semibold)
-                    Spacer()
-                }
-                .padding(.horizontal, 16)
-            })
-
-            Section(content: {
-                LazyVStack(spacing: 24) {
-                    if store.podcastsList?.podcasts != nil {
-                        ForEach((store.podcastsList!.podcasts), id: \.self) { response in
-                            ListViewCell(
-                                imageURL: response.image,
-                                author: response.author, title: response.title,
-                                isPodcast: true
-                            )
-                            .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
-                            .onTapGesture {
-                                store.send(.podcastDetailsTapped(response))
+        VStack {
+            if (podcastList) != nil {
+                ScrollView(.vertical) {
+                    LazyVStack(alignment: .leading, spacing: 15) {
+                        LazyVGrid(columns: Array(repeating: GridItem(spacing: 10), count: 2), spacing: 10) {
+                            ForEach(podcastList!) { post in
+                                podcastCardView(post)
                             }
                         }
                     }
+                    .padding(15)
+                    .background(ScrollViewExtractor {
+                        coordinator.scrollView = $0
+                    })
                 }
-                .padding(.horizontal, 16)
-            }, header: {
-                if (store.podcastsList?.podcasts) != nil {
-                    horizontalList(data: (store.podcastsList!.podcasts)) { podcast in
-                        CatagoriesView(label: podcast.title ?? "")
+                .opacity(coordinator.hideRootView ? 0 : 1)
+                .scrollDisabled(coordinator.hideRootView)
+                .allowsHitTesting(!coordinator.hideRootView)
+                .overlay {
+                    GeometryReader {
+                        let size = $0.size
+                        let animateView = coordinator.animateView
+                        let hideLayer = coordinator.hideLayer
+                        let rect = coordinator.rect
+
+                        let anchorX = (coordinator.rect.minX / size.width) > 0.5 ? 1.0 : ((coordinator.rect.minX / size.width) > 0.25 ? 0.5 : 0.0)
+
+                        let scale = size.width / coordinator.rect.width
+                        let offsetX = animateView && anchorX != 0.5 ? (anchorX > 0.5 ? 15 : -15) * scale : 0
+                        let offsetY = animateView ? -coordinator.rect.minY * scale : 0
+
+                        let detailHeight: CGFloat = rect.height * scale
+                        let scrollContentHeight: CGFloat = size.height - detailHeight
+
+                        if let image = coordinator.animationLayer, let post = coordinator.selectedItem {
+
+                            if !hideLayer {
+                                Image(uiImage: image)
+                                    .scaleEffect(animateView ? scale : 1, anchor: .init(x: anchorX, y: 0))
+                                    .offset(x: offsetX, y: offsetY)
+                                    .offset(y: animateView ? -coordinator.headerOffset : 0)
+                                    .opacity(animateView ? 0 : 1)
+                                    .transition(.identity)
+                            }
+                            ScrollView(.vertical) {
+                                ListViewCell(imageURL: coordinator.selectedItem?.image, author: coordinator.selectedItem?.author, title: coordinator.selectedItem?.title, isPodcast: false)
+                                    .safeAreaInset(edge: .top, spacing: 0) {
+                                        Rectangle()
+                                            .fill(.clear)
+                                            .frame(height: detailHeight)
+                                            .offsetY { offset in
+                                                coordinator.headerOffset = max(min(-offset, detailHeight), 0)
+                                            }
+                                    }
+                            }
+                            .scrollDisabled(!hideLayer)
+                            .contentMargins(.top, detailHeight, for: .scrollIndicators)
+                            .background {
+                                Rectangle()
+                                    .fill(.background)
+                                    .padding(.top, detailHeight - coordinator.headerOffset)
+                            }
+                            .animation(.easeInOut(duration: 0.3).speed(1.5)) {
+                                $0
+                                    .offset(y: animateView ? 0 : scrollContentHeight)
+                                    .opacity(animateView ? 1 : 0)
+                            }
+   
+                            PodcastCardImageView(post: post)
+                                .allowsHitTesting(false)
+                                .frame(
+                                    width: animateView ? size.width : rect.width,
+                                    height: animateView ? rect.height * scale : rect.height
+                                )
+                                .clipShape(.rect(cornerRadius: animateView ? 0 : 10))
+                                .overlay(alignment: .top, content: {
+                                    headerActions(post)
+                                        .offset(y: coordinator.headerOffset)
+                                        .padding(.top, safeArea.top)
+                                })
+                                .offset(x: animateView ? 0 : rect.minX, y: animateView ? 0 : rect.minY)
+                                .offset(y: animateView ? -coordinator.headerOffset : 0)
+                        }
                     }
+                    .ignoresSafeArea()
+                    .environment(coordinator)
+                    .allowsHitTesting(coordinator.hideLayer)
                 }
-            })
+                .background(.gray.opacity(0.15))
+            }
         }
     }
 }
 
-struct CatagoriesView: View {
-    let label: String
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 28)
-                .fill(Color.blue)
-            Text(label)
-                .font(.headline)
-                .foregroundColor(.black)
-                .lineLimit(1)
+extension ExploreViewContent {
+    @ViewBuilder
+    func headerActions(_ post: Podcast) -> some View {
+        HStack {
+            Spacer(minLength: 0)
+            if coordinator.hideLayer {
+                Button(action: { coordinator.toogleView(show: false, frame: .zero, post: post) }, label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.title)
+                        .foregroundStyle(Color.primary, .bar)
+                        .padding(10)
+                        .contentShape(.rect)
+                })
+                .transition(.asymmetric(insertion: .opacity, removal: .identity))
+            }
         }
-        .frame(width: 130, height: 56)
+        .animation(.easeInOut(duration: 0.3), value: coordinator.hideLayer)
+    }
+
+    @ViewBuilder
+    func podcastCardView(_ post: Podcast) -> some View {
+        GeometryReader {
+            let frame = $0.frame(in: .global)
+            PodcastCardImageView(post: post)
+                .clipShape(.rect(cornerRadius: 10))
+                .contentShape(.rect(cornerRadius: 10))
+                .onTapGesture {
+                    coordinator.toogleView(show: true, frame: frame, post: post)
+                }
+        }
+        .frame(height: 220)
     }
 }
