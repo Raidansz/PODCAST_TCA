@@ -18,7 +18,6 @@ struct ListViewHero: View {
         VStack {
             KFImage(imageURL)
                 .resizable()
-                .serialize(as: .PNG)
                 .placeholder({
                     Image(systemName: "waveform.badge.mic")
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -28,6 +27,10 @@ struct ListViewHero: View {
                                 .stroke(Color.gray, lineWidth: 0.5)
                         )
                 })
+                .setProcessor(
+                    DownsamplingImageProcessor(size: CGSize(width: 380, height: 380)) |>
+                    JPEGCompressProcessor(compressionQuality: 0.5)
+                )
                 .onSuccess { result in
                     PODLogInfo("Image loaded from cache: \(result.cacheType)")
                 }

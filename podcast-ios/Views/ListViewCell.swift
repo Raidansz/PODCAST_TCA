@@ -30,7 +30,6 @@ struct ListViewCell: View {
                 if shouldShowIcon {
                     KFImage(imageURL)
                         .resizable()
-                        .serialize(as: .PNG)
                         .onSuccess { result in
                             PODLogInfo("Image loaded from cache: \(result.cacheType)")
                         }
@@ -46,6 +45,11 @@ struct ListViewCell: View {
                                         .stroke(Color.gray, lineWidth: 0.5)
                                 )
                         }
+                        .setProcessor(
+                            DownsamplingImageProcessor(size: CGSize(width: 100, height: 100)) |>
+                            JPEGCompressProcessor(compressionQuality: 0.1)
+                        )
+                        .scaleFactor(UIScreen.main.scale)
                         .aspectRatio(contentMode: .fit)
                         .frame(width: 100, height: 100)
                         .cornerRadius(24)
@@ -76,5 +80,15 @@ struct ListViewCell: View {
                 .background(Color(.systemGray))
         }
         .contentShape(Rectangle())
+    }
+}
+
+struct JPEGCompressProcessor: ImageProcessor {
+    let identifier = "com.atwsmf.jpegcompressor"
+    var compressionQuality: CGFloat
+
+    func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> KFCrossPlatformImage? {
+        guard case let .image(image) = item else { return nil }
+        return image.jpegData(compressionQuality: compressionQuality).flatMap { UIImage(data: $0) }
     }
 }

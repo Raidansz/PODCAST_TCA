@@ -191,7 +191,6 @@ struct Catagory: Identifiable, Hashable {
     let id: PodcastGenre
     let title: String
     let description: String
-    let image: UIImage
 }
 
 let artsDescription = "Explore podcasts about literature, visual arts, and performing arts."
@@ -211,19 +210,19 @@ let tvAndFilmDescription = "Get insights into movies, television shows, and the 
 let trueCrimeDescription = "Uncover real-life mysteries, true crime cases, and investigative storytelling."
 
 let globalCatagories: IdentifiedArrayOf<Catagory> = [
-    .init(id: .arts, title: "Arts", description: artsDescription, image: UIImage(named: "art")!),
-    .init(id: .business, title: "Business", description: businessDescription, image: UIImage(named: "business")!),
+    .init(id: .arts, title: "Arts", description: artsDescription),
+    .init(id: .business, title: "Business", description: businessDescription),
 //    .init(id: .comedy, title: "Comedy", description: comedyDescription, image: UIImage(named: "Pic 10")!),
-    .init(id: .education, title: "Education", description: educationDescription, image: UIImage(named: "learn")!),
+    .init(id: .education, title: "Education", description: educationDescription),
 //    .init(id: .healthAndFitness, title: "Health & Fitness", description: healthAndFitnessDescription, image: UIImage(named: "Pic 10")!),
-    .init(id: .kidsAndFamily, title: "Kids & Family", description: kidsAndFamilyDescription, image: UIImage(named: "baby")!),
-    .init(id: .music, title: "Music", description: musicDescription, image: UIImage(named: "music")!),
+    .init(id: .kidsAndFamily, title: "Kids & Family", description: kidsAndFamilyDescription),
+    .init(id: .music, title: "Music", description: musicDescription),
 //    .init(id: .news, title: "News", description: newsDescription, image: UIImage(named: "Pic 10")!),
 //    .init(id: .religionAndSpirituality, title: religionAndSpiritualityDescription, description: religionAndSpiritualityDescription, image: UIImage(named: "Pic 10")!),
-    .init(id: .science, title: "Science", description: scienceDescription, image: UIImage(named: "science")!),
-    .init(id: .societyAndCulture, title: "Society & Culture", description: societyAndCultureDescription, image: UIImage(named: "people")!),
-    .init(id: .sports, title: "Sports", description: sportsDescription, image: UIImage(named: "sport")!),
-    .init(id: .technology, title: "Technology", description: technologyDescription, image: UIImage(named: "techinology")!)
+    .init(id: .science, title: "Science", description: scienceDescription),
+    .init(id: .societyAndCulture, title: "Society & Culture", description: societyAndCultureDescription),
+    .init(id: .sports, title: "Sports", description: sportsDescription),
+    .init(id: .technology, title: "Technology", description: technologyDescription)
 //    .init(id: .tvAndFilm, title: "TV & Film", description: tvAndFilmDescription, image: UIImage(named: "Pic 10")!),
 //    .init(id: .trueCrime, title: "True Crime", description: trueCrimeDescription, image: UIImage(named: "Pic 10")!)
 ]
