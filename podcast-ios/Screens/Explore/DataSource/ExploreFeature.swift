@@ -13,7 +13,6 @@ struct ExploreFeature: Sendable {
     struct State {
         var podcastsList: PodHub?
         var isLoading: Bool = false
-        var selectedPodcast: Item?
         var searchTerm = ""
         var searchPodcastResults: PodHub?
         var path = StackState<Path.State>()
@@ -26,6 +25,7 @@ struct ExploreFeature: Sendable {
     @Reducer
     enum Path {
         case podcastDetails(PodcastDetailsFeature)
+        case categoryDetails(CategoryDetailsFeature)
         case searchResults(ExploreSearchFeature)
     }
 
@@ -44,6 +44,7 @@ struct ExploreFeature: Sendable {
         case settingsTapped
         case path(StackActionOf<Path>)
         case podcastDetailsTapped(Podcast)
+        case catagoryTapped(Catagory)
         case destination(PresentationAction<Destination.Action>)
     }
 
@@ -102,6 +103,9 @@ struct ExploreFeature: Sendable {
                 return .none
             case .settingsTapped:
                 state.destination = .settings(SettingFeature.State())
+                return .none
+            case .catagoryTapped(let catagory):
+                state.path.append(.categoryDetails(CategoryDetailsFeature.State(category: catagory)))
                 return .none
             }
         }

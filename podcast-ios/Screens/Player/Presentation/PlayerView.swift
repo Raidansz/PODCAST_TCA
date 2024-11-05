@@ -9,7 +9,6 @@ import SwiftUI
 import ComposableArchitecture
 import Combine
 
-
 struct PlayerView: View {
     @Bindable var store: StoreOf<PlayerFeature>
     var body: some View {
@@ -66,6 +65,13 @@ struct PlayerView: View {
                 }
                 .onAppear {
                     store.send(.immeditelyPlay)
+                }
+                .onDisappear {
+                    if store.isPlaying == .paused {
+                        AudioPlayer.shared.stop()
+                        store.send(.flushRunningItem)
+                        
+                    }
                 }
                 .navigationTitle("Now Playing")
                 .navigationBarTitleDisplayMode(.inline)

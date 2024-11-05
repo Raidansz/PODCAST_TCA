@@ -61,6 +61,8 @@ struct ExloreView: View {
                 PodcastDetailsView(store: store)
             case .searchResults(let store):
                 ExploreSearchView(store: store)
+            case .categoryDetails(let store):
+                CategoryDetailsView(store: store)
             }
         }
         .sheet(
@@ -120,6 +122,9 @@ struct ExploreViewContent: View {
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                         ForEach(store.catagoryList) { catagory in
                             CategoryViewHero(title: catagory.title)
+                                .onTapGesture {
+                                    store.send(.catagoryTapped(catagory))
+                                }
                         }
                     }
             }, header: {

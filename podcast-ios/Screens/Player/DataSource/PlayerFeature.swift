@@ -29,6 +29,7 @@ struct PlayerFeature {
         case onTotalTimeChange(Double)
         case updateIsPlaying(PlaybackState)
         case immeditelyPlay
+        case flushRunningItem
     }
 
     var body: some ReducerOf<Self> {
@@ -53,6 +54,9 @@ struct PlayerFeature {
                         AudioPlayer.shared.play(item: episode, action: .playNow)
                     }
                 }
+                return .none
+            case .flushRunningItem:
+                state.runningItem = RunningItem()
                 return .none
             }
         }

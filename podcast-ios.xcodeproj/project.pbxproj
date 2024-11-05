@@ -28,6 +28,8 @@
 		AA61A6BB2CD984DB00095FE0 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = AA61A6BA2CD984DB00095FE0 /* Alamofire */; };
 		AA7C8EB92CDA420600122196 /* RSSFeedGeneratorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EB82CDA41ED00122196 /* RSSFeedGeneratorModel.swift */; };
 		AA7C8EBC2CDA4AB400122196 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA7C8EBB2CDA4AB400122196 /* FeedKit */; };
+		AA7C8EBE2CDAC6DD00122196 /* CategoryDetailsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EBD2CDAC6DB00122196 /* CategoryDetailsFeature.swift */; };
+		AA7C8EC02CDAC6E400122196 /* CategoryDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EBF2CDAC6E000122196 /* CategoryDetailsView.swift */; };
 		AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */; };
 		AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */; };
 		AA7DE4BE2C9F0D5800D51A42 /* ListViewHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */; };
@@ -75,6 +77,8 @@
 		AA42C2212CD68D9A00DDF645 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
 		AA45496E2CB43A450055890A /* PodcastDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastDetailsView.swift; sourceTree = "<group>"; };
 		AA7C8EB82CDA41ED00122196 /* RSSFeedGeneratorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSFeedGeneratorModel.swift; sourceTree = "<group>"; };
+		AA7C8EBD2CDAC6DB00122196 /* CategoryDetailsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailsFeature.swift; sourceTree = "<group>"; };
+		AA7C8EBF2CDAC6E000122196 /* CategoryDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailsView.swift; sourceTree = "<group>"; };
 		AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewCell.swift; sourceTree = "<group>"; };
 		AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewHero.swift; sourceTree = "<group>"; };
 		AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
@@ -383,6 +387,8 @@
 		AA9278452C8F151C00D5CF6D /* podcast-ios */ = {
 			isa = PBXGroup;
 			children = (
+				AA7C8EBF2CDAC6E000122196 /* CategoryDetailsView.swift */,
+				AA7C8EBD2CDAC6DB00122196 /* CategoryDetailsFeature.swift */,
 				AA42C20F2CD6899600DDF645 /* Other */,
 				AA42C20C2CD6895B00DDF645 /* RootModule.swift */,
 				AA42C20B2CD6892600DDF645 /* Views */,
@@ -515,6 +521,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AAAD22772CA31AAB0064F2C5 /* ExploreView.swift in Sources */,
+				AA7C8EBE2CDAC6DD00122196 /* CategoryDetailsFeature.swift in Sources */,
 				AA7DE4C22C9F1C9600D51A42 /* ItunesCallerConstants.swift in Sources */,
 				AAF16C662CB460750035F9D0 /* RSSFeed+Extension.swift in Sources */,
 				AA42C1FD2CD687F900DDF645 /* HomeView.swift in Sources */,
@@ -530,6 +537,7 @@
 				AA42C1982CD55C7E00DDF645 /* SharedStateFeature.swift in Sources */,
 				AA42C2202CD68AEF00DDF645 /* ExploreFeature.swift in Sources */,
 				AA42C20D2CD6895C00DDF645 /* RootModule.swift in Sources */,
+				AA7C8EC02CDAC6E400122196 /* CategoryDetailsView.swift in Sources */,
 				AA7DE4D22CA08D4F00D51A42 /* PodcastIndexModel.swift in Sources */,
 				AAAFD49D2CCC3B3E006E2A89 /* HapticManager.swift in Sources */,
 				AA3098F82CC43CCD003CF32F /* AudioPlayer.swift in Sources */,
