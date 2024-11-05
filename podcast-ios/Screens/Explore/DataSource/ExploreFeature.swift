@@ -17,6 +17,9 @@ struct ExploreFeature: Sendable {
         var searchTerm = ""
         var searchPodcastResults: PodHub?
         var path = StackState<Path.State>()
+        var catagoryList: IdentifiedArrayOf<Catagory> {
+            globalCatagories
+        }
         @Presents var destination: Destination.State?
     }
 

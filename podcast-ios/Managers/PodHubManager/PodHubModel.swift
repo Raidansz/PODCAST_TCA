@@ -10,6 +10,7 @@ import ComposableArchitecture
 import FeedKit
 import SwiftyJSON
 import SwiftData
+import UIKit
 
 struct PodHub: Sendable, Equatable, Codable {
     static func == (lhs: PodHub, rhs: PodHub) -> Bool {
@@ -185,3 +186,44 @@ final class Episode: Codable, Identifiable, Equatable, Hashable, PlayableItemPro
         self.episodeDescription = descriptionText.cleanHTMLTags()
     }
 }
+
+struct Catagory: Identifiable, Hashable {
+    let id: PodcastGenre
+    let title: String
+    let description: String
+    let image: UIImage
+}
+
+let artsDescription = "Explore podcasts about literature, visual arts, and performing arts."
+let businessDescription = "Stay updated with industry insights, entrepreneurial tips, and financial advice."
+let comedyDescription = "Enjoy a wide range of humorous shows, from stand-up to improv and storytelling."
+let educationDescription = "Learn something new every day with topics ranging from science to history."
+let healthAndFitnessDescription = "Get motivated with wellness tips, fitness guides, and mental health discussions."
+let kidsAndFamilyDescription = "Family-friendly content with stories, music, and discussions for all ages."
+let musicDescription = "Listen to music reviews, artist interviews, and discussions on music history."
+let newsDescription = "Stay informed with current events, daily news updates, and analysis."
+let religionAndSpiritualityDescription = "Explore diverse perspectives on spirituality, faith, and personal growth."
+let scienceDescription = "Dive into the wonders of science, from the cosmos to biology and everything in between."
+let societyAndCultureDescription = "Discover perspectives on culture, social issues, and lifestyle topics."
+let sportsDescription = "Catch up on sports news, game analysis, and interviews with athletes."
+let technologyDescription = "Keep up with the latest tech trends, innovations, and gadget reviews."
+let tvAndFilmDescription = "Get insights into movies, television shows, and the entertainment industry."
+let trueCrimeDescription = "Uncover real-life mysteries, true crime cases, and investigative storytelling."
+
+let globalCatagories: IdentifiedArrayOf<Catagory> = [
+    .init(id: .arts, title: "Arts", description: artsDescription, image: UIImage(named: "art")!),
+    .init(id: .business, title: "Business", description: businessDescription, image: UIImage(named: "business")!),
+//    .init(id: .comedy, title: "Comedy", description: comedyDescription, image: UIImage(named: "Pic 10")!),
+    .init(id: .education, title: "Education", description: educationDescription, image: UIImage(named: "learn")!),
+//    .init(id: .healthAndFitness, title: "Health & Fitness", description: healthAndFitnessDescription, image: UIImage(named: "Pic 10")!),
+    .init(id: .kidsAndFamily, title: "Kids & Family", description: kidsAndFamilyDescription, image: UIImage(named: "baby")!),
+    .init(id: .music, title: "Music", description: musicDescription, image: UIImage(named: "music")!),
+//    .init(id: .news, title: "News", description: newsDescription, image: UIImage(named: "Pic 10")!),
+//    .init(id: .religionAndSpirituality, title: religionAndSpiritualityDescription, description: religionAndSpiritualityDescription, image: UIImage(named: "Pic 10")!),
+    .init(id: .science, title: "Science", description: scienceDescription, image: UIImage(named: "science")!),
+    .init(id: .societyAndCulture, title: "Society & Culture", description: societyAndCultureDescription, image: UIImage(named: "people")!),
+    .init(id: .sports, title: "Sports", description: sportsDescription, image: UIImage(named: "sport")!),
+    .init(id: .technology, title: "Technology", description: technologyDescription, image: UIImage(named: "techinology")!)
+//    .init(id: .tvAndFilm, title: "TV & Film", description: tvAndFilmDescription, image: UIImage(named: "Pic 10")!),
+//    .init(id: .trueCrime, title: "True Crime", description: trueCrimeDescription, image: UIImage(named: "Pic 10")!)
+]
