@@ -22,7 +22,7 @@ struct PodcastDetailsView: View {
                                         imageURL: response.imageUrl,
                                         author: response.author, title: response.title,
                                         isPodcast: false,
-                                        description: response.description
+                                        description: response.episodeDescription
                                     )
                                         .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
                                         .onTapGesture {

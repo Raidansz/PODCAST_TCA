@@ -29,7 +29,6 @@ struct HomeFeature: Sendable {
         case path(StackActionOf<Path>)
         case podcastDetailsTapped(Podcast)
         case destination(PresentationAction<Destination.Action>)
-        case resetPagination
     }
 
     @Reducer
@@ -76,11 +75,6 @@ struct HomeFeature: Sendable {
                 return .none
             case .podcastDetailsTapped(let podcast):
                 state.path.append(.podcastDetails(PodcastDetailsFeature.State(podcast: podcast)))
-                return .none
-            case .resetPagination:
-                let podcasts = state.trendingPodcasts?.podcasts
-                guard let podcasts else { return .none }
-                state.trendingPodcasts?.podcasts = IdentifiedArray(uniqueElements: Array(podcasts.prefix(5)))
                 return .none
             }
         }

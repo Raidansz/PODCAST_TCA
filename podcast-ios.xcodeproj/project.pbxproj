@@ -28,6 +28,9 @@
 		AA61A6B22CD9441900095FE0 /* UICoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA61A6B12CD9441700095FE0 /* UICoordinator.swift */; };
 		AA61A6B42CD9444500095FE0 /* ScrollViewExtractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA61A6B32CD9444400095FE0 /* ScrollViewExtractor.swift */; };
 		AA61A6B82CD944F100095FE0 /* CustomImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA61A6B72CD944E900095FE0 /* CustomImageView.swift */; };
+		AA61A6BB2CD984DB00095FE0 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = AA61A6BA2CD984DB00095FE0 /* Alamofire */; };
+		AA7C8EB92CDA420600122196 /* RSSFeedGeneratorModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EB82CDA41ED00122196 /* RSSFeedGeneratorModel.swift */; };
+		AA7C8EBC2CDA4AB400122196 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA7C8EBB2CDA4AB400122196 /* FeedKit */; };
 		AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */; };
 		AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */; };
 		AA7DE4BE2C9F0D5800D51A42 /* ListViewHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */; };
@@ -49,7 +52,6 @@
 		AAAFD5302CD308BB006E2A89 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAFD52F2CD308B5006E2A89 /* String+Extension.swift */; };
 		AAAFD55C2CD40228006E2A89 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = AAAFD55B2CD40228006E2A89 /* Kingfisher */; };
 		AAAFD55E2CD405BA006E2A89 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAAFD55D2CD405B8006E2A89 /* AppDelegate.swift */; };
-		AAF16C642CB440690035F9D0 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = AAF16C632CB440690035F9D0 /* FeedKit */; };
 		AAF16C662CB460750035F9D0 /* RSSFeed+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF16C652CB460720035F9D0 /* RSSFeed+Extension.swift */; };
 		AAF16C692CBAB2840035F9D0 /* ShowMorePodcastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAF16C682CBAB2550035F9D0 /* ShowMorePodcastView.swift */; };
 		AAFED4332CC8143800A9096D /* ExploreSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAFED4322CC8143100A9096D /* ExploreSearchView.swift */; };
@@ -78,6 +80,7 @@
 		AA61A6B12CD9441700095FE0 /* UICoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICoordinator.swift; sourceTree = "<group>"; };
 		AA61A6B32CD9444400095FE0 /* ScrollViewExtractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollViewExtractor.swift; sourceTree = "<group>"; };
 		AA61A6B72CD944E900095FE0 /* CustomImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomImageView.swift; sourceTree = "<group>"; };
+		AA7C8EB82CDA41ED00122196 /* RSSFeedGeneratorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSFeedGeneratorModel.swift; sourceTree = "<group>"; };
 		AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewCell.swift; sourceTree = "<group>"; };
 		AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewHero.swift; sourceTree = "<group>"; };
 		AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
@@ -108,9 +111,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AAF16C642CB440690035F9D0 /* FeedKit in Frameworks */,
 				AAAFD55C2CD40228006E2A89 /* Kingfisher in Frameworks */,
 				AAFED4392CC9AE0F00A9096D /* Cache in Frameworks */,
+				AA61A6BB2CD984DB00095FE0 /* Alamofire in Frameworks */,
+				AA7C8EBC2CDA4AB400122196 /* FeedKit in Frameworks */,
 				AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */,
 				AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */,
 			);
@@ -221,6 +225,7 @@
 				AA7DE4C02C9F1C6600D51A42 /* ItunesManager */,
 				AA3098F32CC43CA8003CF32F /* PlayerManager */,
 				AAAFD52D2CD2E4FA006E2A89 /* RSSFeedGeneratorManager.swift */,
+				AA7C8EB82CDA41ED00122196 /* RSSFeedGeneratorModel.swift */,
 				AAAFD49C2CCC3B37006E2A89 /* HapticManager.swift */,
 				AA42C1972CD55C7400DDF645 /* SharedStateFeature.swift */,
 				AA42C2232CD68F2B00DDF645 /* LoggingManager */,
@@ -437,9 +442,10 @@
 			packageProductDependencies = (
 				AA9278552C8F155C00D5CF6D /* ComposableArchitecture */,
 				AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */,
-				AAF16C632CB440690035F9D0 /* FeedKit */,
 				AAFED4382CC9AE0F00A9096D /* Cache */,
 				AAAFD55B2CD40228006E2A89 /* Kingfisher */,
+				AA61A6BA2CD984DB00095FE0 /* Alamofire */,
+				AA7C8EBB2CDA4AB400122196 /* FeedKit */,
 			);
 			productName = "podcast-ios";
 			productReference = AA9278432C8F151C00D5CF6D /* podcast-ios.app */;
@@ -472,9 +478,10 @@
 			packageReferences = (
 				AA9278542C8F155C00D5CF6D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 				AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
-				AAF16C622CB440690035F9D0 /* XCRemoteSwiftPackageReference "FeedKit" */,
 				AAFED4372CC9AE0F00A9096D /* XCRemoteSwiftPackageReference "Cache" */,
 				AAAFD55A2CD40228006E2A89 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				AA61A6B92CD984DB00095FE0 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				AA7C8EBA2CDA4AB400122196 /* XCRemoteSwiftPackageReference "FeedKit" */,
 			);
 			productRefGroup = AA9278442C8F151C00D5CF6D /* Products */;
 			projectDirPath = "";
@@ -558,6 +565,7 @@
 				AAAFD55E2CD405BA006E2A89 /* AppDelegate.swift in Sources */,
 				AA45496F2CB43A5C0055890A /* PodcastDetailsView.swift in Sources */,
 				AA7DE4D42CA08D8D00D51A42 /* PodcastIndexManager.swift in Sources */,
+				AA7C8EB92CDA420600122196 /* RSSFeedGeneratorModel.swift in Sources */,
 				AA61A6B42CD9444500095FE0 /* ScrollViewExtractor.swift in Sources */,
 				AA7DE4BE2C9F0D5800D51A42 /* ListViewHero.swift in Sources */,
 				AA7DE4CB2C9F1E0A00D51A42 /* InjectionKey.swift in Sources */,
@@ -783,6 +791,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		AA61A6B92CD984DB00095FE0 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.10.1;
+			};
+		};
+		AA7C8EBA2CDA4AB400122196 /* XCRemoteSwiftPackageReference "FeedKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nmdias/FeedKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.2;
+			};
+		};
 		AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON.git";
@@ -807,14 +831,6 @@
 				minimumVersion = 8.1.0;
 			};
 		};
-		AAF16C622CB440690035F9D0 /* XCRemoteSwiftPackageReference "FeedKit" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/nmdias/FeedKit.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 9.1.2;
-			};
-		};
 		AAFED4372CC9AE0F00A9096D /* XCRemoteSwiftPackageReference "Cache" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/hyperoslo/Cache.git";
@@ -826,6 +842,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AA61A6BA2CD984DB00095FE0 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA61A6B92CD984DB00095FE0 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		AA7C8EBB2CDA4AB400122196 /* FeedKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA7C8EBA2CDA4AB400122196 /* XCRemoteSwiftPackageReference "FeedKit" */;
+			productName = FeedKit;
+		};
 		AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
@@ -840,11 +866,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AAAFD55A2CD40228006E2A89 /* XCRemoteSwiftPackageReference "Kingfisher" */;
 			productName = Kingfisher;
-		};
-		AAF16C632CB440690035F9D0 /* FeedKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AAF16C622CB440690035F9D0 /* XCRemoteSwiftPackageReference "FeedKit" */;
-			productName = FeedKit;
 		};
 		AAFED4382CC9AE0F00A9096D /* Cache */ = {
 			isa = XCSwiftPackageProductDependency;

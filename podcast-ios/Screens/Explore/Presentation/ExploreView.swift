@@ -64,6 +64,9 @@ struct ExploreViewContent: View {
         VStack {
             if (podcastList) != nil {
                 ScrollView(.vertical) {
+                    Rectangle()
+                        .foregroundStyle(.red)
+                        .frame(width: 400, height: 800)
                     LazyVStack(alignment: .leading, spacing: 15) {
                         LazyVGrid(columns: Array(repeating: GridItem(spacing: 10), count: 2), spacing: 10) {
                             ForEach(podcastList!) { post in

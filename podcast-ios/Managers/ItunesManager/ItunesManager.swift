@@ -30,16 +30,19 @@ class ItunesManager: ItunesManagerProtocol {
             throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
         }
 
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let searchResultsModel = try await Task.detached { () throws -> SearchResults in
+            let (data, _) = try await URLSession.shared.data(from: url)
 
-        let json = try JSON(data: data)
-        let resultCount = json["resultCount"].intValue
-        let resultsArray = json["results"].arrayValue
-        let searchResults = resultsArray.map { SearchResult(json: $0) }
-        let searchResultsModel = SearchResults(
-            resultCount: resultCount,
-            results: IdentifiedArray(uniqueElements: searchResults)
-        )
+            let json = try JSON(data: data)
+            let resultCount = json["resultCount"].intValue
+            let resultsArray = json["results"].arrayValue
+            let searchResults = resultsArray.map { SearchResult(json: $0) }
+
+            return SearchResults(
+                resultCount: resultCount,
+                results: IdentifiedArray(uniqueElements: searchResults)
+            )
+        }.value
 
         return searchResultsModel
     }

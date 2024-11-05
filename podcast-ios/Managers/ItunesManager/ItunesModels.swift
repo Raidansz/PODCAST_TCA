@@ -8,6 +8,7 @@
 import Foundation
 import SwiftyJSON
 import ComposableArchitecture
+import SwiftData
 
 protocol PartialPodcast {
     var collectionId: Int! { get }
@@ -24,9 +25,27 @@ protocol PartialPodcast {
     var genres: [String]! { get }
 }
 
-class SearchResults: Equatable, Identifiable, PodHubConvertable {
-    let resultCount: Int!
+@Model
+class SearchResults: Equatable, Identifiable, PodHubConvertable, Codable, Sendable {
+    var resultCount: Int!
     var results: IdentifiedArrayOf<SearchResult> = []
+    
+    enum CodingKeys: CodingKey {
+        case resultCount
+        case results
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(resultCount, forKey: .resultCount)
+        try container.encode(results, forKey: .results)
+    }
+
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        resultCount = try container.decode(Int.self, forKey: .resultCount)
+        results = try container.decode(IdentifiedArrayOf<SearchResult>.self, forKey: .results)
+    }
 
     init(resultCount: Int, results: IdentifiedArrayOf<SearchResult>) {
         self.resultCount = resultCount
@@ -45,40 +64,147 @@ extension Formatter {
         return formatter
     }()
 }
-
-class SearchResult: Equatable, Identifiable, PartialPodcast {
+@Model
+class SearchResult: Equatable, Identifiable, PartialPodcast, Codable {
     var wrapperType: String!
     var kind: String!
     var collectionId: Int!
     var trackId: Int?
     var artistName: String!
     var collectionName: String!
-    let trackName: String!
-    let collectionCensoredName: String!
-    let trackCensoredName: String!
-    let collectionViewUrl: URL!
+    var trackName: String!
+    var collectionCensoredName: String!
+    var trackCensoredName: String!
+    var collectionViewUrl: URL!
     var feedUrl: URL!
-    let trackViewUrl: URL!
+    var trackViewUrl: URL!
     var artworkUrl30: URL?
     var artworkUrl60: URL?
     var artworkUrl100: URL?
     var collectionPrice: Double?
-    let trackPrice: Double?
-    let trackRentalPrice: Double?
-    let collectionHdPrice: Double?
-    let trackHdPrice: Double?
-    let trackHdRentalPrice: Double?
-    let releaseDate: Date!
+    var trackPrice: Double?
+    var trackRentalPrice: Double?
+    var collectionHdPrice: Double?
+    var trackHdPrice: Double?
+    var trackHdRentalPrice: Double?
+    var releaseDate: Date!
     var collectionExplicitness: String!
-    let trackExplicitness: String!
-    let trackCount: Int?
-    let country: String!
-    let currency: String!
+    var trackExplicitness: String!
+    var trackCount: Int?
+    var country: String!
+    var currency: String!
     var primaryGenreName: String!
-    let contentAdvisoryRating: String?
+    var contentAdvisoryRating: String?
     var artworkUrl600: URL?
     var genreIds: [String]!
     var genres: [String]!
+
+    enum CodingKeys: CodingKey {
+       case wrapperType
+       case kind
+       case collectionId
+       case trackId
+       case artistName
+       case collectionName
+       case trackName
+       case collectionCensoredName
+       case trackCensoredName
+       case collectionViewUrl
+       case feedUrl
+       case trackViewUrl
+       case artworkUrl30
+       case artworkUrl60
+       case artworkUrl100
+       case collectionPrice
+       case trackPrice
+       case trackRentalPrice
+       case collectionHdPrice
+       case trackHdPrice
+       case trackHdRentalPrice
+       case releaseDate
+       case collectionExplicitness
+       case trackExplicitness
+       case trackCount
+       case country
+       case currency
+       case primaryGenreName
+       case contentAdvisoryRating
+       case artworkUrl600
+       case genreIds
+       case genres
+    }
+
+    required init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        wrapperType = try container.decode(String.self, forKey: .wrapperType)
+        kind = try container.decode(String.self, forKey: .kind)
+        collectionId = try container.decode(Int.self, forKey: .collectionId)
+        trackId = try container.decodeIfPresent(Int.self, forKey: .trackId)
+        artistName = try container.decode(String.self, forKey: .artistName)
+        collectionName = try container.decode(String.self, forKey: .collectionName)
+        trackName = try container.decode(String.self, forKey: .trackName)
+        collectionCensoredName = try container.decode(String.self, forKey: .collectionCensoredName)
+        trackCensoredName = try container.decode(String.self, forKey: .trackCensoredName)
+        collectionViewUrl = try container.decode(URL.self, forKey: .collectionViewUrl)
+        feedUrl = try container.decode(URL.self, forKey: .feedUrl)
+        trackViewUrl = try container.decode(URL.self, forKey: .trackViewUrl)
+        artworkUrl30 = try container.decodeIfPresent(URL.self, forKey: .artworkUrl30)
+        artworkUrl60 = try container.decodeIfPresent(URL.self, forKey: .artworkUrl60)
+        artworkUrl100 = try container.decodeIfPresent(URL.self, forKey: .artworkUrl100)
+        collectionPrice = try container.decodeIfPresent(Double.self, forKey: .collectionPrice)
+        trackPrice = try container.decodeIfPresent(Double.self, forKey: .trackPrice)
+        trackRentalPrice = try container.decodeIfPresent(Double.self, forKey: .trackRentalPrice)
+        collectionHdPrice = try container.decodeIfPresent(Double.self, forKey: .collectionHdPrice)
+        trackHdPrice = try container.decodeIfPresent(Double.self, forKey: .trackHdPrice)
+        trackHdRentalPrice = try container.decodeIfPresent(Double.self, forKey: .trackHdRentalPrice)
+        releaseDate = try container.decode(Date.self, forKey: .releaseDate)
+        collectionExplicitness = try container.decode(String.self, forKey: .collectionExplicitness)
+        trackExplicitness = try container.decode(String.self, forKey: .trackExplicitness)
+        trackCount = try container.decodeIfPresent(Int.self, forKey: .trackCount)
+        country = try container.decode(String.self, forKey: .country)
+        currency = try container.decode(String.self, forKey: .currency)
+        primaryGenreName = try container.decode(String.self, forKey: .primaryGenreName)
+        contentAdvisoryRating = try container.decodeIfPresent(String.self, forKey: .contentAdvisoryRating)
+        artworkUrl600 = try container.decodeIfPresent(URL.self, forKey: .artworkUrl600)
+        genreIds = try container.decode([String].self, forKey: .genreIds)
+        genres = try container.decode([String].self, forKey: .genres)
+    }
+
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+        try container.encode(wrapperType, forKey: .wrapperType)
+        try container.encode(kind, forKey: .kind)
+        try container.encode(collectionId, forKey: .collectionId)
+        try container.encodeIfPresent(trackId, forKey: .trackId)
+        try container.encode(artistName, forKey: .artistName)
+        try container.encode(collectionName, forKey: .collectionName)
+        try container.encode(trackName, forKey: .trackName)
+        try container.encode(collectionCensoredName, forKey: .collectionCensoredName)
+        try container.encode(trackCensoredName, forKey: .trackCensoredName)
+        try container.encode(collectionViewUrl, forKey: .collectionViewUrl)
+        try container.encode(feedUrl, forKey: .feedUrl)
+        try container.encode(trackViewUrl, forKey: .trackViewUrl)
+        try container.encodeIfPresent(artworkUrl30, forKey: .artworkUrl30)
+        try container.encodeIfPresent(artworkUrl60, forKey: .artworkUrl60)
+        try container.encodeIfPresent(artworkUrl100, forKey: .artworkUrl100)
+        try container.encodeIfPresent(collectionPrice, forKey: .collectionPrice)
+        try container.encodeIfPresent(trackPrice, forKey: .trackPrice)
+        try container.encodeIfPresent(trackRentalPrice, forKey: .trackRentalPrice)
+        try container.encodeIfPresent(collectionHdPrice, forKey: .collectionHdPrice)
+        try container.encodeIfPresent(trackHdPrice, forKey: .trackHdPrice)
+        try container.encodeIfPresent(trackHdRentalPrice, forKey: .trackHdRentalPrice)
+        try container.encode(releaseDate, forKey: .releaseDate)
+        try container.encode(collectionExplicitness, forKey: .collectionExplicitness)
+        try container.encode(trackExplicitness, forKey: .trackExplicitness)
+        try container.encodeIfPresent(trackCount, forKey: .trackCount)
+        try container.encode(country, forKey: .country)
+        try container.encode(currency, forKey: .currency)
+        try container.encode(primaryGenreName, forKey: .primaryGenreName)
+        try container.encodeIfPresent(contentAdvisoryRating, forKey: .contentAdvisoryRating)
+        try container.encodeIfPresent(artworkUrl600, forKey: .artworkUrl600)
+        try container.encode(genreIds, forKey: .genreIds)
+        try container.encode(genres, forKey: .genres)
+    }
 
     init(json: JSON) {
         wrapperType = json["wrapperType"].string

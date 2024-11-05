@@ -5,7 +5,7 @@
 //  Created by Raidan on 2024. 10. 30..
 //
 import Foundation
-import FeedKit
+import SwiftyJSON
 import IdentifiedCollections
 
 final class RSSFeedGeneratorManager: RSSFeedGeneratorManagerProtocol {
@@ -26,37 +26,32 @@ final class RSSFeedGeneratorManager: RSSFeedGeneratorManagerProtocol {
         var urlComponents = URLComponents()
         urlComponents.scheme = scheme
         urlComponents.host = mainURL
-        urlComponents.path = "/api/v2/\(country.rawValue)/podcasts/top/\(limit)/podcasts.rss"
+        urlComponents.path = "/api/v2/\(country.rawValue)/podcasts/top/\(limit)/podcasts.json"
 
         guard let url = urlComponents.url else { return [] }
-        let firstResult = try await parseFeed(url: url)
-        let result = firstResult?.link
-        guard let result else { return [] }
-        let finalResult = try await parseFeed(url: URL(string: result))?.toPodcasts() ?? []
-        var ids: [String] = []
-        finalResult.forEach { item in
-            ids.append(extractPodcastID(from: item.id) ?? "")
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+            throw URLError(.badServerResponse)
         }
-        return ids
+
+        let json = JSON(data)
+        let feedResponse = RSSFeedResponse(json: json)
+
+        return feedResponse.feed?.results.map { $0.id } ?? []
     }
 
-    func getTopChartedEpisodes(limit: Int, country: Country) async throws -> IdentifiedArrayOf<Episode> {
-        var urlComponents = URLComponents()
-        urlComponents.scheme = scheme
-        urlComponents.host = mainURL
-        urlComponents.path = "/api/v2/\(country.rawValue)/podcasts/top/\(limit)/podcast-episodes.rss"
-        guard let url = urlComponents.url else { return [] }
-        let result = try await parseFeed(url: url)?.link
-        guard let result else { return [] }
-        let finalResult = try await parseFeed(url: URL(string: result))?.toEpisodes() ?? []
-        return finalResult
-    }
-
-    private func parseFeed(url: URL?) async throws -> RSSFeed? {
-        guard let url = url else { return nil }
-        let parser = FeedParser(URL: url)
-        return try await parser.parseAsync().rssFeed
-    }
+//    func getTopChartedEpisodes(limit: Int, country: Country) async throws -> IdentifiedArrayOf<Episode> {
+//        var urlComponents = URLComponents()
+//        urlComponents.scheme = scheme
+//        urlComponents.host = mainURL
+//        urlComponents.path = "/api/v2/\(country.rawValue)/podcasts/top/\(limit)/podcast-episodes.rss"
+//        guard let url = urlComponents.url else { return [] }
+//        let result = try await parseFeed(url: url)?.link
+//        guard let result else { return [] }
+//        let finalResult = try await parseFeed(url: URL(string: result))?.toEpisodes() ?? []
+//        return finalResult
+//    }
 
     deinit {
         PODLogInfo("RSSFeedGeneratorManager was deinitialized")
@@ -65,7 +60,7 @@ final class RSSFeedGeneratorManager: RSSFeedGeneratorManagerProtocol {
 
 protocol RSSFeedGeneratorManagerProtocol {
     func getTopChartedPodcast(limit: Int, country: Country) async throws -> [String]
-    func getTopChartedEpisodes(limit: Int, country: Country) async throws -> IdentifiedArrayOf<Episode>
+//    func getTopChartedEpisodes(limit: Int, country: Country) async throws -> IdentifiedArrayOf<Episode>
 }
 
 private struct RSSFeedGeneratorManagerKey: @preconcurrency InjectionKey {
