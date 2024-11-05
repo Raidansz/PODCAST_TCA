@@ -15,6 +15,7 @@ final class PodHubManager: PodHubManagerProtocol {
     @Injected(\.rssFeedGeneratorManager) private var rSSFeedGeneratorManager: RSSFeedGeneratorManagerProtocol
     private let trendingPodcastsCacheKey = "trending_podcasts"
     private let searchResultsCacheKeyPrefix = "search_results_"
+    private let catagoryResultsCacheKeyPrefix = "catagory_results_"
 
     private let diskConfig = DiskConfig(
         name: "PodHubCache",
@@ -72,7 +73,7 @@ final class PodHubManager: PodHubManagerProtocol {
     }
 
     func searchFor(
-        searchFor mediaType: MediaType,
+        searchFor mediaType: Entity,
         value: String,
         limit: Int? = nil,
         page: Int? = nil,
@@ -105,7 +106,7 @@ final class PodHubManager: PodHubManagerProtocol {
     }
 
     private func lookupItunes(
-        searchFor: MediaType,
+        searchFor: Entity,
         value: String,
         limit: Int? = nil,
         page: Int? = nil
@@ -126,7 +127,7 @@ final class PodHubManager: PodHubManagerProtocol {
                 limit: limit,
                 page: page
             )
-        } else if searchFor == .episode {
+        } else if searchFor == .podcastEpisode {
             searchResult = try await itunesManager.searchPodcasts(
                 term: encodedValue,
                 entity: .podcastEpisode,
@@ -144,7 +145,28 @@ final class PodHubManager: PodHubManagerProtocol {
         return searchResult
     }
 
-    private func lookupPodcastIndex(searchFor: MediaType, value: String) async throws -> PodcastIndexResponse {
+    func getPodcastListOf(catagory: PodcastGenre) async throws -> PodHub {
+        let cacheKey = "\(catagoryResultsCacheKeyPrefix)\(catagory)"
+
+        if let cachedResult = try? await searchResultsStorage?.async.object(forKey: cacheKey) {
+            PODLogInfo("Fetched search result from cache")
+            return cachedResult
+        }
+
+        let result = try await itunesManager.getPodcastListOf(catagory: catagory, mediaType: .podcast, limit: 20)
+
+        let finalResult = try normalizeResult(result: result, mediaType: .podcast, totalCount: result.resultCount)
+
+        searchResultsStorage?.async.setObject(finalResult, forKey: cacheKey) { result in
+            if case .failure(let error) = result {
+                PODLogError("Failed to cache search result: \(error)")
+            }
+        }
+
+        return finalResult
+    }
+
+    private func lookupPodcastIndex(searchFor: Entity, value: String) async throws -> PodcastIndexResponse {
 
         guard let encodedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)?
                 .replacingOccurrences(of: "%20", with: "+") else {
@@ -159,7 +181,7 @@ final class PodHubManager: PodHubManagerProtocol {
         }
     }
 
-    private func normalizeResult(result: PodHubConvertable, mediaType: MediaType, totalCount: Int ) throws -> PodHub {
+    private func normalizeResult(result: PodHubConvertable, mediaType: Entity, totalCount: Int ) throws -> PodHub {
         return try PodHub(result: result, mediaType: mediaType, totalCount: totalCount)
     }
 
@@ -186,13 +208,9 @@ extension InjectedValues {
 }
 
 protocol PodHubManagerProtocol {
-    func searchFor(searchFor: MediaType, value: String, limit: Int?, page: Int?, id: UUID?) async throws -> PodHub
+    func searchFor(searchFor: Entity, value: String, limit: Int?, page: Int?, id: UUID?) async throws -> PodHub
     func getTrendingPodcasts() async throws -> PodHub
-}
-
-enum MediaType {
-    case podcast
-    case episode
+    func getPodcastListOf(catagory: PodcastGenre) async throws -> PodHub
 }
 
 struct PaginatedResult {

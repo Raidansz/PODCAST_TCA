@@ -21,7 +21,7 @@ class ItunesManager: ItunesManagerProtocol {
         case lang = "lang"
         case version = "version"
         case explicit = "explicit"
-        case apiURL = "https://itunes.apple.com/search"
+        case apiURL = "https://itunes.apple.com/"
     }
 
     private func performQuery(_ url: URL?) async throws -> SearchResults {
@@ -94,6 +94,8 @@ protocol ItunesManagerProtocol {
     func searchPodcasts(term: String, limit: Int?, page: Int?) async throws -> SearchResults
 
     func lookupPodcasts(ids: [String]) async throws -> SearchResults
+
+    func getPodcastListOf(catagory: PodcastGenre, mediaType: Entity, limit: Int) async throws -> SearchResults
 }
 
 // MARK: Search for Podcast / Episode
@@ -109,7 +111,7 @@ extension ItunesManager {
                         limit: Int?,
                         page: Int?
     ) async throws -> SearchResults {
-
+        let url = "search"
         var queryItems = [URLQueryItem]()
 
         if let term = term?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
@@ -146,7 +148,7 @@ extension ItunesManager {
             queryItems.append(URLQueryItem(name: Constants.explicit.rawValue, value: explicit))
         }
 
-        var urlComponents = URLComponents(string: Constants.apiURL.rawValue)
+        var urlComponents = URLComponents(string: Constants.apiURL.rawValue + url)
         urlComponents?.queryItems = queryItems
 
         guard let limit = limit, let page = page else {
@@ -158,7 +160,7 @@ extension ItunesManager {
 
     func searchPodcasts(term: String, limit: Int?, page: Int?) async throws -> SearchResults {
         var queryItems = [URLQueryItem]()
-
+        let url = "search"
         if let term = term.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
             queryItems.append(URLQueryItem(name: "term", value: term))
         }
@@ -167,7 +169,7 @@ extension ItunesManager {
 
         queryItems.append(URLQueryItem(name: Constants.media.rawValue, value: "podcast"))
 
-        var urlComponents = URLComponents(string: Constants.apiURL.rawValue)
+        var urlComponents = URLComponents(string: Constants.apiURL.rawValue + url)
         urlComponents?.queryItems = queryItems
 
         guard let limit = limit, let page = page else {
@@ -179,7 +181,7 @@ extension ItunesManager {
 
     func searchPodcasts(term: String, entity: Entity, limit: Int?, page: Int?) async throws -> SearchResults {
         var queryItems = [URLQueryItem]()
-
+        let url = "search"
         if let term = term.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
             queryItems.append(URLQueryItem(name: "term", value: term))
         }
@@ -188,7 +190,7 @@ extension ItunesManager {
 
         queryItems.append(URLQueryItem(name: Constants.media.rawValue, value: "podcast"))
 
-        var urlComponents = URLComponents(string: Constants.apiURL.rawValue)
+        var urlComponents = URLComponents(string: Constants.apiURL.rawValue + url)
         urlComponents?.queryItems = queryItems
 
         guard let limit = limit, let page = page else {
@@ -199,7 +201,7 @@ extension ItunesManager {
     }
 
     func lookupPodcasts(ids: [String]) async throws -> SearchResults {
-       let rootURL = "https://itunes.apple.com/lookup"
+       let url = "lookup"
         guard !ids.isEmpty else {
             throw URLError(.badURL)
         }
@@ -210,7 +212,20 @@ extension ItunesManager {
         queryItems.append(URLQueryItem(name: "id", value: idString))
         queryItems.append(URLQueryItem(name: Constants.media.rawValue, value: "podcast"))
 
-        var urlComponents = URLComponents(string: rootURL)
+        var urlComponents = URLComponents(string: Constants.apiURL.rawValue + url)
+        urlComponents?.queryItems = queryItems
+
+        return try await performQuery(urlComponents?.url)
+    }
+
+    func getPodcastListOf(catagory: PodcastGenre, mediaType: Entity, limit: Int) async throws -> SearchResults {
+        let url = "search"
+        var queryItems = [URLQueryItem]()
+        queryItems.append(URLQueryItem(name: Constants.term.rawValue, value: mediaType.rawValue))
+        queryItems.append(URLQueryItem(name: Constants.genreId.rawValue, value: catagory.rawValue))
+        queryItems.append(URLQueryItem(name: Constants.limit.rawValue, value: "\(limit)"))
+
+        var urlComponents = URLComponents(string: Constants.apiURL.rawValue + url)
         urlComponents?.queryItems = queryItems
 
         return try await performQuery(urlComponents?.url)

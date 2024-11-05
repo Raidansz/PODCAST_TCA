@@ -20,7 +20,7 @@ struct PodHub: Sendable, Equatable, Codable {
     var podcasts: IdentifiedArrayOf<Podcast> = []
     var totalCount: Int
 
-    init(result: PodHubConvertable, mediaType: MediaType, totalCount: Int) throws {
+    init(result: PodHubConvertable, mediaType: Entity, totalCount: Int) throws {
         self.podcasts = IdentifiedArray()
         self.totalCount = totalCount
         if let searchResults = result as? SearchResults {
@@ -91,7 +91,7 @@ final class Podcast: Identifiable, Equatable, Hashable, Codable, Sendable {
         try container.encode(type, forKey: .type)
     }
 
-    init(item: SearchResult, mediaType: MediaType) {
+    init(item: SearchResult, mediaType: Entity) {
         self.id = "\(item.id)"
         self.title = item.trackName
         self.image = item.artworkUrl600 ?? item.artworkUrl100 ?? URL(fileURLWithPath: "")
@@ -113,7 +113,7 @@ final class Podcast: Identifiable, Equatable, Hashable, Codable, Sendable {
         self.isPodcast = true
     }
 
-    init(item: Item, mediaType: MediaType) {
+    init(item: Item, mediaType: Entity) {
         self.id = "\(item.id)"
         self.title = item.title
         self.image = item.image ?? item.feedImage ?? URL(fileURLWithPath: "")
