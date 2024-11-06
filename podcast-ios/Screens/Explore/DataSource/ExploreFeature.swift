@@ -6,6 +6,8 @@
 //
 
 import ComposableArchitecture
+import SwiftUICore
+import Combine
 
 @Reducer
 struct ExploreFeature: Sendable {
@@ -19,6 +21,9 @@ struct ExploreFeature: Sendable {
         var catagoryList: IdentifiedArrayOf<Catagory> {
             globalCatagories
         }
+        let searchID = "search"
+        @ObservationStateIgnored  var didRunIntoException = CurrentValueSubject<Bool, Never>(false)
+        var error: ErrorMessage?
         @Presents var destination: Destination.State?
     }
 
@@ -46,6 +51,7 @@ struct ExploreFeature: Sendable {
         case podcastDetailsTapped(Podcast)
         case catagoryTapped(Catagory)
         case destination(PresentationAction<Destination.Action>)
+        case didRunIntoException(ErrorMessage)
     }
 
     @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
@@ -84,7 +90,11 @@ struct ExploreFeature: Sendable {
                             term
                         )
                     )
+                } catch: { [state] error, send in
+                    Task.cancel(id: state.searchID)
+                    await send (.didRunIntoException(ErrorMessage(text: error.localizedDescription, color: .red, id: "something")))
                 }
+                    .cancellable(id: state.searchID)
             case .searchTermChanged(let searchTerm):
                 state.searchTerm = searchTerm
                 return .none
@@ -106,6 +116,10 @@ struct ExploreFeature: Sendable {
                 return .none
             case .catagoryTapped(let catagory):
                 state.path.append(.categoryDetails(CategoryDetailsFeature.State(category: catagory)))
+                return .none
+            case .didRunIntoException(let value):
+                state.error = value
+                state.didRunIntoException.send(true)
                 return .none
             }
         }

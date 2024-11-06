@@ -142,7 +142,8 @@ enum QueryType {
         case .guid(let guid):
             return "byguid?guid=\(guid)"
         case .title(let title):
-            return "bytitle?title=\(title)"
+            let safeTitle = title.replacingOccurrences(of: " ", with: "+")
+            return "bytitle?title=\(safeTitle)"
         case .medium(let medium):
             return "bymedium?medium=\(medium)"
         case .trending:

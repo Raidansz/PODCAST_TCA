@@ -88,7 +88,7 @@ final class PodHubManager: PodHubManagerProtocol {
 
         var finalResult: PodHub
         let result = try await lookupItunes(searchFor: mediaType, value: value, limit: limit, page: page)
-
+        PODLogInfo(value)
         if result.results.isEmpty {
             let indexResult = try await lookupPodcastIndex(searchFor: mediaType, value: value)
             finalResult = try normalizeResult(result: indexResult, mediaType: mediaType, totalCount: indexResult.count)
@@ -112,31 +112,23 @@ final class PodHubManager: PodHubManagerProtocol {
         page: Int? = nil
     ) async throws -> SearchResults {
         let searchResult: SearchResults
-        let encodedValuee = value.replacingOccurrences(of: " ", with: "+")
-
-        guard let encodedValue = encodedValuee.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)?
-                .replacingOccurrences(of: "%20", with: "+") else {
-            PODLogError("\(URLError(.badURL))")
-            throw URLError(.badURL)
-        }
-
         if searchFor == .podcast {
             searchResult = try await itunesManager.searchPodcasts(
-                term: encodedValue,
+                term: value,
                 entity: .podcast,
                 limit: limit,
                 page: page
             )
         } else if searchFor == .podcastEpisode {
             searchResult = try await itunesManager.searchPodcasts(
-                term: encodedValue,
+                term: value,
                 entity: .podcastEpisode,
                 limit: limit,
                 page: page
             )
         } else {
             searchResult = try await itunesManager.searchPodcasts(
-                term: encodedValue,
+                term: value,
                 entity: .podcastAndEpisode,
                 limit: limit,
                 page: page
@@ -167,17 +159,10 @@ final class PodHubManager: PodHubManagerProtocol {
     }
 
     private func lookupPodcastIndex(searchFor: Entity, value: String) async throws -> PodcastIndexResponse {
-
-        guard let encodedValue = value.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)?
-                .replacingOccurrences(of: "%20", with: "+") else {
-            PODLogError("\(URLError(.badURL))")
-            throw URLError(.badURL)
-        }
-
         if searchFor == .podcast {
-            return   try await podcastIndexManager.performQuery(for: .podcast, .title(encodedValue), parameter: nil)
+            return   try await podcastIndexManager.performQuery(for: .podcast, .title(value), parameter: nil)
         } else {
-            return  try await podcastIndexManager.performQuery(for: .episode, .title(encodedValue), parameter: nil)
+            return  try await podcastIndexManager.performQuery(for: .episode, .title(value), parameter: nil)
         }
     }
 

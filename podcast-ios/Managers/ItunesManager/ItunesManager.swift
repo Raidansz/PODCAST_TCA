@@ -46,29 +46,6 @@ class ItunesManager: ItunesManagerProtocol {
 
         return searchResultsModel
     }
-
-    private func performQueryWithPagination(_ url: URL?, limit: Int, page: Int) async throws -> SearchResults {
-        guard let url = url else {
-            PODLogError("\(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"]))")
-            throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Invalid URL"])
-        }
-
-        let offset = (page - 1) * limit
-        let queryURL = URL(string: "\(url)&limit=\(limit)&offset=\(offset)")!
-        let (data, _) = try await URLSession.shared.data(from: queryURL)
-
-        let json = try JSON(data: data)
-        let resultCount = json["resultCount"].intValue
-        let resultsArray = json["results"].arrayValue
-        let searchResults = resultsArray.map { SearchResult(json: $0) }
-        let searchResultsModel = SearchResults(
-            resultCount: resultCount,
-            results: IdentifiedArray(uniqueElements: searchResults)
-        )
-
-        return searchResultsModel
-    }
-
     deinit {
         PODLogInfo("ItunesManager was deinitialized")
     }
@@ -114,9 +91,8 @@ extension ItunesManager {
         let url = "search"
         var queryItems = [URLQueryItem]()
 
-        if let term = term?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-            queryItems.append(URLQueryItem(name: "term", value: term))
-        }
+        let safeTerm = term?.replacingOccurrences(of: " ", with: "+")
+        queryItems.append(URLQueryItem(name: "term", value: safeTerm))
 
         if let country = country {
             queryItems.append(URLQueryItem(name: Constants.country.rawValue, value: country.rawValue))
@@ -155,15 +131,15 @@ extension ItunesManager {
             return try await performQuery(urlComponents?.url)
         }
 
-        return try await performQueryWithPagination(urlComponents?.url, limit: limit, page: page)
+        return try await performQuery(urlComponents?.url)
     }
 
     func searchPodcasts(term: String, limit: Int?, page: Int?) async throws -> SearchResults {
         var queryItems = [URLQueryItem]()
         let url = "search"
-        if let term = term.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-            queryItems.append(URLQueryItem(name: "term", value: term))
-        }
+
+        let safeTerm = term.replacingOccurrences(of: " ", with: "+")
+        queryItems.append(URLQueryItem(name: "term", value: safeTerm))
 
         queryItems.append(URLQueryItem(name: Constants.entity.rawValue, value: "podcast,podcastEpisode"))
 
@@ -176,15 +152,15 @@ extension ItunesManager {
             return try await performQuery(urlComponents?.url)
         }
 
-        return try await performQueryWithPagination(urlComponents?.url, limit: limit, page: page)
+        return try await performQuery(urlComponents?.url)
     }
 
     func searchPodcasts(term: String, entity: Entity, limit: Int?, page: Int?) async throws -> SearchResults {
         var queryItems = [URLQueryItem]()
         let url = "search"
-        if let term = term.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
-            queryItems.append(URLQueryItem(name: "term", value: term))
-        }
+
+        let safeTerm = term.replacingOccurrences(of: " ", with: "+")
+        queryItems.append(URLQueryItem(name: "term", value: safeTerm))
 
         queryItems.append(URLQueryItem(name: Constants.entity.rawValue, value: entity.rawValue))
 
@@ -197,7 +173,7 @@ extension ItunesManager {
             return try await performQuery(urlComponents?.url)
         }
 
-        return try await performQueryWithPagination(urlComponents?.url, limit: limit, page: page)
+        return try await performQuery(urlComponents?.url)
     }
 
     func lookupPodcasts(ids: [String]) async throws -> SearchResults {
