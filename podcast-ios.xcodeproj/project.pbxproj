@@ -32,6 +32,7 @@
 		AA7C8EC22CDADCCB00122196 /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EC12CDADCC300122196 /* AudioPlayerManager.swift */; };
 		AA7C8EC42CDB889500122196 /* AudioPlayerManagerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EC32CDB888D00122196 /* AudioPlayerManagerModel.swift */; };
 		AA7C8EC62CDBB39000122196 /* AVPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EC52CDBB38800122196 /* AVPlayerManager.swift */; };
+		AA7C8EC82CDBDDAA00122196 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EC72CDBDDA600122196 /* Theme.swift */; };
 		AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */; };
 		AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */; };
 		AA7DE4BE2C9F0D5800D51A42 /* ListViewHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */; };
@@ -83,6 +84,7 @@
 		AA7C8EC12CDADCC300122196 /* AudioPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
 		AA7C8EC32CDB888D00122196 /* AudioPlayerManagerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerManagerModel.swift; sourceTree = "<group>"; };
 		AA7C8EC52CDBB38800122196 /* AVPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVPlayerManager.swift; sourceTree = "<group>"; };
+		AA7C8EC72CDBDDA600122196 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewCell.swift; sourceTree = "<group>"; };
 		AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewHero.swift; sourceTree = "<group>"; };
 		AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
@@ -391,6 +393,7 @@
 		AA9278452C8F151C00D5CF6D /* podcast-ios */ = {
 			isa = PBXGroup;
 			children = (
+				AA7C8EC72CDBDDA600122196 /* Theme.swift */,
 				AA7C8EC32CDB888D00122196 /* AudioPlayerManagerModel.swift */,
 				AA7C8EC12CDADCC300122196 /* AudioPlayerManager.swift */,
 				AA7C8EBF2CDAC6E000122196 /* CategoryDetailsView.swift */,
@@ -562,6 +565,7 @@
 				AAAFD55E2CD405BA006E2A89 /* AppDelegate.swift in Sources */,
 				AA45496F2CB43A5C0055890A /* PodcastDetailsView.swift in Sources */,
 				AA7DE4D42CA08D8D00D51A42 /* PodcastIndexManager.swift in Sources */,
+				AA7C8EC82CDBDDAA00122196 /* Theme.swift in Sources */,
 				AA7C8EB92CDA420600122196 /* RSSFeedGeneratorModel.swift in Sources */,
 				AA7DE4BE2C9F0D5800D51A42 /* ListViewHero.swift in Sources */,
 				AA7DE4CB2C9F1E0A00D51A42 /* InjectionKey.swift in Sources */,

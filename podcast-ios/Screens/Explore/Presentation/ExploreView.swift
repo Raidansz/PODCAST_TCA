@@ -121,7 +121,7 @@ struct ExploreViewContent: View {
             Section(content: {
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
                         ForEach(store.catagoryList) { catagory in
-                            CategoryViewHero(title: catagory.title)
+                            CategoryViewHero(title: catagory.title, theme: getRandomTheme())
                                 .onTapGesture {
                                     store.send(.catagoryTapped(catagory))
                                 }
@@ -136,20 +136,5 @@ struct ExploreViewContent: View {
             })
             .padding(.horizontal, 16)
         }
-    }
-}
-
-struct CatagoriesView: View {
-    let label: String
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 28)
-                .fill(Color.blue)
-            Text(label)
-                .font(.headline)
-                .foregroundColor(.black)
-                .lineLimit(1)
-        }
-        .frame(width: 130, height: 56)
     }
 }
