@@ -139,10 +139,12 @@
 		AA3098F32CC43CA8003CF32F /* PlayerManager */ = {
 			isa = PBXGroup;
 			children = (
+				AA7C8EC32CDB888D00122196 /* AudioPlayerManagerModel.swift */,
 				AA7C8EC52CDBB38800122196 /* AVPlayerManager.swift */,
 				AA3098F52CC43CCD003CF32F /* PlayerDurationObserver.swift */,
 				AA3098F62CC43CCD003CF32F /* PlayerTimeObserver.swift */,
 				AA3098F72CC43CCD003CF32F /* Queue.swift */,
+				AA7C8EC12CDADCC300122196 /* AudioPlayerManager.swift */,
 			);
 			path = PlayerManager;
 			sourceTree = "<group>";
@@ -150,6 +152,7 @@
 		AA42C1F82CD687BB00DDF645 /* Screens */ = {
 			isa = PBXGroup;
 			children = (
+				AA7C8EC92CDBDED400122196 /* Catagory */,
 				AA42C20A2CD688FA00DDF645 /* ShowMorePodcast */,
 				AA42C2082CD688CF00DDF645 /* PodcastDetails */,
 				AA42C2072CD688BB00DDF645 /* Player */,
@@ -223,14 +226,13 @@
 		AA42C2042CD6888B00DDF645 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				AA7C8ECC2CDBDF3100122196 /* SharedStateManager */,
+				AA7C8ECB2CDBDF1F00122196 /* CoreHapticManager */,
+				AA7C8ECA2CDBDF0800122196 /* RSSFeedManager */,
 				AA1F8E3A2CA8570B009FFC85 /* PodHubManager */,
 				AA7DE4D02CA08D3500D51A42 /* PodcastIndexManager */,
 				AA7DE4C02C9F1C6600D51A42 /* ItunesManager */,
 				AA3098F32CC43CA8003CF32F /* PlayerManager */,
-				AAAFD52D2CD2E4FA006E2A89 /* RSSFeedGeneratorManager.swift */,
-				AA7C8EB82CDA41ED00122196 /* RSSFeedGeneratorModel.swift */,
-				AAAFD49C2CCC3B37006E2A89 /* HapticManager.swift */,
-				AA42C1972CD55C7400DDF645 /* SharedStateFeature.swift */,
 				AA42C2232CD68F2B00DDF645 /* LoggingManager */,
 			);
 			path = Managers;
@@ -286,6 +288,7 @@
 			children = (
 				AAAFD55D2CD405B8006E2A89 /* AppDelegate.swift */,
 				AA7DE4CA2C9F1E0600D51A42 /* InjectionKey.swift */,
+				AA7C8EC72CDBDDA600122196 /* Theme.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -354,6 +357,40 @@
 			path = LoggingManager;
 			sourceTree = "<group>";
 		};
+		AA7C8EC92CDBDED400122196 /* Catagory */ = {
+			isa = PBXGroup;
+			children = (
+				AA7C8EBF2CDAC6E000122196 /* CategoryDetailsView.swift */,
+				AA7C8EBD2CDAC6DB00122196 /* CategoryDetailsFeature.swift */,
+			);
+			path = Catagory;
+			sourceTree = "<group>";
+		};
+		AA7C8ECA2CDBDF0800122196 /* RSSFeedManager */ = {
+			isa = PBXGroup;
+			children = (
+				AAAFD52D2CD2E4FA006E2A89 /* RSSFeedGeneratorManager.swift */,
+				AA7C8EB82CDA41ED00122196 /* RSSFeedGeneratorModel.swift */,
+			);
+			path = RSSFeedManager;
+			sourceTree = "<group>";
+		};
+		AA7C8ECB2CDBDF1F00122196 /* CoreHapticManager */ = {
+			isa = PBXGroup;
+			children = (
+				AAAFD49C2CCC3B37006E2A89 /* HapticManager.swift */,
+			);
+			path = CoreHapticManager;
+			sourceTree = "<group>";
+		};
+		AA7C8ECC2CDBDF3100122196 /* SharedStateManager */ = {
+			isa = PBXGroup;
+			children = (
+				AA42C1972CD55C7400DDF645 /* SharedStateFeature.swift */,
+			);
+			path = SharedStateManager;
+			sourceTree = "<group>";
+		};
 		AA7DE4C02C9F1C6600D51A42 /* ItunesManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -393,11 +430,6 @@
 		AA9278452C8F151C00D5CF6D /* podcast-ios */ = {
 			isa = PBXGroup;
 			children = (
-				AA7C8EC72CDBDDA600122196 /* Theme.swift */,
-				AA7C8EC32CDB888D00122196 /* AudioPlayerManagerModel.swift */,
-				AA7C8EC12CDADCC300122196 /* AudioPlayerManager.swift */,
-				AA7C8EBF2CDAC6E000122196 /* CategoryDetailsView.swift */,
-				AA7C8EBD2CDAC6DB00122196 /* CategoryDetailsFeature.swift */,
 				AA42C20F2CD6899600DDF645 /* Other */,
 				AA42C20C2CD6895B00DDF645 /* RootModule.swift */,
 				AA42C20B2CD6892600DDF645 /* Views */,
