@@ -293,6 +293,20 @@ extension AudioPlayerManager {
         tearDown()
     }
 
+    func seek(to time: Double) {
+        let targetTime = CMTime(seconds: time, preferredTimescale: 600)
+        if playbackStatePublisher.value == .playing {
+            updatePlayerStatus(state: .buffering)
+            audioPlayerManager?.player.seek(to: targetTime) { [weak self] _ in
+                guard let self else { return }
+                updatePlayerStatus(state: .playing)
+                audioPlayerManager?.resume()
+            }
+        } else {
+            audioPlayerManager?.player.seek(to: targetTime)
+        }
+    }
+
     func seekForward() {
         audioPlayerManager?.seekForward()
     }

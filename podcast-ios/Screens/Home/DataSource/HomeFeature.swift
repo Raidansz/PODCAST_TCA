@@ -50,7 +50,7 @@ struct HomeFeature: Sendable {
                 return .run { send in
                     try await send(
                         .trendingPodcastResponse(
-                            self.podHubManager.getPodcastListOf(catagory: .comedy)
+                            self.podHubManager.getTrendingPodcasts()
                         )
                     )
                 }

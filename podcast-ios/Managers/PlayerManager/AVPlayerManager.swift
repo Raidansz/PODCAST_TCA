@@ -51,9 +51,4 @@ final class AVPlayerManager: NSObject, @unchecked Sendable {
         let newTime = CMTimeAdd(currentTime, CMTime(seconds: 15, preferredTimescale: 1))
         player.seek(to: newTime)
     }
-
-    func seek(to time: Double) {
-        let targetTime = CMTime(seconds: time, preferredTimescale: 600)
-        player.seek(to: targetTime)
-    }
 }

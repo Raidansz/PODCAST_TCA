@@ -157,7 +157,7 @@ extension PlayerView {
         if editingStarted {
             AudioPlayerManager.shared.playbackStatePublisher.send(.paused)
         } else {
-           // AVPlayerManager.shared.seek(to: store.runningItem.currentTime)
+            AudioPlayerManager.shared.seek(to: store.runningItem.currentTime)
         }
     }
 }
