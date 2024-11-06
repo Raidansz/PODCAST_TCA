@@ -48,10 +48,9 @@ struct PlayerFeature {
                 return .none
             case .immeditelyPlay:
                 guard let episode = state.runningItem.episode else { return .none }
-                if episode.id != AudioPlayer.shared.playableItem?.id {
+                if episode.id != AudioPlayerManager.shared.playableItem?.id {
                     return .run { @MainActor _ in
-                        AudioPlayer.shared.stop()
-                        AudioPlayer.shared.play(item: episode, action: .playNow)
+                        AudioPlayerManager.shared.play(avPlayerItem: episode)
                     }
                 }
                 return .none
@@ -67,41 +66,41 @@ extension PlayerFeature {
     private func handlePlayAction(for state: inout State) -> Effect<Action> {
         switch state.isPlaying {
         case .playing:
-            if let beingPlayedItem = AudioPlayer.shared.playableItem {
+            if let beingPlayedItem = AudioPlayerManager.shared.playableItem {
                 if beingPlayedItem.id == state.runningItem.episode?.id {
-                    return .run { @MainActor _ in
-                        AudioPlayer.shared.pause()
+                    return .run { _ in
+                        AudioPlayerManager.shared.pause()
                     }
                 } else {
-                    return .run { @MainActor [episode = state.runningItem.episode] _ in
+                    return .run {  [episode = state.runningItem.episode] _ in
                         guard let episode else { return }
-                        AudioPlayer.shared.play(item: episode, action: .playNow)
+                        AudioPlayerManager.shared.play(avPlayerItem: episode)
                     }
                 }
             }
             return .none
         case .paused:
-            if let beingPlayedItem = AudioPlayer.shared.playableItem {
+            if let beingPlayedItem = AudioPlayerManager.shared.playableItem {
                 if beingPlayedItem.id == state.runningItem.episode?.id {
                     return .run { _ in
-                        await AudioPlayer.shared.resume()
+                        AudioPlayerManager.shared.resume()
                     }
                 } else {
                     return .run { [episode = state.runningItem.episode] _ in
                         guard let episode else { return }
-                        await AudioPlayer.shared.play(item: episode, action: .playNow)
+                        AudioPlayerManager.shared.play(avPlayerItem: episode)
                     }
                 }
             } else {
                 return .run { [episode = state.runningItem.episode] _ in
                     guard let episode else { return }
-                    await AudioPlayer.shared.play(item: episode, action: .playNow)
+                    AudioPlayerManager.shared.play(avPlayerItem: episode)
                 }
             }
         case .stopped:
             return .run { [episode = state.runningItem.episode] _ in
                 guard let episode else { return }
-                await AudioPlayer.shared.play(item: episode, action: .playNow)
+                AudioPlayerManager.shared.play(avPlayerItem: episode)
             }
         default:
             return .none

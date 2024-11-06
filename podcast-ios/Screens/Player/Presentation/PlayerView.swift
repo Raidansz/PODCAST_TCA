@@ -44,14 +44,14 @@ struct PlayerView: View {
                     .padding(.horizontal, 16)
                     .onReceive(
                         Publishers.CombineLatest(
-                            AudioPlayer.shared.totalDurationObserver.publisher,
-                            AudioPlayer.shared.elapsedTimeObserver.publisher
+                            AudioPlayerManager.shared.totalItemTimeObserver,
+                            AudioPlayerManager.shared.elapsedTimeObserver
                         )) { totalDuration, elapsedTime in
                             store.send(.onCurrentTimeChange(elapsedTime))
                             store.send(.onTotalTimeChange(totalDuration))
                         }
-                        .onReceive(AudioPlayer.shared.playbackStatePublisher) { state in
-                            if let item = AudioPlayer.shared.playableItem {
+                        .onReceive(AudioPlayerManager.shared.playbackStatePublisher) { state in
+                            if let item = AudioPlayerManager.shared.playableItem {
                                 if item.id == store.runningItem.episode?.id {
                                     store.send(.updateIsPlaying(state))
                                 } else {
@@ -68,9 +68,8 @@ struct PlayerView: View {
                 }
                 .onDisappear {
                     if store.isPlaying == .paused {
-                        AudioPlayer.shared.stop()
+                        AudioPlayerManager.shared.stop()
                         store.send(.flushRunningItem)
-                        
                     }
                 }
                 .navigationTitle("Now Playing")
@@ -108,7 +107,7 @@ struct ControllButton: View {
                 }
                 Spacer()
                 Button {
-                    AudioPlayer.shared.seekBackward()
+                    AudioPlayerManager.shared.seekBackward()
                 } label: {
                     Image(systemName: "gobackward.15")
                         .resizable()
@@ -131,7 +130,7 @@ struct ControllButton: View {
                 }
                 Spacer()
                 Button {
-                    AudioPlayer.shared.seekForward()
+                    AudioPlayerManager.shared.seekForward()
                 } label: {
                     Image(systemName: "goforward.15")
                         .resizable()
@@ -156,9 +155,9 @@ struct ControllButton: View {
 extension PlayerView {
     func onEditingChanged(editingStarted: Bool) {
         if editingStarted {
-            AudioPlayer.shared.elapsedTimeObserver.pause(true)
+            AudioPlayerManager.shared.playbackStatePublisher.send(.paused)
         } else {
-            AudioPlayer.shared.seek(to: store.runningItem.currentTime, playerStatus: store.isPlaying)
+           // AVPlayerManager.shared.seek(to: store.runningItem.currentTime)
         }
     }
 }

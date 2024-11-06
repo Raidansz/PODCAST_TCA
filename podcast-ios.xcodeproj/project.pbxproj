@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		AA1F8E3C2CA8572C009FFC85 /* PodHubModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1F8E3B2CA8571F009FFC85 /* PodHubModel.swift */; };
 		AA1F8E3E2CA8573E009FFC85 /* PodHubManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1F8E3D2CA85737009FFC85 /* PodHubManager.swift */; };
-		AA3098F82CC43CCD003CF32F /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3098F42CC43CCD003CF32F /* AudioPlayer.swift */; };
 		AA3098F92CC43CCD003CF32F /* PlayerTimeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3098F62CC43CCD003CF32F /* PlayerTimeObserver.swift */; };
 		AA3098FA2CC43CCD003CF32F /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3098F72CC43CCD003CF32F /* Queue.swift */; };
 		AA3098FB2CC43CCD003CF32F /* PlayerDurationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3098F52CC43CCD003CF32F /* PlayerDurationObserver.swift */; };
@@ -30,6 +29,9 @@
 		AA7C8EBC2CDA4AB400122196 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA7C8EBB2CDA4AB400122196 /* FeedKit */; };
 		AA7C8EBE2CDAC6DD00122196 /* CategoryDetailsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EBD2CDAC6DB00122196 /* CategoryDetailsFeature.swift */; };
 		AA7C8EC02CDAC6E400122196 /* CategoryDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EBF2CDAC6E000122196 /* CategoryDetailsView.swift */; };
+		AA7C8EC22CDADCCB00122196 /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EC12CDADCC300122196 /* AudioPlayerManager.swift */; };
+		AA7C8EC42CDB889500122196 /* AudioPlayerManagerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EC32CDB888D00122196 /* AudioPlayerManagerModel.swift */; };
+		AA7C8EC62CDBB39000122196 /* AVPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EC52CDBB38800122196 /* AVPlayerManager.swift */; };
 		AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */; };
 		AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */; };
 		AA7DE4BE2C9F0D5800D51A42 /* ListViewHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */; };
@@ -60,7 +62,6 @@
 /* Begin PBXFileReference section */
 		AA1F8E3B2CA8571F009FFC85 /* PodHubModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodHubModel.swift; sourceTree = "<group>"; };
 		AA1F8E3D2CA85737009FFC85 /* PodHubManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodHubManager.swift; sourceTree = "<group>"; };
-		AA3098F42CC43CCD003CF32F /* AudioPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
 		AA3098F52CC43CCD003CF32F /* PlayerDurationObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDurationObserver.swift; sourceTree = "<group>"; };
 		AA3098F62CC43CCD003CF32F /* PlayerTimeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTimeObserver.swift; sourceTree = "<group>"; };
 		AA3098F72CC43CCD003CF32F /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
@@ -79,6 +80,9 @@
 		AA7C8EB82CDA41ED00122196 /* RSSFeedGeneratorModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSFeedGeneratorModel.swift; sourceTree = "<group>"; };
 		AA7C8EBD2CDAC6DB00122196 /* CategoryDetailsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailsFeature.swift; sourceTree = "<group>"; };
 		AA7C8EBF2CDAC6E000122196 /* CategoryDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryDetailsView.swift; sourceTree = "<group>"; };
+		AA7C8EC12CDADCC300122196 /* AudioPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
+		AA7C8EC32CDB888D00122196 /* AudioPlayerManagerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerManagerModel.swift; sourceTree = "<group>"; };
+		AA7C8EC52CDBB38800122196 /* AVPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVPlayerManager.swift; sourceTree = "<group>"; };
 		AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewCell.swift; sourceTree = "<group>"; };
 		AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewHero.swift; sourceTree = "<group>"; };
 		AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
@@ -133,7 +137,7 @@
 		AA3098F32CC43CA8003CF32F /* PlayerManager */ = {
 			isa = PBXGroup;
 			children = (
-				AA3098F42CC43CCD003CF32F /* AudioPlayer.swift */,
+				AA7C8EC52CDBB38800122196 /* AVPlayerManager.swift */,
 				AA3098F52CC43CCD003CF32F /* PlayerDurationObserver.swift */,
 				AA3098F62CC43CCD003CF32F /* PlayerTimeObserver.swift */,
 				AA3098F72CC43CCD003CF32F /* Queue.swift */,
@@ -387,6 +391,8 @@
 		AA9278452C8F151C00D5CF6D /* podcast-ios */ = {
 			isa = PBXGroup;
 			children = (
+				AA7C8EC32CDB888D00122196 /* AudioPlayerManagerModel.swift */,
+				AA7C8EC12CDADCC300122196 /* AudioPlayerManager.swift */,
 				AA7C8EBF2CDAC6E000122196 /* CategoryDetailsView.swift */,
 				AA7C8EBD2CDAC6DB00122196 /* CategoryDetailsFeature.swift */,
 				AA42C20F2CD6899600DDF645 /* Other */,
@@ -525,6 +531,7 @@
 				AA7DE4C22C9F1C9600D51A42 /* ItunesCallerConstants.swift in Sources */,
 				AAF16C662CB460750035F9D0 /* RSSFeed+Extension.swift in Sources */,
 				AA42C1FD2CD687F900DDF645 /* HomeView.swift in Sources */,
+				AA7C8EC42CDB889500122196 /* AudioPlayerManagerModel.swift in Sources */,
 				AAFED4332CC8143800A9096D /* ExploreSearchView.swift in Sources */,
 				AA42C21D2CD68A9800DDF645 /* ExploreSearchFeature.swift in Sources */,
 				AA7DE4C92C9F1DA800D51A42 /* ItunesManager.swift in Sources */,
@@ -540,9 +547,10 @@
 				AA7C8EC02CDAC6E400122196 /* CategoryDetailsView.swift in Sources */,
 				AA7DE4D22CA08D4F00D51A42 /* PodcastIndexModel.swift in Sources */,
 				AAAFD49D2CCC3B3E006E2A89 /* HapticManager.swift in Sources */,
-				AA3098F82CC43CCD003CF32F /* AudioPlayer.swift in Sources */,
 				AA3098F92CC43CCD003CF32F /* PlayerTimeObserver.swift in Sources */,
+				AA7C8EC22CDADCCB00122196 /* AudioPlayerManager.swift in Sources */,
 				AA3098FA2CC43CCD003CF32F /* Queue.swift in Sources */,
+				AA7C8EC62CDBB39000122196 /* AVPlayerManager.swift in Sources */,
 				AA3098FB2CC43CCD003CF32F /* PlayerDurationObserver.swift in Sources */,
 				AA42C1F52CD66E6D00DDF645 /* SettingsView.swift in Sources */,
 				AA42C2152CD689E200DDF645 /* PodcastDetailsFeature.swift in Sources */,

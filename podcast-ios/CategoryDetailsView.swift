@@ -11,22 +11,22 @@ import ComposableArchitecture
 struct CategoryDetailsView: View {
     @State var store: StoreOf<CategoryDetailsFeature>
     var body: some View {
-            ZStack(alignment: .top) {
-                ScrollView {
-                        LazyVStack(spacing: 24) {
-                            if let podcastList = store.podcastList?.podcasts {
-                                ForEach(podcastList, id: \.self) { podcast in
-                                    NavigationLink(state: ExploreFeature.Path.State.podcastDetails(PodcastDetailsFeature.State(podcast: podcast))) {
-                                        ListViewCell(
-                                            imageURL: podcast.image,
-                                            author: podcast.author,
-                                            title: podcast.title,
-                                            isPodcast: true,
-                                            description: podcast.publicationDate?.formatted(.dateTime)
-                                        )
-                                        .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
-                                    }
-                                }
+        ZStack(alignment: .top) {
+            ScrollView {
+                LazyVStack(spacing: 24) {
+                    if let podcastList = store.podcastList?.podcasts {
+                        ForEach(podcastList, id: \.self) { podcast in
+                            NavigationLink(state: ExploreFeature.Path.State.podcastDetails(PodcastDetailsFeature.State(podcast: podcast))) {
+                                ListViewCell(
+                                    imageURL: podcast.image,
+                                    author: podcast.author,
+                                    title: podcast.title,
+                                    isPodcast: true,
+                                    description: podcast.publicationDate?.formatted(.dateTime)
+                                )
+                                .shadow(color: .black.opacity(0.2), radius: 10, x: 5, y: 5)
+                            }
+                        }
                             }
                         }
                     .padding(.horizontal, 16)
