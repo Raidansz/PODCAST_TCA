@@ -20,7 +20,7 @@ final class AudioPlayerManager: @unchecked Sendable {
     var totalItemTimeObserver = PassthroughSubject<TimeInterval, Never>()
     var player: AVPlayer?
     var elapsedTime: Double = .zero
-    var playbackStatePublisher
+    private(set) var playbackStatePublisher
     = CurrentValueSubject<PlaybackState, Never>(.waitingForSelection)
     var cancellables: Set<AnyCancellable> = []
     var playableItem: (any PlayableItemProtocol)?
@@ -57,6 +57,12 @@ final class AudioPlayerManager: @unchecked Sendable {
         play(avPlayerItem: nextItem)
         } else {
             stop()
+        }
+    }
+
+    func updatePlayerStatus(state: PlaybackState) {
+        Task { @MainActor in
+            self.playbackStatePublisher.send(state)
         }
     }
     // MARK: - Control Panel
@@ -267,23 +273,23 @@ extension AudioPlayerManager {
         setup()
         audioPlayerManager?.play(playerItem: item)
         updateNowPlayingInfo(playableItem: playableItem)
-        playbackStatePublisher.send(.playing)
+        updatePlayerStatus(state: .playing)
     }
 
     func resume() {
         audioPlayerManager?.resume()
-        playbackStatePublisher.send(.playing)
+        updatePlayerStatus(state: .playing)
     }
 
     func pause() {
         audioPlayerManager?.pause()
-        playbackStatePublisher.send(.paused)
+        updatePlayerStatus(state: .paused)
     }
 
     func stop() {
         try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
         audioPlayerManager?.stop()
-        playbackStatePublisher.send(.stopped)
+        updatePlayerStatus(state: .stopped)
         tearDown()
     }
 
