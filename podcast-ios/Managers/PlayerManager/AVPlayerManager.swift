@@ -11,7 +11,7 @@ import MediaPlayer
 import Combine
 import Kingfisher
 
-final class AVPlayerManager: @unchecked Sendable {
+final class AVPlayerManager: NSObject, @unchecked Sendable {
     let player: AVPlayer
 
     // MARK: - Initializer

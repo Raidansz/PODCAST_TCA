@@ -11,7 +11,7 @@ import AVFoundation
 import MediaPlayer
 import Kingfisher
 
-final class AudioPlayerManager: @unchecked Sendable {
+final class AudioPlayerManager: NSObject, @unchecked Sendable {
     // MARK: - Stored Properties
     static let shared = AudioPlayerManager()
     var audioPlayerManager: AVPlayerManager?
