@@ -13,7 +13,7 @@ import Combine
 struct ExploreFeature: Sendable {
     @ObservableState
     struct State {
-        var podcastsList: PodHub?
+        var trendingPodcastsList: PodHub?
         var isLoading: Bool = false
         var searchTerm = ""
         var searchPodcastResults: PodHub?
@@ -21,6 +21,7 @@ struct ExploreFeature: Sendable {
         var catagoryList: IdentifiedArrayOf<Catagory> {
             globalCatagories
         }
+        var themeForCatagories = getRandomTheme()
         let searchID = "search"
         @Presents var destination: Destination.State?
     }
@@ -57,7 +58,7 @@ struct ExploreFeature: Sendable {
         Reduce { state, action in
             switch action {
             case .fetchPodcasts:
-                state.podcastsList = nil
+                state.trendingPodcastsList = nil
                 state.isLoading = true
                 return .run {  send in
                     try await send(
@@ -68,7 +69,7 @@ struct ExploreFeature: Sendable {
                 }
             case .fetchPodcastsResponse(let response):
                 state.isLoading = false
-                state.podcastsList = response
+                state.trendingPodcastsList = response
                 return .none
             case .searchForPodcastTapped(with: let term):
                 if term.isEmpty {
@@ -79,7 +80,7 @@ struct ExploreFeature: Sendable {
                     try await send(
                         .showSearchResults(
                             self.podHubManager.searchFor(
-                                searchFor: .podcast,
+                                searchFor: .podcasts,
                                 value: term,
                                 limit: nil,
                                 page: nil, id: nil

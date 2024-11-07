@@ -18,6 +18,7 @@ struct ExploreSearchFeature {
         @Presents var playEpisode: PlayerFeature.State?
         var episodeURL: URL?
         var searchTerm: String = ""
+        var activeTab: Tab = .all
     }
 
     enum Action: Equatable {
@@ -26,7 +27,7 @@ struct ExploreSearchFeature {
         case episodeResponse(IdentifiedArrayOf<Episode>?)
         case onDisappear
         case searchTermChanged(String)
-        case searchForPodcastTapped(with: String)
+        case searchForPodcastTapped(with: String, activeTab: Tab)
         case showSearchResults(PodHub)
     }
 
@@ -63,17 +64,18 @@ struct ExploreSearchFeature {
             case .searchTermChanged(let term):
                 state.searchTerm = term
                 return .none
-            case .searchForPodcastTapped(with: let term):
+            case .searchForPodcastTapped(with: let term, activeTab: let activeTab):
                 if term.isEmpty {
                     return .none
                 }
+                state.activeTab = activeTab
                 state.searchResult = nil
                 state.isLoading = true
                 return .run { send in
                     try await send(
                         .showSearchResults(
                             self.podHubManager.searchFor(
-                                searchFor: .podcast,
+                                searchFor: activeTab,
                                 value: term,
                                 limit: nil,
                                 page: nil,

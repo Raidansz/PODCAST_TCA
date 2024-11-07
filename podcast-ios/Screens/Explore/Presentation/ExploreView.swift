@@ -13,10 +13,11 @@ struct ExloreView: View {
     var body: some View {
         NavigationStack( path: $store.scope(state: \.path, action: \.path)) {
             ZStack(alignment: .top) {
-                ExploreViewContent(store: store)
+                ExploreListView(store: store, shouldShowSegmentView: false)
                     .blur(
                         radius: store.isLoading ? 5 : 0
                     )
+                    .navigationBarHidden(true)
 
                 if store.isLoading {
                     ProgressView("Please wait")
@@ -24,35 +25,6 @@ struct ExloreView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 32)
-                            .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
-                            .frame(width: 35, height: 35)
-                        HStack {
-                            Image(systemName: "person.fill")
-                                .resizable()
-                                .frame(width: 21, height: 21)
-                        }
-                    }
-                }
-
-                ToolbarItem(placement: .topBarLeading) {
-                    ZStack {
-                        RoundedRectangle(cornerRadius: 32)
-                            .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
-                            .frame(width: 35, height: 35)
-                        HStack {
-                            Image(systemName: "bell.fill")
-                                .resizable()
-                                .frame(width: 21, height: 21)
-                        }
-                    }
-                }
-            }
-            .navigationTitle("Explore")
-            .navigationBarTitleDisplayMode(.large)
         } destination: { store in
             switch store.case {
             case .podcastDetails(let store):
@@ -89,56 +61,198 @@ struct ExloreView: View {
     }
 }
 
+struct ExploreListView: View {
+    @Bindable var store: StoreOf<ExploreFeature>
+    @FocusState private var isSearching: Bool
+    @State private var activeTab: Tab = .all
+    @Environment(\.colorScheme) private var scheme
+    @Namespace private var animation
+    @State var shouldShowSegmentView: Bool
+    var body: some View {
+        ScrollView(.vertical) {
+            LazyVStack(spacing: 15) {
+                ExploreViewContent(store: store)
+                    .blur(
+                        radius: isSearching ? 5 : 0
+                    )
+                    .disabled(isSearching)
+            }
+            .safeAreaPadding(15)
+            .safeAreaInset(edge: .top, spacing: 0) {
+                expandableNavigationBar()
+            }
+            .animation(.snappy(duration: 0.3, extraBounce: 0), value: isSearching)
+        }
+        .scrollTargetBehavior(CustomScrollTargetBehaviour())
+        .background(.white)
+        .contentMargins(.top, 190, for: .scrollIndicators)
+    }
+
+    /// Expandable Navigation Bar
+    @ViewBuilder
+    func expandableNavigationBar(_ title: String = "Explore") -> some View {
+        GeometryReader { proxy in
+            let minY = proxy.frame(in: .scrollView(axis: .vertical)).minY
+            let scrollviewHeight = proxy.bounds(of: .scrollView(axis: .vertical))?.height ?? 0
+            let scaleProgress = minY > 0 ? 1 + (max(min(minY / scrollviewHeight, 1), 0) * 0.5) : 1
+            let progress = isSearching ? 1 : max(min(-minY / 70, 1), 0)
+
+            VStack(spacing: 10) {
+                /// Title
+                Text(title)
+                    .font(.largeTitle.bold())
+                    .scaleEffect(scaleProgress, anchor: .topLeading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom, 10)
+
+                /// Search Bar
+                HStack(spacing: 12) {
+                    Image(systemName: "magnifyingglass")
+                        .font(.title3)
+
+                    TextField("Search Podcasts or Episodes", text: $store.searchTerm.sending(\.searchTermChanged))
+                        .focused($isSearching)
+                        .onSubmit {
+                            store.send(.searchForPodcastTapped(with: store.searchTerm))
+                        }
+
+                    if isSearching {
+                        Button(action: {
+                            isSearching = false
+                        }, label: {
+                            Image(systemName: "xmark")
+                                .font(.title3)
+                        })
+                        .transition(.asymmetric(insertion: .push(from: .bottom), removal: .push(from: .top)))
+                    }
+                }
+                .foregroundStyle(Color.primary)
+                .padding(.vertical, 10)
+                .padding(.horizontal, 15 - (progress * 15))
+                .frame(height: 45)
+                .clipShape(.capsule)
+                .background {
+                    RoundedRectangle(cornerRadius: 25 - (progress * 25))
+                        .fill(.background)
+                        .shadow(color: .gray.opacity(0.25), radius: 5, x: 0, y: 5)
+                        .padding(.top, -progress * 190)
+                        .padding(.bottom, shouldShowSegmentView ? -progress * 65 : 0)
+                        .padding(.horizontal, -progress * 15)
+                }
+
+                if shouldShowSegmentView {
+                    ScrollView(.horizontal) {
+                        HStack(spacing: 12) {
+                            ForEach(Tab.allCases, id: \.rawValue) { tab in
+                                Button {
+                                    withAnimation(.snappy) {
+                                        activeTab = tab
+                                    }
+                                } label: {
+                                    Text(tab.rawValue)
+                                        .font(.callout)
+                                        .foregroundStyle(
+                                            activeTab == tab ? (scheme == .dark ? .black : .white) : Color.primary)
+                                        .padding(.vertical, 8)
+                                        .padding(.horizontal, 15)
+                                        .background {
+                                            if activeTab == tab {
+                                                Capsule()
+                                                    .fill(Color.primary)
+                                                    .matchedGeometryEffect(id: "ACTIVETAB", in: animation)
+                                            } else {
+                                                Capsule()
+                                                    .fill(.background)
+                                            }
+                                        }
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                    }
+                    .frame(height: 50)
+                }
+            }
+            .padding(.top, 25)
+            .safeAreaPadding(.horizontal, 15)
+            .offset(y: minY < 0 || isSearching ? -minY : 0)
+            .offset(y: -progress * 65)
+        }
+        .frame(height: shouldShowSegmentView ? 190 : 140)
+        .padding(.bottom, 10)
+        .padding(.bottom, isSearching ? -65 : 0)
+    }
+}
 struct ExploreViewContent: View {
     @Bindable var store: StoreOf<ExploreFeature>
     var body: some View {
         ScrollView {
-            ZStack {
-                RoundedRectangle(cornerRadius: 32)
-                    .fill(Color(red: 31/255, green: 31/255, blue: 31/255, opacity: 0.08))
-                    .frame(width: 364, height: 64)
-                HStack {
-                    Image(systemName: "magnifyingglass")
-                        .resizable()
-                        .frame(width: 24, height: 24)
-                        .foregroundColor(.black)
-                        .padding(.leading, 15)
-                    TextField(
-                        "Search the podcast here...",
-                        text: $store.searchTerm.sending(\.searchTermChanged)
-                    )
-                    .padding(.leading, 5)
-                    .onSubmit {
-                        store.send(.searchForPodcastTapped(with: store.searchTerm))
+            Section(content: {
+                if let podcasts = store.trendingPodcastsList {
+                    horizontalList(data: (podcasts.podcasts)) { podcast in
+                        ListViewHero(imageURL: podcast.image ?? URL(string: ""))
+                            .frame(width: 200, height: 200)
+                            .onTapGesture {
+                                store.send(.podcastDetailsTapped(podcast))
+                            }
                     }
+                    .scrollTargetLayout()
+                    .scrollTargetBehavior(.viewAligned)
                 }
-                .frame(width: 364, height: 64)
-                .clipShape(RoundedRectangle(cornerRadius: 32))
+            }, header: {
+                HStack {
+                    Text("Trending Podcasts")
+                        .fontWeight(.semibold)
+                    Spacer()
+                }
+                .padding(.horizontal, 16)
             }
+            )
 
             Section(content: {
-                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                LazyVGrid(
+                    columns: [GridItem(.adaptive(minimum: 100, maximum: 200)),
+                              GridItem(.adaptive(minimum: 100, maximum: 200))],
+                    spacing: 8) {
                         ForEach(store.catagoryList) { catagory in
-                            CategoryViewHero(title: catagory.title, theme: getRandomTheme())
+                            CategoryViewHero(title: catagory.title, theme: store.themeForCatagories)
+                                .frame(height: 100)
                                 .onTapGesture {
                                     store.send(.catagoryTapped(catagory))
                                 }
                         }
                     }
+                    .padding(.horizontal, 16)
             }, header: {
                 HStack {
                     Text("Catagories")
                         .fontWeight(.semibold)
+                    Spacer()
                 }
-
+                .padding(.horizontal, 16)
             })
-            .padding(.horizontal, 16)
         }
     }
 }
-
+struct CustomScrollTargetBehaviour: ScrollTargetBehavior {
+    func updateTarget(_ target: inout ScrollTarget, context: TargetContext) {
+        if target.rect.minY < 70 {
+            if target.rect.minY < 35 {
+                target.rect.origin = .zero
+            } else {
+                target.rect.origin = .init(x: 0, y: 70)
+            }
+        }
+    }
+}
 struct ErrorMessage {
     let text: String
     let color: Color
     let id: String
+}
+
+enum Tab: String, CaseIterable {
+    case all = "All"
+    case podcasts = "Podcasts"
+    case episodes = "Episodes"
 }

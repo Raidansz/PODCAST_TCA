@@ -73,7 +73,7 @@ final class PodHubManager: PodHubManagerProtocol {
     }
 
     func searchFor(
-        searchFor mediaType: Entity,
+        searchFor mediaType: Tab,
         value: String,
         limit: Int? = nil,
         page: Int? = nil,
@@ -85,15 +85,23 @@ final class PodHubManager: PodHubManagerProtocol {
             PODLogInfo("Fetched search result from cache")
             return cachedResult
         }
-
+        var entity: Entity = .podcast
+        switch mediaType {
+        case .podcasts:
+            entity = .podcast
+        case .episodes:
+            entity = .podcastEpisode
+        case .all:
+            entity = .podcastAndEpisode
+        }
         var finalResult: PodHub
-        let result = try await lookupItunes(searchFor: mediaType, value: value, limit: limit, page: page)
+        let result = try await lookupItunes(searchFor: entity, value: value, limit: limit, page: page)
         PODLogInfo(value)
         if result.results.isEmpty {
-            let indexResult = try await lookupPodcastIndex(searchFor: mediaType, value: value)
-            finalResult = try normalizeResult(result: indexResult, mediaType: mediaType, totalCount: indexResult.count)
+            let indexResult = try await lookupPodcastIndex(searchFor: entity, value: value)
+            finalResult = try normalizeResult(result: indexResult, mediaType: entity, totalCount: indexResult.count)
         } else {
-            finalResult = try normalizeResult(result: result, mediaType: mediaType, totalCount: result.resultCount)
+            finalResult = try normalizeResult(result: result, mediaType: entity, totalCount: result.resultCount)
         }
 
         searchResultsStorage?.async.setObject(finalResult, forKey: cacheKey) { result in
@@ -193,7 +201,7 @@ extension InjectedValues {
 }
 
 protocol PodHubManagerProtocol {
-    func searchFor(searchFor: Entity, value: String, limit: Int?, page: Int?, id: UUID?) async throws -> PodHub
+    func searchFor(searchFor: Tab, value: String, limit: Int?, page: Int?, id: UUID?) async throws -> PodHub
     func getTrendingPodcasts() async throws -> PodHub
     func getPodcastListOf(catagory: PodcastGenre) async throws -> PodHub
 }
