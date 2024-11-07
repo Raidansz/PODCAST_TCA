@@ -49,6 +49,7 @@ final class AudioPlayerManager: NSObject, @unchecked Sendable {
         player = nil
         resourceLoaderDelegate = nil
         cachedArtwork = nil
+        timeObserver = nil
         try? AVAudioSession.sharedInstance().setActive(false)
         URLCache.shared.removeAllCachedResponses()
         NotificationCenter.default.removeObserver(self)
@@ -156,10 +157,10 @@ extension AudioPlayerManager {
 
     func setupTotalItemTimeObserver(player: AVPlayer) {
         let durationKeyPath: KeyPath<AVPlayer, CMTime?> = \.currentItem?.duration
-        player.publisher(for: durationKeyPath).sink { duration in
+        player.publisher(for: durationKeyPath).sink { [weak self] duration in
             guard let duration = duration else { return }
             guard duration.isNumeric else { return }
-            self.totalItemTimeObserver.send(duration.seconds)
+            self?.totalItemTimeObserver.send(duration.seconds)
         }
         .store(in: &cancellables)
     }
