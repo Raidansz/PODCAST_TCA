@@ -20,6 +20,7 @@ final class AudioPlayerManager: NSObject, @unchecked Sendable {
     var timeObserver: Any?
     var totalItemTimeObserver = PassthroughSubject<TimeInterval, Never>()
     var player: AVPlayer?
+    var cachedArtwork: MPMediaItemArtwork?
     @Published var elapsedTime: Double = .zero
     var playbackStatePublisher
     = CurrentValueSubject<PlaybackState, Never>(.waitingForSelection)
@@ -47,6 +48,7 @@ final class AudioPlayerManager: NSObject, @unchecked Sendable {
         player?.replaceCurrentItem(with: nil)
         player = nil
         resourceLoaderDelegate = nil
+        cachedArtwork = nil
         try? AVAudioSession.sharedInstance().setActive(false)
         URLCache.shared.removeAllCachedResponses()
         NotificationCenter.default.removeObserver(self)
@@ -147,6 +149,7 @@ extension AudioPlayerManager {
             guard let self = self else { return }
             if shouldObserveElapsedTime {
                 self.elapsedTimeObserver.send(time.seconds)
+                self.updateNowPlayingInfo(playableItem: self.playableItem)
             }
         }
     }
@@ -184,6 +187,7 @@ extension AudioPlayerManager {
             guard let self else { return }
             if playbackStatePublisher.value == .playing {
                 self.elapsedTime = time
+                self.updateNowPlayingInfo(playableItem: self.playableItem)
             }
         }
         .store(in: &cancellables)
@@ -202,22 +206,25 @@ extension AudioPlayerManager {
 extension AudioPlayerManager {
     func updateNowPlayingInfo(playableItem: (any PlayableItemProtocol)?) {
         guard let playableItem else { return }
-
+        
         var nowPlayingInfo = [String: Any]()
-
+        
         nowPlayingInfo[MPMediaItemPropertyTitle] = playableItem.title
         nowPlayingInfo[MPMediaItemPropertyArtist] = playableItem.author
-        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player?.rate
+        nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player?.rate ?? 0.0
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elapsedTime
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = player?.currentItem?.duration.seconds
-
-        if let imageURL = playableItem.imageUrl {
+        
+        if let cachedArtwork = self.cachedArtwork {
+            nowPlayingInfo[MPMediaItemPropertyArtwork] = cachedArtwork
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
+        } else if let imageURL = playableItem.imageUrl {
             Task {
                 let result = try? await KingfisherManager.shared.retrieveImage(with: imageURL)
                 if let cachedImage = result?.image {
                     let artwork = MPMediaItemArtwork(boundsSize: cachedImage.size) { _ in cachedImage }
+                    self.cachedArtwork = artwork
                     nowPlayingInfo[MPMediaItemPropertyArtwork] = artwork
-                    try await KingfisherManager.shared.cache.removeImage(forKey: imageURL.absoluteString)
                 }
                 MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
             }
@@ -254,15 +261,38 @@ extension AudioPlayerManager {
             return .success
         }
 
-        commandCenter.nextTrackCommand.addTarget { [weak self] _ in
+        commandCenter.skipBackwardCommand.preferredIntervals = [15]
+        commandCenter.skipBackwardCommand.addTarget { [weak self] _ in
+            self?.seekBackward()
+            return .success
+        }
+
+        commandCenter.skipForwardCommand.preferredIntervals = [15]
+        commandCenter.skipForwardCommand.addTarget { [weak self] _ in
             self?.seekForward()
             return .success
         }
 
-        commandCenter.previousTrackCommand.addTarget { [weak self] _ in
-            self?.seekBackward()
-            return .success
+        commandCenter.changePlaybackPositionCommand.addTarget { [weak self] event in
+            guard let self = self, let player = self.player else { return .commandFailed }
+            if let positionEvent = event as? MPChangePlaybackPositionCommandEvent {
+                let newTime = CMTime(seconds: positionEvent.positionTime, preferredTimescale: 600)
+                player.seek(to: newTime)
+                self.updateNowPlayingInfo(playableItem: self.playableItem)
+                return .success
+            }
+            return .commandFailed
         }
+
+//        commandCenter.nextTrackCommand.addTarget { [weak self] _ in
+//            self?.seekForward()
+//            return .success
+//        }
+//
+//        commandCenter.previousTrackCommand.addTarget { [weak self] _ in
+//            self?.seekBackward()
+//            return .success
+//        }
     }
 }
 
