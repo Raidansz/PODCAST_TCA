@@ -63,7 +63,7 @@ struct ExploreFeature: Sendable {
                 return .run {  send in
                     try await send(
                         .fetchPodcastsResponse(
-                            self.podHubManager.getLocalTrendingPodcasts()
+                            self.podHubManager.getTrendingPodcasts()
                         )
                     )
                 }

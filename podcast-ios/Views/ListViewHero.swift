@@ -46,23 +46,23 @@ struct ListViewHero: View {
 
 struct CategoryViewHero: View {
     let title: String
-    let theme: Theme
-
+    let theme: Color
+    @Environment(\.colorScheme) private var scheme
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .fill(theme.mainColor)
+                .fill(theme)
                 .cornerRadius(20)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)
-                        .stroke(theme.mainColor.opacity(0.5), lineWidth: 2)
+                        .stroke(theme.opacity(0.2), lineWidth: 2)
                 )
 
             Text(title)
                 .font(.headline)
-                .foregroundColor(theme.accentColor)
+                .foregroundColor(scheme == .dark ? .white : .black)
                 .bold()
                 .multilineTextAlignment(.center)
         }

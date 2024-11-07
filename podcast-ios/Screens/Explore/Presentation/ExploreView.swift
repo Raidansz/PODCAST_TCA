@@ -133,7 +133,7 @@ struct ExploreListView: View {
                 .clipShape(.capsule)
                 .background {
                     RoundedRectangle(cornerRadius: 25 - (progress * 25))
-                        .fill(.background)
+                        .fill((scheme == .dark ? Color.customGray : .gray.opacity(0.15)))
                         .shadow(color: .gray.opacity(0.25), radius: 5, x: 0, y: 5)
                         .padding(.top, -progress * 190)
                         .padding(.bottom, shouldShowSegmentView ? -progress * 65 : 0)
@@ -185,7 +185,7 @@ struct ExploreListView: View {
 }
 struct ExploreViewContent: View {
     @Bindable var store: StoreOf<ExploreFeature>
-
+    @Environment(\.colorScheme) private var scheme
     var body: some View {
         ScrollView {
             Section(content: {
@@ -221,7 +221,7 @@ struct ExploreViewContent: View {
                         spacing: 8
                     ) {
                         ForEach(store.catagoryList) { catagory in
-                            CategoryViewHero(title: catagory.title, theme: store.themeForCatagories)
+                            CategoryViewHero(title: catagory.title, theme: (scheme == .dark ? Color.customGray : .gray.opacity(0.15)))
                                 .frame(width: 200, height: 100)
                                 .onTapGesture {
                                     store.send(.catagoryTapped(catagory))
@@ -264,4 +264,9 @@ enum Tab: String, CaseIterable {
     case all = "All"
     case podcasts = "Podcasts"
     case episodes = "Episodes"
+}
+
+
+extension Color {
+    static let customGray = Color(red: 49 / 255, green: 49 / 255, blue: 49 / 255)
 }

@@ -111,7 +111,7 @@ struct ExploreSearchListView: View {
                 .clipShape(.capsule)
                 .background {
                     RoundedRectangle(cornerRadius: 25 - (progress * 25))
-                        .fill(.background)
+                        .fill((scheme == .dark ? Color.customGray : .gray.opacity(0.15)))
                         .shadow(color: .gray.opacity(0.25), radius: 5, x: 0, y: 5)
                         .padding(.top, -progress * 190)
                         .padding(.bottom, shouldShowSegmentView ? -progress * 65 : 0)
