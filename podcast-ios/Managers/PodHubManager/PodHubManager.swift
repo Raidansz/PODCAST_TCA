@@ -14,8 +14,10 @@ final class PodHubManager: PodHubManagerProtocol {
     @Injected(\.podcastIndexManager) private var podcastIndexManager: PodcastIndexManagerProtocol
     @Injected(\.rssFeedGeneratorManager) private var rSSFeedGeneratorManager: RSSFeedGeneratorManagerProtocol
     private let trendingPodcastsCacheKey = "trending_podcasts"
+    private let localTrendingPodcastsCacheKey = "local_trending_podcasts"
     private let searchResultsCacheKeyPrefix = "search_results_"
     private let catagoryResultsCacheKeyPrefix = "catagory_results_"
+    private let locationCountryDetector = LocationCountryDetector()
 
     private let diskConfig = DiskConfig(
         name: "PodHubCache",
@@ -54,16 +56,46 @@ final class PodHubManager: PodHubManagerProtocol {
     }
 
     func getTrendingPodcasts() async throws -> PodHub {
+
         if let cachedPodcasts = try? await trendingPodcastsStorage?.async.object(forKey: trendingPodcastsCacheKey) {
             PODLogInfo("Fetched trending podcasts from cache")
             return cachedPodcasts
         }
-
+        // TODO: implement langague option
         let fetchedIds = try await rSSFeedGeneratorManager.getTopChartedPodcast(limit: 50, country: .unitedStates)
         let result = try await itunesManager.lookupPodcasts(ids: fetchedIds)
         let normalizedResult = try normalizeResult(result: result, mediaType: .podcast, totalCount: result.resultCount)
 
         trendingPodcastsStorage?.async.setObject(normalizedResult, forKey: trendingPodcastsCacheKey) { result in
+            if case .failure(let error) = result {
+                PODLogError("Failed to cache trending podcasts: \(error)")
+            }
+        }
+
+        return normalizedResult
+    }
+
+    func getLocalTrendingPodcasts() async throws -> PodHub {
+        let safeCountryCode: Country
+        if let countryCode = UserDefaults.standard.string(forKey: "DetectedCountry"),
+           let country = Country(rawValue: countryCode) {
+            safeCountryCode = country
+        } else {
+            safeCountryCode = .unitedStates
+        }
+
+        let cacheKey = "\(localTrendingPodcastsCacheKey)_\(safeCountryCode)_"
+
+        if let cachedPodcasts = try? await trendingPodcastsStorage?.async.object(forKey: cacheKey) {
+            PODLogInfo("Fetched trending podcasts from cache")
+            return cachedPodcasts
+        }
+        // TODO: implement langague option
+        let fetchedIds = try await rSSFeedGeneratorManager.getTopChartedPodcast(limit: 50, country: safeCountryCode)
+        let result = try await itunesManager.lookupPodcasts(ids: fetchedIds)
+        let normalizedResult = try normalizeResult(result: result, mediaType: .podcast, totalCount: result.resultCount)
+
+        trendingPodcastsStorage?.async.setObject(normalizedResult, forKey: cacheKey) { result in
             if case .failure(let error) = result {
                 PODLogError("Failed to cache trending podcasts: \(error)")
             }
@@ -202,6 +234,7 @@ extension InjectedValues {
 
 protocol PodHubManagerProtocol {
     func searchFor(searchFor: Tab, value: String, limit: Int?, page: Int?, id: UUID?) async throws -> PodHub
+    func getLocalTrendingPodcasts() async throws -> PodHub
     func getTrendingPodcasts() async throws -> PodHub
     func getPodcastListOf(catagory: PodcastGenre) async throws -> PodHub
 }

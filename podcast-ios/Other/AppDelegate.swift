@@ -9,6 +9,7 @@ import UIKit
 import Kingfisher
 
 class AppDelegate: NSObject, UIApplicationDelegate {
+    private let locationCountryDetector = LocationCountryDetector()
 
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
@@ -22,6 +23,16 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         // Constrain Disk Cache to 200 MB
         cache.diskStorage.config.sizeLimit = 1024 * 1024 * 30
         PODLogInfo("Disk image cache was set to 30mbs")
+
+        locationCountryDetector.detectCountry { country in
+            if let country = country {
+                print("Detected country: \(country)")
+                UserDefaults.standard.set(country.rawValue, forKey: "DetectedCountry")
+            } else {
+                print("Could not detect the country.")
+            }
+        }
+
         return true
     }
 

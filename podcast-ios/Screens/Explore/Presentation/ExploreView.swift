@@ -84,7 +84,7 @@ struct ExploreListView: View {
             .animation(.snappy(duration: 0.3, extraBounce: 0), value: isSearching)
         }
         .scrollTargetBehavior(CustomScrollTargetBehaviour())
-        .background(.white)
+        .background(.background)
         .contentMargins(.top, 190, for: .scrollIndicators)
     }
 
@@ -185,19 +185,23 @@ struct ExploreListView: View {
 }
 struct ExploreViewContent: View {
     @Bindable var store: StoreOf<ExploreFeature>
+
     var body: some View {
         ScrollView {
             Section(content: {
                 if let podcasts = store.sharedStateManager.podcasts {
-                    horizontalList(data: (podcasts)) { podcast in
-                        ListViewHero(imageURL: podcast.image ?? URL(string: ""))
-                            .frame(width: 200, height: 200)
-                            .onTapGesture {
-                                store.send(.podcastDetailsTapped(podcast))
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16) {
+                            ForEach(podcasts) { podcast in
+                                ListViewHero(imageURL: podcast.image ?? URL(string: ""))
+                                    .frame(width: 300, height: 300)
+                                    .onTapGesture {
+                                        store.send(.podcastDetailsTapped(podcast))
+                                    }
                             }
+                        }
+                        .padding(.horizontal, 16)
                     }
-                    .scrollTargetLayout()
-                    .scrollTargetBehavior(.viewAligned)
                 }
             }, header: {
                 HStack {
@@ -206,26 +210,29 @@ struct ExploreViewContent: View {
                     Spacer()
                 }
                 .padding(.horizontal, 16)
-            }
-            )
+            })
 
             Section(content: {
-                LazyVGrid(
-                    columns: [GridItem(.adaptive(minimum: 100, maximum: 200)),
-                              GridItem(.adaptive(minimum: 100, maximum: 200))],
-                    spacing: 8) {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    LazyHGrid(
+                        rows: [GridItem(.adaptive(minimum: 100, maximum: 200)),
+                               GridItem(.adaptive(minimum: 100, maximum: 200)),
+                               GridItem(.adaptive(minimum: 100, maximum: 200))],
+                        spacing: 8
+                    ) {
                         ForEach(store.catagoryList) { catagory in
                             CategoryViewHero(title: catagory.title, theme: store.themeForCatagories)
-                                .frame(height: 100)
+                                .frame(width: 200, height: 100)
                                 .onTapGesture {
                                     store.send(.catagoryTapped(catagory))
                                 }
                         }
                     }
                     .padding(.horizontal, 16)
+                }
             }, header: {
                 HStack {
-                    Text("Catagories")
+                    Text("Categories")
                         .fontWeight(.semibold)
                     Spacer()
                 }

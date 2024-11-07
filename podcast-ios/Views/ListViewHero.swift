@@ -53,7 +53,7 @@ struct CategoryViewHero: View {
             RoundedRectangle(cornerRadius: 20)
                 .fill(theme.mainColor)
                 .cornerRadius(20)
-                .frame(maxWidth: .infinity,maxHeight: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
                 .overlay(
                     RoundedRectangle(cornerRadius: 20)

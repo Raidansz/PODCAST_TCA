@@ -226,6 +226,10 @@ enum Country: String {
     case yemen = "YE"
     case zambia = "ZM"
     case zimbabwe = "ZW"
+
+    static func fromCountryCode(_ code: String) -> Country? {
+        return Country(rawValue: code.uppercased())
+    }
 }
 
 enum Language: String {
@@ -316,4 +320,13 @@ enum Language: String {
     case yiddish = "yi"
     case yoruba = "yo"
     case zulu = "zu"
+}
+
+extension Language {
+    static var current: Language? {
+        if let languageCode = Locale.current.languageCode {
+            return Language(rawValue: languageCode)
+        }
+        return nil
+    }
 }

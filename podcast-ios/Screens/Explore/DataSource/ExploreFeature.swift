@@ -13,7 +13,6 @@ import Combine
 struct ExploreFeature: Sendable {
     @ObservableState
     struct State {
-//        var trendingPodcastsList: PodHub?
         var isLoading: Bool = false
         var searchTerm = ""
         var searchPodcastResults: PodHub?
@@ -64,7 +63,7 @@ struct ExploreFeature: Sendable {
                 return .run {  send in
                     try await send(
                         .fetchPodcastsResponse(
-                            self.podHubManager.getTrendingPodcasts()
+                            self.podHubManager.getLocalTrendingPodcasts()
                         )
                     )
                 }

@@ -62,7 +62,7 @@ struct ExploreSearchListView: View {
             .animation(.snappy(duration: 0.3, extraBounce: 0), value: isSearching)
         }
         .scrollTargetBehavior(CustomScrollTargetBehaviour())
-        .background(.white)
+        .background(.background)
         .contentMargins(.top, 190, for: .scrollIndicators)
     }
 

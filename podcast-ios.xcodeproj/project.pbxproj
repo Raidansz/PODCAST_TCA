@@ -43,6 +43,7 @@
 		AA7DE4D22CA08D4F00D51A42 /* PodcastIndexModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4D12CA08D4C00D51A42 /* PodcastIndexModel.swift */; };
 		AA7DE4D42CA08D8D00D51A42 /* PodcastIndexManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4D32CA08D8900D51A42 /* PodcastIndexManager.swift */; };
 		AA7DE4DA2CA090A400D51A42 /* PodcastIndexKey.pl in Resources */ = {isa = PBXBuildFile; fileRef = AA7DE4D92CA090A400D51A42 /* PodcastIndexKey.pl */; };
+		AA8EAD5D2CDD318500224E32 /* CoreLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8EAD5C2CDD317F00224E32 /* CoreLocationManager.swift */; };
 		AA92784B2C8F151D00D5CF6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784A2C8F151D00D5CF6D /* Assets.xcassets */; };
 		AA92784E2C8F151D00D5CF6D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784D2C8F151D00D5CF6D /* Preview Assets.xcassets */; };
 		AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = AA9278552C8F155C00D5CF6D /* ComposableArchitecture */; };
@@ -92,6 +93,7 @@
 		AA7DE4D12CA08D4C00D51A42 /* PodcastIndexModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastIndexModel.swift; sourceTree = "<group>"; };
 		AA7DE4D32CA08D8900D51A42 /* PodcastIndexManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodcastIndexManager.swift; sourceTree = "<group>"; };
 		AA7DE4D92CA090A400D51A42 /* PodcastIndexKey.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = PodcastIndexKey.pl; sourceTree = "<group>"; };
+		AA8EAD5C2CDD317F00224E32 /* CoreLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreLocationManager.swift; sourceTree = "<group>"; };
 		AA9278432C8F151C00D5CF6D /* podcast-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "podcast-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA92784A2C8F151D00D5CF6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA92784D2C8F151D00D5CF6D /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -220,6 +222,7 @@
 		AA42C2042CD6888B00DDF645 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
+				AA8EAD5C2CDD317F00224E32 /* CoreLocationManager.swift */,
 				AA7C8ECC2CDBDF3100122196 /* SharedStateManager */,
 				AA7C8ECB2CDBDF1F00122196 /* CoreHapticManager */,
 				AA7C8ECA2CDBDF0800122196 /* RSSFeedManager */,
@@ -572,6 +575,7 @@
 				AA7DE4CD2C9F725200D51A42 /* PlayerView.swift in Sources */,
 				AA42C1982CD55C7E00DDF645 /* SharedStateFeature.swift in Sources */,
 				AA42C2202CD68AEF00DDF645 /* ExploreFeature.swift in Sources */,
+				AA8EAD5D2CDD318500224E32 /* CoreLocationManager.swift in Sources */,
 				AA42C20D2CD6895C00DDF645 /* RootModule.swift in Sources */,
 				AA7C8EC02CDAC6E400122196 /* CategoryDetailsView.swift in Sources */,
 				AA7DE4D22CA08D4F00D51A42 /* PodcastIndexModel.swift in Sources */,
@@ -732,6 +736,8 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "podcast-ios/Info.plist";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to improve your experience.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to improve your experience.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -768,6 +774,8 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "podcast-ios/Info.plist";
+				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "We need your location to improve your experience.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We need your location to improve your experience.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

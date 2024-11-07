@@ -52,19 +52,22 @@ struct HomeViewContent: View {
         ScrollView {
             Section(content: {
                 if let podcasts = store.sharedStateManager.podcasts {
-                    horizontalList(data: (podcasts.prefix(store.limit))) { podcast in
-                        ListViewHero(imageURL: podcast.image ?? URL(string: ""))
-                            .frame(width: 350, height: 350)
-                            .onTapGesture {
-                                store.send(.podcastDetailsTapped(podcast))
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16) {
+                            ForEach(podcasts) { podcast in
+                                ListViewHero(imageURL: podcast.image ?? URL(string: ""))
+                                    .frame(width: 350, height: 350)
+                                    .onTapGesture {
+                                        store.send(.podcastDetailsTapped(podcast))
+                                    }
                             }
+                        }
+                        .padding(.horizontal, 16)
                     }
-                    .scrollTargetLayout()
-                    .scrollTargetBehavior(.viewAligned)
                 }
             }, header: {
                 HStack {
-                    Text("Trending Podcasts")
+                    Text("Trending in your area")
                         .fontWeight(.semibold)
                     Spacer()
                 }
