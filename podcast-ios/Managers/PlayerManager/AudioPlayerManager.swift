@@ -16,11 +16,12 @@ final class AudioPlayerManager: NSObject, @unchecked Sendable {
     static let shared = AudioPlayerManager()
     var audioPlayerManager: AVPlayerManager?
     var elapsedTimeObserver = PassthroughSubject<TimeInterval, Never>()
+    var shouldObserveElapsedTime: Bool = true
     var timeObserver: Any?
     var totalItemTimeObserver = PassthroughSubject<TimeInterval, Never>()
     var player: AVPlayer?
-    var elapsedTime: Double = .zero
-    private(set) var playbackStatePublisher
+    @Published var elapsedTime: Double = .zero
+    var playbackStatePublisher
     = CurrentValueSubject<PlaybackState, Never>(.waitingForSelection)
     var cancellables: Set<AnyCancellable> = []
     var playableItem: (any PlayableItemProtocol)?
@@ -144,8 +145,9 @@ extension AudioPlayerManager {
             queue: nil
         ) { [weak self] time in
             guard let self = self else { return }
-            if self.playbackStatePublisher.value == .paused { return }
-            self.elapsedTimeObserver.send(time.seconds)
+            if shouldObserveElapsedTime {
+                self.elapsedTimeObserver.send(time.seconds)
+            }
         }
     }
 
@@ -296,11 +298,12 @@ extension AudioPlayerManager {
     func seek(to time: Double) {
         let targetTime = CMTime(seconds: time, preferredTimescale: 600)
         if playbackStatePublisher.value == .playing {
-            updatePlayerStatus(state: .buffering)
+            shouldObserveElapsedTime = false
+            self.playbackStatePublisher.send(.buffering)
             audioPlayerManager?.player.seek(to: targetTime) { [weak self] _ in
                 guard let self else { return }
                 updatePlayerStatus(state: .playing)
-                audioPlayerManager?.resume()
+                shouldObserveElapsedTime = true
             }
         } else {
             audioPlayerManager?.player.seek(to: targetTime)

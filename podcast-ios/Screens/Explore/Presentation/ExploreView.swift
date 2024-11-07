@@ -10,18 +10,10 @@ import ComposableArchitecture
 
 struct ExloreView: View {
     @Bindable var store: StoreOf<ExploreFeature>
-    @Environment(ToastsData.self)  var toastsData
     var body: some View {
         NavigationStack( path: $store.scope(state: \.path, action: \.path)) {
             ZStack(alignment: .top) {
                 ExploreViewContent(store: store)
-                    .onReceive(store.didRunIntoException) {[store] value in
-                        if value == true {
-                            self.toastsData.add(.init { id in
-                                presentAlert(store.error)
-                            })
-                        }
-                    }
                     .blur(
                         radius: store.isLoading ? 5 : 0
                     )

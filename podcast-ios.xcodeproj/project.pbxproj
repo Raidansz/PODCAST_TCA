@@ -9,9 +9,7 @@
 /* Begin PBXBuildFile section */
 		AA1F8E3C2CA8572C009FFC85 /* PodHubModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1F8E3B2CA8571F009FFC85 /* PodHubModel.swift */; };
 		AA1F8E3E2CA8573E009FFC85 /* PodHubManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA1F8E3D2CA85737009FFC85 /* PodHubManager.swift */; };
-		AA3098F92CC43CCD003CF32F /* PlayerTimeObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3098F62CC43CCD003CF32F /* PlayerTimeObserver.swift */; };
 		AA3098FA2CC43CCD003CF32F /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3098F72CC43CCD003CF32F /* Queue.swift */; };
-		AA3098FB2CC43CCD003CF32F /* PlayerDurationObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA3098F52CC43CCD003CF32F /* PlayerDurationObserver.swift */; };
 		AA42C1982CD55C7E00DDF645 /* SharedStateFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42C1972CD55C7400DDF645 /* SharedStateFeature.swift */; };
 		AA42C1F52CD66E6D00DDF645 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA42C1F42CD66E6700DDF645 /* SettingsView.swift */; };
 		AA42C1F72CD67F9C00DDF645 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AA42C1F62CD67F9C00DDF645 /* Settings.bundle */; };
@@ -33,8 +31,6 @@
 		AA7C8EC42CDB889500122196 /* AudioPlayerManagerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EC32CDB888D00122196 /* AudioPlayerManagerModel.swift */; };
 		AA7C8EC62CDBB39000122196 /* AVPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EC52CDBB38800122196 /* AVPlayerManager.swift */; };
 		AA7C8EC82CDBDDAA00122196 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EC72CDBDDA600122196 /* Theme.swift */; };
-		AA7C8EDB2CDBF5DB00122196 /* Banner.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EDA2CDBF5D900122196 /* Banner.swift */; };
-		AA7C8EE42CDBF69E00122196 /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7C8EE32CDBF69800122196 /* BannerView.swift */; };
 		AA7DE4BC2C9F0D5800D51A42 /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */; };
 		AA7DE4BD2C9F0D5800D51A42 /* ListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */; };
 		AA7DE4BE2C9F0D5800D51A42 /* ListViewHero.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */; };
@@ -65,8 +61,6 @@
 /* Begin PBXFileReference section */
 		AA1F8E3B2CA8571F009FFC85 /* PodHubModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodHubModel.swift; sourceTree = "<group>"; };
 		AA1F8E3D2CA85737009FFC85 /* PodHubManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PodHubManager.swift; sourceTree = "<group>"; };
-		AA3098F52CC43CCD003CF32F /* PlayerDurationObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerDurationObserver.swift; sourceTree = "<group>"; };
-		AA3098F62CC43CCD003CF32F /* PlayerTimeObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerTimeObserver.swift; sourceTree = "<group>"; };
 		AA3098F72CC43CCD003CF32F /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		AA42C1972CD55C7400DDF645 /* SharedStateFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedStateFeature.swift; sourceTree = "<group>"; };
 		AA42C1F42CD66E6700DDF645 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -87,8 +81,6 @@
 		AA7C8EC32CDB888D00122196 /* AudioPlayerManagerModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerManagerModel.swift; sourceTree = "<group>"; };
 		AA7C8EC52CDBB38800122196 /* AVPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVPlayerManager.swift; sourceTree = "<group>"; };
 		AA7C8EC72CDBDDA600122196 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		AA7C8EDA2CDBF5D900122196 /* Banner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Banner.swift; sourceTree = "<group>"; };
-		AA7C8EE32CDBF69800122196 /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
 		AA7DE4B82C9F0D5800D51A42 /* ListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewCell.swift; sourceTree = "<group>"; };
 		AA7DE4B92C9F0D5800D51A42 /* ListViewHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewHero.swift; sourceTree = "<group>"; };
 		AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
@@ -145,8 +137,6 @@
 			children = (
 				AA7C8EC32CDB888D00122196 /* AudioPlayerManagerModel.swift */,
 				AA7C8EC52CDBB38800122196 /* AVPlayerManager.swift */,
-				AA3098F52CC43CCD003CF32F /* PlayerDurationObserver.swift */,
-				AA3098F62CC43CCD003CF32F /* PlayerTimeObserver.swift */,
 				AA3098F72CC43CCD003CF32F /* Queue.swift */,
 				AA7C8EC12CDADCC300122196 /* AudioPlayerManager.swift */,
 			);
@@ -395,23 +385,6 @@
 			path = SharedStateManager;
 			sourceTree = "<group>";
 		};
-		AA7C8EE12CDBF66B00122196 /* Banner */ = {
-			isa = PBXGroup;
-			children = (
-				AA7C8EE32CDBF69800122196 /* BannerView.swift */,
-				AA7C8EE22CDBF67300122196 /* Helpers */,
-			);
-			path = Banner;
-			sourceTree = "<group>";
-		};
-		AA7C8EE22CDBF67300122196 /* Helpers */ = {
-			isa = PBXGroup;
-			children = (
-				AA7C8EDA2CDBF5D900122196 /* Banner.swift */,
-			);
-			path = Helpers;
-			sourceTree = "<group>";
-		};
 		AA7DE4C02C9F1C6600D51A42 /* ItunesManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -451,7 +424,6 @@
 		AA9278452C8F151C00D5CF6D /* podcast-ios */ = {
 			isa = PBXGroup;
 			children = (
-				AA7C8EE12CDBF66B00122196 /* Banner */,
 				AA42C20F2CD6899600DDF645 /* Other */,
 				AA42C20C2CD6895B00DDF645 /* RootModule.swift */,
 				AA42C20B2CD6892600DDF645 /* Views */,
@@ -594,8 +566,6 @@
 				AA7DE4C92C9F1DA800D51A42 /* ItunesManager.swift in Sources */,
 				AA1F8E3C2CA8572C009FFC85 /* PodHubModel.swift in Sources */,
 				AA42C2172CD68A1B00DDF645 /* PlayerFeature.swift in Sources */,
-				AA7C8EE42CDBF69E00122196 /* BannerView.swift in Sources */,
-				AA7C8EDB2CDBF5DB00122196 /* Banner.swift in Sources */,
 				AAAFD5302CD308BB006E2A89 /* String+Extension.swift in Sources */,
 				AAAFD52E2CD2E505006E2A89 /* RSSFeedGeneratorManager.swift in Sources */,
 				AAF16C692CBAB2840035F9D0 /* ShowMorePodcastView.swift in Sources */,
@@ -606,11 +576,9 @@
 				AA7C8EC02CDAC6E400122196 /* CategoryDetailsView.swift in Sources */,
 				AA7DE4D22CA08D4F00D51A42 /* PodcastIndexModel.swift in Sources */,
 				AAAFD49D2CCC3B3E006E2A89 /* HapticManager.swift in Sources */,
-				AA3098F92CC43CCD003CF32F /* PlayerTimeObserver.swift in Sources */,
 				AA7C8EC22CDADCCB00122196 /* AudioPlayerManager.swift in Sources */,
 				AA3098FA2CC43CCD003CF32F /* Queue.swift in Sources */,
 				AA7C8EC62CDBB39000122196 /* AVPlayerManager.swift in Sources */,
-				AA3098FB2CC43CCD003CF32F /* PlayerDurationObserver.swift in Sources */,
 				AA42C1F52CD66E6D00DDF645 /* SettingsView.swift in Sources */,
 				AA42C2152CD689E200DDF645 /* PodcastDetailsFeature.swift in Sources */,
 				AA7DE4C42C9F1D0D00D51A42 /* ItunesModels.swift in Sources */,
