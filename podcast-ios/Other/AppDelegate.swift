@@ -30,7 +30,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
 
     func applicationDidReceiveMemoryWarning(_ application: UIApplication) {
-        KingfisherManager.shared.cache.clearCache()
+        clearAllAppCache()
         PODLogWarn("applicationDidReceiveMemoryWarning")
         PODLogInfo("Kignfisher cache was cleared")
     }

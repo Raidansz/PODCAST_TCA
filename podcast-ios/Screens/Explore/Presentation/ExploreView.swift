@@ -188,8 +188,8 @@ struct ExploreViewContent: View {
     var body: some View {
         ScrollView {
             Section(content: {
-                if let podcasts = store.trendingPodcastsList {
-                    horizontalList(data: (podcasts.podcasts)) { podcast in
+                if let podcasts = store.sharedStateManager.podcasts {
+                    horizontalList(data: (podcasts)) { podcast in
                         ListViewHero(imageURL: podcast.image ?? URL(string: ""))
                             .frame(width: 200, height: 200)
                             .onTapGesture {
@@ -234,6 +234,7 @@ struct ExploreViewContent: View {
         }
     }
 }
+
 struct CustomScrollTargetBehaviour: ScrollTargetBehavior {
     func updateTarget(_ target: inout ScrollTarget, context: TargetContext) {
         if target.rect.minY < 70 {
@@ -245,6 +246,7 @@ struct CustomScrollTargetBehaviour: ScrollTargetBehavior {
         }
     }
 }
+
 struct ErrorMessage {
     let text: String
     let color: Color

@@ -14,11 +14,11 @@ struct CategoryDetailsFeature: Sendable{
     @ObservableState
     struct State {
         let category: Catagory
-        var podcastList: PodHub?
         var isLoading: Bool = false
         @Presents var playEpisode: PlayerFeature.State?
         var episodeURL: URL?
         @Shared(.runningItem) var runningItem = RunningItem()
+        @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
 
         init(category: Catagory) {
             self.category = category
@@ -36,7 +36,7 @@ struct CategoryDetailsFeature: Sendable{
         Reduce { state, action in
             switch action {
             case .fetchPodcastList(for: let category):
-                state.podcastList = nil
+                state.sharedStateManager.setPodcasts(podcasts: nil)
                 state.isLoading = true
                 return .run {[id = category.id]  send in
                     try await send(
@@ -46,7 +46,7 @@ struct CategoryDetailsFeature: Sendable{
                     )
                 }
             case .podcastResponse(let response):
-                state.podcastList = response
+                state.sharedStateManager.setPodcasts(podcasts: response?.podcasts)
                 state.isLoading = false
                 return .none
             }

@@ -13,12 +13,13 @@ struct ExploreSearchFeature {
     @ObservableState
     struct State {
         var searchResult: PodHub?
-        var episodes: IdentifiedArrayOf<Episode>?
+//        var episodes: IdentifiedArrayOf<Episode>?
         var isLoading: Bool = false
         @Presents var playEpisode: PlayerFeature.State?
         var episodeURL: URL?
         var searchTerm: String = ""
         var activeTab: Tab = .all
+        @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
     }
 
     enum Action: Equatable {
@@ -51,7 +52,7 @@ struct ExploreSearchFeature {
             switch action {
             case .episodeResponse(let response):
                 state.isLoading = false
-                state.episodes = response
+                state.sharedStateManager.setEpisode(episode: response)
                 return .none
             case .cellTapped(let episode):
                 state.playEpisode = PlayerFeature.State(episode: episode)
@@ -59,7 +60,7 @@ struct ExploreSearchFeature {
             case .playEpisode:
                 return .none
             case .onDisappear:
-                state.episodes = nil
+                state.sharedStateManager.setEpisode(episode: nil)
                 return .none
             case .searchTermChanged(let term):
                 state.searchTerm = term

@@ -8,6 +8,25 @@ import ComposableArchitecture
 import AVFoundation
 import Kingfisher
 
+struct SharedStateManager: Codable {
+    private(set) var episodes: IdentifiedArrayOf<Episode>? = []
+    private(set) var podcasts: IdentifiedArrayOf<Podcast>? = []
+
+    mutating func setEpisode(episode: IdentifiedArrayOf<Episode>?) {
+        self.episodes = episode
+    }
+
+    mutating func setPodcasts(podcasts: IdentifiedArrayOf<Podcast>?) {
+        self.podcasts = podcasts
+    }
+}
+
+extension PersistenceReaderKey where Self == InMemoryKey<SharedStateManager> {
+    static var sharedStateManager: Self {
+        inMemory("SharedStateManager")
+    }
+}
+
 struct RunningItem: Codable {
     private(set) var episode: Episode?
     private(set) var currentTime: Double = 0
@@ -82,6 +101,8 @@ extension PersistenceReaderKey where Self == InMemoryKey<RunningItem> {
 
     // clear image cache
     KingfisherManager.shared.cache.clearCache()
-    // Provide user feedback that cache was cleared
+
+    @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
+    sharedStateManager = SharedStateManager()
     return true
 }

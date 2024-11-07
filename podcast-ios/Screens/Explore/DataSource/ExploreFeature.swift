@@ -13,7 +13,7 @@ import Combine
 struct ExploreFeature: Sendable {
     @ObservableState
     struct State {
-        var trendingPodcastsList: PodHub?
+//        var trendingPodcastsList: PodHub?
         var isLoading: Bool = false
         var searchTerm = ""
         var searchPodcastResults: PodHub?
@@ -23,6 +23,7 @@ struct ExploreFeature: Sendable {
         }
         var themeForCatagories = getRandomTheme()
         let searchID = "search"
+        @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
         @Presents var destination: Destination.State?
     }
 
@@ -58,7 +59,7 @@ struct ExploreFeature: Sendable {
         Reduce { state, action in
             switch action {
             case .fetchPodcasts:
-                state.trendingPodcastsList = nil
+                state.sharedStateManager.setPodcasts(podcasts: nil)
                 state.isLoading = true
                 return .run {  send in
                     try await send(
@@ -69,7 +70,7 @@ struct ExploreFeature: Sendable {
                 }
             case .fetchPodcastsResponse(let response):
                 state.isLoading = false
-                state.trendingPodcastsList = response
+                state.sharedStateManager.setPodcasts(podcasts: response.podcasts)
                 return .none
             case .searchForPodcastTapped(with: let term):
                 if term.isEmpty {

@@ -51,8 +51,8 @@ struct HomeViewContent: View {
     var body: some View {
         ScrollView {
             Section(content: {
-                if let podcasts = store.trendingPodcasts {
-                    horizontalList(data: (podcasts.podcasts.prefix(store.limit))) { podcast in
+                if let podcasts = store.sharedStateManager.podcasts {
+                    horizontalList(data: (podcasts.prefix(store.limit))) { podcast in
                         ListViewHero(imageURL: podcast.image ?? URL(string: ""))
                             .frame(width: 350, height: 350)
                             .onTapGesture {
@@ -77,8 +77,8 @@ struct HomeViewContent: View {
 
             Section(content: {
                 LazyVStack(spacing: 24) {
-                    if let podcasts = store.trendingPodcasts?.podcasts {
-                        ForEach(Array(podcasts.enumerated()), id: \.element) { index, podcast in
+                    if let podcasts = store.sharedStateManager.podcasts {
+                        ForEach(podcasts) { podcast in
                             ListViewCell(
                                 imageURL: podcast.image,
                                 author: podcast.author,
