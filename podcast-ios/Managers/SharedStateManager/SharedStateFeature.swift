@@ -12,8 +12,8 @@ struct RunningItem: Codable {
     private(set) var episode: Episode?
     private(set) var currentTime: Double = 0
     private(set) var totalTime: Double = 100
-    mutating func setEpisode(episode: Episode?) {
-        if self.episode?.id != episode?.id {
+    mutating func setEpisode(episode: Episode) {
+        if self.episode?.id != episode.id {
             currentTime = 0
             totalTime = 0
             self.episode = episode

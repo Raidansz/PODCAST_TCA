@@ -11,7 +11,6 @@ import ComposableArchitecture
 @main
 struct RootModule: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-
     var body: some Scene {
         WindowGroup {
             TabView {

@@ -11,6 +11,10 @@ import Combine
 
 struct PlayerView: View {
     @Bindable var store: StoreOf<PlayerFeature>
+    @State var playerStatus: PlaybackState = .waitingForSelection
+    @State var totalTime: String = "02:00:00"
+    @State var elapsedTime: String = "00:00"
+
     var body: some View {
         NavigationStack {
             GeometryReader { proxy in
@@ -29,45 +33,53 @@ struct PlayerView: View {
                             .font(.subheadline)
                     }
                     Spacer()
-                    HStack {
-                        Text(formatTime(seconds: store.runningItem.currentTime))
-                        Spacer()
-                        Text(formatTime(seconds: store.runningItem.totalTime))
-                    }
-                    .padding(.horizontal, 16)
-
-                    Slider(
-                        value: $store.runningItem.currentTime.sending(\.onCurrentTimeChange),
-                        in: 0...store.runningItem.totalTime,
-                        onEditingChanged: onEditingChanged
-                    )
-                    .padding(.horizontal, 16)
-                    .onReceive(
-                        Publishers.CombineLatest(
-                            AudioPlayerManager.shared.totalItemTimeObserver,
-                            AudioPlayerManager.shared.elapsedTimeObserver
-                        )) { totalDuration, elapsedTime in
-                            store.send(.onCurrentTimeChange(elapsedTime))
-                            store.send(.onTotalTimeChange(totalDuration))
+                    VStack {
+                        HStack {
+                            Text(elapsedTime)
+                            Spacer()
+                            Text(totalTime)
                         }
-                        .onReceive(AudioPlayerManager.shared.playbackStatePublisher) { state in
-                            if let item = AudioPlayerManager.shared.playableItem {
-                                if item.id == store.runningItem.episode?.id {
-                                    store.send(.updateIsPlaying(state))
-                                } else {
-                                    store.send(.updateIsPlaying(.stopped))
-                                }
+                        .padding(.horizontal, 16)
+
+                        Slider(
+                            value: $store.runningItem.currentTime.sending(\.onCurrentTimeChange),
+                            in: 0...store.runningItem.totalTime,
+                            onEditingChanged: onEditingChanged
+                        )
+                        .padding(.horizontal, 16)
+                    }
+                    .onReceive(AudioPlayerManager.shared.elapsedTimeObserver) { value in
+                        if AudioPlayerManager.shared.playableItem?.id == store.runningItem.episode?.id {
+                            store.send(.onCurrentTimeChange(value))
+                            elapsedTime = formatTime(seconds: value)
+                            totalTime = formatTime(seconds: store.runningItem.totalTime)
+                        }
+                    }
+                    .onReceive(AudioPlayerManager.shared.totalItemTimeObserver) { value in
+                        if AudioPlayerManager.shared.playableItem?.id == store.runningItem.episode?.id {
+                            store.send(.onTotalTimeChange(value))
+                            totalTime = formatTime(seconds: value)
+                        }
+                    }
+                    .onReceive(AudioPlayerManager.shared.playbackStatePublisher) { state in
+                        if let item = AudioPlayerManager.shared.playableItem {
+                            if item.id == store.runningItem.episode?.id {
+                                store.send(.updateIsPlaying(state))
+                            } else {
+                                store.send(.updateIsPlaying(.stopped))
                             }
                         }
+                        playerStatus = state
+                    }
 
-                    ControllButton(store: store)
+                    ControllButton(store: store, playerStatus: $playerStatus)
                         .padding(.top, 40)
                 }
                 .onAppear {
                     store.send(.immeditelyPlay)
                 }
                 .onDisappear {
-                    if store.isPlaying == .paused {
+                    if playerStatus == .paused {
                         AudioPlayerManager.shared.stop()
                         store.send(.flushRunningItem)
                     }
@@ -93,6 +105,7 @@ struct PlayerView: View {
 
 struct ControllButton: View {
     @Bindable var store: StoreOf<PlayerFeature>
+    @Binding var playerStatus: PlaybackState
     var body: some View {
         VStack {
             HStack {
@@ -118,7 +131,7 @@ struct ControllButton: View {
                 Button {
                     store.send(.handlePlayAction)
                 } label: {
-                    if store.isPlaying == .playing {
+                    if playerStatus == .playing {
                         Image(systemName: "pause.circle.fill")
                             .resizable()
                             .frame(width: 60, height: 60)
@@ -155,7 +168,7 @@ struct ControllButton: View {
 extension PlayerView {
     func onEditingChanged(editingStarted: Bool) {
         if editingStarted {
-            AudioPlayerManager.shared.playbackStatePublisher.send(.paused)
+            AudioPlayerManager.shared.shouldObserveElapsedTime = false
         } else {
             AudioPlayerManager.shared.seek(to: store.runningItem.currentTime)
         }

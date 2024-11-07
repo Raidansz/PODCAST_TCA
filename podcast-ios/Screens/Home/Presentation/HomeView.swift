@@ -94,17 +94,7 @@ struct HomeViewContent: View {
                 }
             }, header: {
                 HStack {
-                    Text("Trending Podcasts")
-                        .fontWeight(.semibold)
                     Spacer()
-                    if store.trendingPodcasts?.podcasts.count ?? 0 > store.limit {
-                        Button {
-                            ()
-                        } label: {
-                            Text("See more..")
-                                .foregroundStyle(Color(.blue))
-                        }
-                    }
                 }
                 .padding(.horizontal, 16)
             }

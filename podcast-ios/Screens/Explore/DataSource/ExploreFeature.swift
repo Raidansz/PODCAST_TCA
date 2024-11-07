@@ -6,6 +6,8 @@
 //
 
 import ComposableArchitecture
+import SwiftUICore
+import Combine
 
 @Reducer
 struct ExploreFeature: Sendable {
@@ -19,6 +21,7 @@ struct ExploreFeature: Sendable {
         var catagoryList: IdentifiedArrayOf<Catagory> {
             globalCatagories
         }
+        let searchID = "search"
         @Presents var destination: Destination.State?
     }
 
@@ -84,7 +87,10 @@ struct ExploreFeature: Sendable {
                             term
                         )
                     )
+                } catch: { [state] error, send in
+                    Task.cancel(id: state.searchID)
                 }
+                    .cancellable(id: state.searchID)
             case .searchTermChanged(let searchTerm):
                 state.searchTerm = searchTerm
                 return .none

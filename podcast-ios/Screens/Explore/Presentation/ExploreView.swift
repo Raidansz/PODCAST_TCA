@@ -17,6 +17,7 @@ struct ExloreView: View {
                     .blur(
                         radius: store.isLoading ? 5 : 0
                     )
+
                 if store.isLoading {
                     ProgressView("Please wait")
                         .progressViewStyle(CircularProgressViewStyle(tint: .blue))
@@ -34,9 +35,6 @@ struct ExloreView: View {
                                 .resizable()
                                 .frame(width: 21, height: 21)
                         }
-                    }
-                    .onTapGesture {
-                        store.send(.settingsTapped)
                     }
                 }
 
@@ -137,4 +135,10 @@ struct ExploreViewContent: View {
             .padding(.horizontal, 16)
         }
     }
+}
+
+struct ErrorMessage {
+    let text: String
+    let color: Color
+    let id: String
 }
