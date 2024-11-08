@@ -202,7 +202,6 @@ struct ExploreViewContent: View {
                                 }
                         }
                     }
-                    .padding(.horizontal, 16)
             }, header: {
                 HStack {
                     Text("Categories")

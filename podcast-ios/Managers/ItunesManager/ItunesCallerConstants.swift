@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PodcastGenre: String {
+enum PodcastGenre: String, CaseIterable {
     case arts = "1301"
     case business = "1321"
     case comedy = "1303"

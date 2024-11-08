@@ -8,16 +8,28 @@ import ComposableArchitecture
 import AVFoundation
 import Kingfisher
 
-struct SharedStateManager: Codable {
+struct SharedStateManager {
     private(set) var episodes: IdentifiedArrayOf<Episode>? = []
     private(set) var podcasts: IdentifiedArrayOf<Podcast>? = []
+     var topCategorizedPodcasts: [PodcastGenre: IdentifiedArrayOf<Podcast>?]?
 
     mutating func setEpisode(episode: IdentifiedArrayOf<Episode>?) {
         self.episodes = episode
     }
 
-    mutating func setPodcasts(podcasts: IdentifiedArrayOf<Podcast>?) {
-        self.podcasts = podcasts
+    mutating func setPodcasts(podcasts: IdentifiedArrayOf<Podcast>?, category: PodcastGenre? = nil) {
+        guard let category else {
+            self.podcasts = podcasts
+            return
+        }
+
+        if topCategorizedPodcasts == nil {
+            topCategorizedPodcasts = [:]
+        }
+
+        if let podcasts = podcasts, let firstPodcast = podcasts.first {
+            topCategorizedPodcasts?[category] = podcasts
+        }
     }
 }
 

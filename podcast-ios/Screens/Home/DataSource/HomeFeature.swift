@@ -25,8 +25,10 @@ struct HomeFeature: Sendable {
         case fetchTrendingPodcasts
         case loadView
         case trendingPodcastResponse(PodHub)
+        case fetchPodcastResponse(response: PodHub, ofCatagory: PodcastGenre)
         case path(StackActionOf<Path>)
         case podcastDetailsTapped(Podcast)
+        case fetchCatagoryPodcastList(forCatagory: PodcastGenre)
         case destination(PresentationAction<Destination.Action>)
     }
 
@@ -58,7 +60,16 @@ struct HomeFeature: Sendable {
                 state.isLoading = false
                 return .none
             case .loadView:
-                return .send(.fetchTrendingPodcasts)
+                return .merge(
+                    .run(operation: { send in
+                        await send(.fetchTrendingPodcasts)}),
+                    .run(operation: { send in
+                        PodcastGenre.allCases.forEach { genre in
+                            Task { @MainActor in
+                                send(.fetchCatagoryPodcastList(forCatagory: genre))
+                            }
+                        }
+                    }))
             case .path:
                 return .none
             case .destination:
@@ -66,6 +77,16 @@ struct HomeFeature: Sendable {
             case .podcastDetailsTapped(let podcast):
                 state.path.append(.podcastDetails(PodcastDetailsFeature.State(podcast: podcast)))
                 return .none
+            case .fetchPodcastResponse(response: let response, ofCatagory: let ofCatagory):
+                state.sharedStateManager.setPodcasts(podcasts: response.podcasts, category: ofCatagory)
+                return .none
+            case .fetchCatagoryPodcastList(forCatagory: let forCatagory):
+                state.isLoading = true
+                return .run { send in
+                    try await send(
+                        .fetchPodcastResponse(response: self.podHubManager.getPodcastListOf(catagory: forCatagory), ofCatagory: forCatagory)
+                    )
+                }
             }
         }
         .ifLet(\.$destination, action: \.destination)

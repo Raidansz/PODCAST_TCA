@@ -40,11 +40,13 @@ struct ListViewCell: View {
                         Rectangle()
                             .fill(randomTheme.mainColor)
                             .frame(width: 64, height: 64)
-                            .cornerRadius(20)
+                            .scaledToFill()
+                            .cornerRadius(7)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 24)
                                     .stroke(Color.gray, lineWidth: 0.5)
                             )
+                            .clipped()
                     }
                     .setProcessor(
                         DownsamplingImageProcessor(size: CGSize(width: 64, height: 64)) |>
