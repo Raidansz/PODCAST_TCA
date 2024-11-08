@@ -23,6 +23,7 @@ struct ExploreSearchView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
+            .navigationTitle("Search")
             .sheet(
                 store: self.store.scope(
                     state: \.$playEpisode,
@@ -68,7 +69,7 @@ struct ExploreSearchListView: View {
 
     /// Expandable Navigation Bar
     @ViewBuilder
-    func expandableNavigationBar(_ title: String = "Search") -> some View {
+    func expandableNavigationBar() -> some View {
         GeometryReader { proxy in
             let minY = proxy.frame(in: .scrollView(axis: .vertical)).minY
             let scrollviewHeight = proxy.bounds(of: .scrollView(axis: .vertical))?.height ?? 0
@@ -76,13 +77,6 @@ struct ExploreSearchListView: View {
             let progress = isSearching ? 1 : max(min(-minY / 70, 1), 0)
 
             VStack(spacing: 10) {
-                /// Title
-                Text(title)
-                    .font(.title)
-                    .scaleEffect(scaleProgress, anchor: .topLeading)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(.bottom, 10)
-
                 /// Search Bar
                 HStack(spacing: 12) {
                     Image(systemName: "magnifyingglass")
@@ -157,7 +151,7 @@ struct ExploreSearchListView: View {
             .offset(y: minY < 0 || isSearching ? -minY : 0)
             .offset(y: -progress * 65)
         }
-        .frame(height: shouldShowSegmentView ? 190 : 140)
+        .frame(height: 140)
         .padding(.bottom, 10)
         .padding(.bottom, isSearching ? -65 : 0)
     }
