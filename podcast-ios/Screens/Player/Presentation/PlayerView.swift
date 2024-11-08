@@ -19,7 +19,7 @@ struct PlayerView: View {
         NavigationStack {
             GeometryReader { proxy in
                 VStack {
-                    ListViewHero(imageURL: store.runningItem.episode?.imageUrl)
+                    HeroCell(imageURL: store.runningItem.episode?.imageUrl, title: store.runningItem.episode?.title)
                         .aspectRatio(contentMode: .fit)
                         .frame(width: proxy.size.width, height: proxy.size.height * 0.5) // 382
                         .clipped()

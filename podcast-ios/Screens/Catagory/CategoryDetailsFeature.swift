@@ -10,7 +10,7 @@ import ComposableArchitecture
 import FeedKit
 
 @Reducer
-struct CategoryDetailsFeature: Sendable{
+struct CategoryDetailsFeature: Sendable {
     @ObservableState
     struct State {
         let category: Catagory

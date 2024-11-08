@@ -104,6 +104,7 @@ struct ExploreListView: View {
                     .scaleEffect(scaleProgress, anchor: .topLeading)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, 10)
+                    .foregroundStyle(progress < 1  ? Color.primary: Color.primary.opacity(0))
 
                 /// Search Bar
                 HStack(spacing: 12) {
@@ -189,47 +190,18 @@ struct ExploreViewContent: View {
     var body: some View {
         ScrollView {
             Section(content: {
-                if let podcasts = store.sharedStateManager.podcasts {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 16) {
-                            ForEach(podcasts) { podcast in
-                                ListViewHero(imageURL: podcast.image ?? URL(string: ""))
-                                    .frame(width: 300, height: 300)
-                                    .onTapGesture {
-                                        store.send(.podcastDetailsTapped(podcast))
-                                    }
-                            }
-                        }
-                        .padding(.horizontal, 16)
-                    }
-                }
-            }, header: {
-                HStack {
-                    Text("Trending Podcasts")
-                        .fontWeight(.semibold)
-                    Spacer()
-                }
-                .padding(.horizontal, 16)
-            })
-
-            Section(content: {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHGrid(
-                        rows: [GridItem(.adaptive(minimum: 100, maximum: 200)),
-                               GridItem(.adaptive(minimum: 100, maximum: 200)),
-                               GridItem(.adaptive(minimum: 100, maximum: 200))],
-                        spacing: 8
-                    ) {
+                LazyVGrid(
+                    columns: [GridItem(.adaptive(minimum: 100, maximum: 200)),
+                              GridItem(.adaptive(minimum: 100, maximum: 200))],
+                    spacing: 8) {
                         ForEach(store.catagoryList) { catagory in
                             CategoryViewHero(title: catagory.title, theme: (scheme == .dark ? Color.customGray : .gray.opacity(0.15)))
-                                .frame(width: 200, height: 100)
+                                .frame(height: 100)
                                 .onTapGesture {
                                     store.send(.catagoryTapped(catagory))
                                 }
                         }
                     }
-                    .padding(.horizontal, 16)
-                }
             }, header: {
                 HStack {
                     Text("Categories")

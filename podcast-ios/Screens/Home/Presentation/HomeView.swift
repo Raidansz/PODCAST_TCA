@@ -55,8 +55,8 @@ struct HomeViewContent: View {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
                             ForEach(podcasts) { podcast in
-                                ListViewHero(imageURL: podcast.image ?? URL(string: ""))
-                                    .frame(width: 350, height: 350)
+                                ListViewHero(imageURL: podcast.image ?? URL(string: ""), title: podcast.title)
+                                    .frame(width: 150, height: 150)
                                     .onTapGesture {
                                         store.send(.podcastDetailsTapped(podcast))
                                     }
@@ -74,9 +74,6 @@ struct HomeViewContent: View {
                 .padding(.horizontal, 16)
             }
             )
-
-            Spacer()
-                .frame(height: 32)
 
             Section(content: {
                 LazyVStack(spacing: 24) {

@@ -15,6 +15,7 @@ struct ListViewCell: View {
     let shouldShowIcon: Bool
     let description: String?
     @State var isDisclosed = false
+    let randomTheme = getRandomTheme()
 
     init(imageURL: URL?, author: String?, title: String?, isPodcast: Bool, description: String? = nil) {
         self.imageURL = imageURL
@@ -26,58 +27,64 @@ struct ListViewCell: View {
 
     var body: some View {
         VStack {
-            HStack(alignment: .top) {
-                if shouldShowIcon {
-                    KFImage(imageURL)
-                        .resizable()
-                        .onSuccess { result in
-                            PODLogInfo("Image loaded from cache: \(result.cacheType)")
-                        }
-                        .onFailure { error in
-                            PODLogError("Error: \(error)")
-                        }
-                        .placeholder {
-                            Image(systemName: "waveform.badge.mic")
-                                .frame(width: 100, height: 100)
-                                .cornerRadius(24)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 24)
-                                        .stroke(Color.gray, lineWidth: 0.5)
-                                )
-                        }
-                        .setProcessor(
-                            DownsamplingImageProcessor(size: CGSize(width: 100, height: 100)) |>
-                            JPEGCompressProcessor(compressionQuality: 0.1)
-                        )
-                        .scaleFactor(UIScreen.main.scale)
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 100, height: 100)
-                        .cornerRadius(24)
-                        .clipped()
-                }
+            HStack {
+                KFImage(imageURL)
+                    .resizable()
+                    .onSuccess { result in
+                        PODLogInfo("Image loaded from cache: \(result.cacheType)")
+                    }
+                    .onFailure { error in
+                        PODLogError("Error: \(error)")
+                    }
+                    .placeholder {
+                        Rectangle()
+                            .fill(randomTheme.mainColor)
+                            .frame(width: 64, height: 64)
+                            .scaledToFill()
+                            .cornerRadius(7)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(Color.gray, lineWidth: 0.5)
+                            )
+                            .clipped()
+                    }
+                    .setProcessor(
+                        DownsamplingImageProcessor(size: CGSize(width: 64, height: 64)) |>
+                        JPEGCompressProcessor(compressionQuality: 0.1)
+                    )
+                    .scaledToFill()
+                    .frame(width: 64, height: 64)
+                    .cornerRadius(7)
+                    .clipped()
 
-                VStack(alignment: .leading, spacing: 16) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 7) {
+                        Text(title ?? "")
+                            .font(.system(size: 20))
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color.primary)
+                        Text(author ?? "")
+                            .font(.system(size: 18))
+                            .fontWeight(.regular)
+                            .foregroundColor(Color.secondary)
+                    }
                     Spacer()
-                        .frame(maxHeight: 4)
-                    Text(title ?? "")
-                        .font(.headline)
-                        .bold()
-                        .lineLimit(2)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Text(author ?? "")
-                        .font(.subheadline)
-                        .lineLimit(2)
-                        .frame(maxWidth: .infinity, alignment: .leading)
+                    VStack(spacing: 0.5) {
+                        Image(systemName: "circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                        Image(systemName: "circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                        Image(systemName: "circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                    }
+                    .frame(width: 5)
+                    .foregroundColor(.white)
                 }
-                .padding(.leading, 8)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-                Spacer()
+                .padding(.leading)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-
-            Divider()
-                .background(Color(.systemGray))
         }
         .contentShape(Rectangle())
     }

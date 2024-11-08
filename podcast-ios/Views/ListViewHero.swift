@@ -10,22 +10,79 @@ import Kingfisher
 
 struct ListViewHero: View {
     let imageURL: URL?
+    let title: String?
+    let randomTheme = getRandomTheme()
 
-    init(imageURL: URL?) {
+    init(imageURL: URL?, title: String?) {
         self.imageURL = imageURL
+        self.title = title
     }
+
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             KFImage(imageURL)
                 .resizable()
                 .placeholder({
-                    Image(systemName: "waveform.badge.mic")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                        .cornerRadius(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 24)
-                                .stroke(Color.gray, lineWidth: 0.5)
-                        )
+                    Rectangle()
+                    .fill(randomTheme.mainColor)
+                    .frame(width: 120, height: 120)
+                    .scaledToFill()
+                    .cornerRadius(7)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(Color.gray, lineWidth: 0.5)
+                    )
+                    .clipped()
+                })
+                .setProcessor(
+                    DownsamplingImageProcessor(size: CGSize(width: 120, height: 120)) |>
+                    JPEGCompressProcessor(compressionQuality: 0.5)
+                )
+                .onSuccess { result in
+                    PODLogInfo("Image loaded from cache: \(result.cacheType)")
+                }
+                .onFailure { error in
+                    PODLogError("Error: \(error)")
+                }
+                .scaledToFill()
+                .frame(width: 120, height: 120)
+                .cornerRadius(7)
+                .clipped()
+            Text(title ?? "")
+                .font(.system(size: 20))
+                .fontWeight(.semibold)
+                .foregroundColor(Color.primary)
+                .frame(width: 120, height: 20, alignment: .leading)
+                .lineLimit(1)
+        }
+    }
+}
+
+struct HeroCell: View {
+    let imageURL: URL?
+    let title: String?
+    let randomTheme = getRandomTheme()
+
+    init(imageURL: URL?, title: String?) {
+        self.imageURL = imageURL
+        self.title = title
+    }
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            KFImage(imageURL)
+                .resizable()
+                .placeholder({
+                    Rectangle()
+                    .fill(randomTheme.mainColor)
+                    .frame(width: 380, height: 380)
+                    .scaledToFill()
+                    .cornerRadius(7)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 24)
+                            .stroke(Color.gray, lineWidth: 0.5)
+                    )
+                    .clipped()
                 })
                 .setProcessor(
                     DownsamplingImageProcessor(size: CGSize(width: 380, height: 380)) |>
@@ -37,8 +94,9 @@ struct ListViewHero: View {
                 .onFailure { error in
                     PODLogError("Error: \(error)")
                 }
-                .aspectRatio(contentMode: .fit)
-                .cornerRadius(10)
+                .scaledToFill()
+                .frame(width: 380, height: 380)
+                .cornerRadius(7)
                 .clipped()
         }
     }
