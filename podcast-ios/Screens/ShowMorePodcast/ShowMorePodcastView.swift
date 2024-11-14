@@ -10,10 +10,9 @@ import ComposableArchitecture
 
 @Reducer
 struct ShowMorePodcastFeature {
-    @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
     @ObservableState
     struct State {
-        var trendingPodcasts: PodHub
+        var trendingPodcasts: PodcastResult
         var isLoading: Bool = false
     }
     @Reducer
@@ -27,7 +26,7 @@ struct ShowMorePodcastView: View {
     var body: some View {
         ScrollView {
             LazyVStack {
-                ForEach(store.trendingPodcasts.podcasts) { podcast in
+                ForEach(store.trendingPodcasts.podcastList ?? []) { podcast in
                     ListViewCell(
                         imageURL: podcast.image,
                         author: podcast.author, title: podcast.title,

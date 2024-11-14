@@ -15,7 +15,7 @@ struct CategoryDetailsView: View {
             ScrollView {
                 LazyVStack(spacing: 24) {
                     if let podcastList = store.sharedStateManager.podcasts {
-                        ForEach(podcastList, id: \.self) { podcast in
+                        ForEach(podcastList) { podcast in
                             NavigationLink(state: ExploreFeature.Path.State.podcastDetails(PodcastDetailsFeature.State(podcast: podcast))) {
                                 ListViewCell(
                                     imageURL: podcast.image,

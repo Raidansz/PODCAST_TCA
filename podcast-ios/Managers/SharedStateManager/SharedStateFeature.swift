@@ -7,19 +7,20 @@
 import ComposableArchitecture
 import AVFoundation
 import Kingfisher
+import ItunesPodcastManager
 
-struct SharedStateManager {
+struct SharedStateManager: Sendable {
     private(set) var episodes: IdentifiedArrayOf<Episode>? = []
     private(set) var podcasts: IdentifiedArrayOf<Podcast>? = []
      var topCategorizedPodcasts: [PodcastGenre: IdentifiedArrayOf<Podcast>?]?
 
-    mutating func setEpisode(episode: IdentifiedArrayOf<Episode>?) {
-        self.episodes = episode
+    mutating func setEpisode(episode: [Episode]?) {
+        self.episodes = IdentifiedArrayOf(uniqueElements: episode ?? [])
     }
 
-    mutating func setPodcasts(podcasts: IdentifiedArrayOf<Podcast>?, category: PodcastGenre? = nil) {
+    mutating func setPodcasts(podcasts: [Podcast]?, category: PodcastGenre? = nil) {
         guard let category else {
-            self.podcasts = podcasts
+            self.podcasts = IdentifiedArrayOf(uniqueElements: podcasts ?? [])
             return
         }
 
@@ -28,7 +29,7 @@ struct SharedStateManager {
         }
 
         if let podcasts = podcasts, let firstPodcast = podcasts.first {
-            topCategorizedPodcasts?[category] = podcasts
+            topCategorizedPodcasts?[category] = IdentifiedArrayOf(uniqueElements: podcasts)
         }
     }
 }

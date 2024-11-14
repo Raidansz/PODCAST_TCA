@@ -10,30 +10,17 @@ import ComposableArchitecture
 import Foundation
 
 extension RSSFeed {
-    func toEpisodes() -> IdentifiedArrayOf<Episode> {
+    func toEpisodes() -> [Episode] {
         let imageUrl = iTunes?.iTunesImage?.attributes?.href
-        var episodes = IdentifiedArrayOf<Episode>()
+        var episodes = [Episode]()
         items?.forEach { feedItem in
-            var episode = Episode(feedItem: feedItem)
-            if episode.imageUrl == nil {
-                episode.imageUrl = URL(string: imageUrl ?? "")
+            var item = Episode(feedItem: feedItem)
+            if item.imageUrl == nil {
+                item.imageUrl = URL(string: imageUrl ?? "")
             }
-            episodes.append(episode)
+            episodes.append(item)
         }
         return episodes
-    }
-}
-
-extension RSSFeed {
-    func toPodcasts() -> IdentifiedArrayOf<Podcast> {
-        let imageUrl = iTunes?.iTunesImage?.attributes?.href
-        var podcasts = IdentifiedArrayOf<Podcast>()
-        items?.forEach { feedItem in
-            var podcast = Podcast(feedItem: feedItem)
-            podcast.image = URL(string: imageUrl ?? "")
-            podcasts.append(podcast)
-        }
-        return podcasts
     }
 }
 

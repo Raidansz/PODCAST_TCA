@@ -15,7 +15,7 @@ struct ExploreFeature: Sendable {
     struct State {
         var isLoading: Bool = false
         var searchTerm = ""
-        var searchPodcastResults: PodHub?
+        var searchPodcastResults: PodcastResult?
         var path = StackState<Path.State>()
         var catagoryList: IdentifiedArrayOf<Catagory> {
             globalCatagories
@@ -41,18 +41,16 @@ struct ExploreFeature: Sendable {
 
     enum Action {
         case fetchPodcasts
-        case fetchPodcastsResponse(PodHub)
+        case fetchPodcastsResponse(PodcastResult)
         case searchForPodcastTapped(with: String)
         case searchTermChanged(String)
-        case showSearchResults(PodHub, String)
+        case showSearchResults(PodcastResult, String)
         case settingsTapped
         case path(StackActionOf<Path>)
         case podcastDetailsTapped(Podcast)
         case catagoryTapped(Catagory)
         case destination(PresentationAction<Destination.Action>)
     }
-
-    @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
 
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -63,13 +61,13 @@ struct ExploreFeature: Sendable {
                 return .run {  send in
                     try await send(
                         .fetchPodcastsResponse(
-                            self.podHubManager.getTrendingPodcasts()
+                            PodHubManager.shared.getTrendingPodcasts(country: .unitedStates, limit: 50)
                         )
                     )
                 }
             case .fetchPodcastsResponse(let response):
                 state.isLoading = false
-                state.sharedStateManager.setPodcasts(podcasts: response.podcasts)
+                state.sharedStateManager.setPodcasts(podcasts: response.podcastList)
                 return .none
             case .searchForPodcastTapped(with: let term):
                 if term.isEmpty {
@@ -79,12 +77,8 @@ struct ExploreFeature: Sendable {
                 return .run { send in
                     try await send(
                         .showSearchResults(
-                            self.podHubManager.searchFor(
-                                searchFor: .podcasts,
-                                value: term,
-                                limit: nil,
-                                page: nil, id: nil
-                            ),
+                            PodHubManager.shared.searchFor(
+                                searchFor: .podcasts, value: term),
                             term
                         )
                     )
