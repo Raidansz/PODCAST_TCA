@@ -8,133 +8,9 @@
 import Foundation
 import ComposableArchitecture
 import FeedKit
-import SwiftyJSON
-import SwiftData
 import UIKit
 
-struct PodHub: Sendable, Equatable, Codable {
-    static func == (lhs: PodHub, rhs: PodHub) -> Bool {
-        lhs.id == rhs.id
-    }
-
-    var id: UUID = UUID()
-    var podcasts: IdentifiedArrayOf<Podcast> = []
-    var totalCount: Int
-
-    init(result: PodHubConvertable, mediaType: Entity, totalCount: Int) throws {
-        self.podcasts = IdentifiedArray()
-        self.totalCount = totalCount
-        if let searchResults = result as? SearchResults {
-            if !searchResults.results.isEmpty {
-                let itunesPodcasts = searchResults.results.map {
-                    Podcast(item: $0, mediaType: mediaType)
-                }
-                self.podcasts = IdentifiedArray(uniqueElements: itunesPodcasts)
-                return
-            }
-        }
-
-        if let podcastIndexResponse = result as? PodcastIndexResponse {
-            if !podcastIndexResponse.items.isEmpty {
-                let podcasts = podcastIndexResponse.items.map {
-                    Podcast(item: $0, mediaType: mediaType)
-                }
-                self.podcasts = IdentifiedArray(uniqueElements: podcasts)
-                return
-            }
-        }
-        PODLogError("\(NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Result is empty or unrecognized"]))")
-        throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "Result is empty or unrecognized"])
-    }
-
-    init(podcasts: IdentifiedArrayOf<Podcast>, count: Int) {
-        self.podcasts = podcasts
-        self.totalCount = count
-    }
-}
-@Model
-final class Podcast: Identifiable, Equatable, Hashable, Codable, Sendable {
-    var id: String
-    var title: String?
-    var image: URL?
-    var publicationDate: Date?
-    var author: String?
-    var isPodcast: Bool
-    var feedURL: URL?
-    var type: String
-
-    enum CodingKeys: String, CodingKey {
-        case id, title, image, publicationDate, author, isPodcast, feedURL, type
-    }
-
-    // Custom initializer to handle encoding and decoding
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(String.self, forKey: .id)
-        title = try container.decodeIfPresent(String.self, forKey: .title)
-        image = try container.decodeIfPresent(URL.self, forKey: .image)
-        publicationDate = try container.decodeIfPresent(Date.self, forKey: .publicationDate)
-        author = try container.decodeIfPresent(String.self, forKey: .author)
-        isPodcast = try container.decode(Bool.self, forKey: .isPodcast)
-        feedURL = try container.decodeIfPresent(URL.self, forKey: .feedURL)
-        type = try container.decode(String.self, forKey: .type)
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(id, forKey: .id)
-        try container.encodeIfPresent(title, forKey: .title)
-        try container.encodeIfPresent(image, forKey: .image)
-        try container.encodeIfPresent(publicationDate, forKey: .publicationDate)
-        try container.encodeIfPresent(author, forKey: .author)
-        try container.encode(isPodcast, forKey: .isPodcast)
-        try container.encodeIfPresent(feedURL, forKey: .feedURL)
-        try container.encode(type, forKey: .type)
-    }
-
-    init(item: SearchResult, mediaType: Entity) {
-        self.id = "\(item.id)"
-        self.title = item.trackName
-        self.image = item.artworkUrl600 ?? item.artworkUrl100 ?? URL(fileURLWithPath: "")
-        self.publicationDate = item.releaseDate
-        self.author = item.artistName ?? ""
-        self.isPodcast = mediaType == .podcast
-        self.feedURL = item.feedUrl
-        self.type = "it"
-    }
-
-    init(feedItem: RSSFeedItem) {
-        self.id = feedItem.guid?.value ?? UUID().uuidString
-        self.feedURL = URL(string: feedItem.enclosure?.attributes?.url ?? "") ?? URL(fileURLWithPath: "")
-        self.title = feedItem.title ?? "No Title"
-        self.publicationDate = feedItem.pubDate ?? Date()
-        self.author = feedItem.iTunes?.iTunesAuthor ?? "Unknown Author"
-        self.image = URL(string: feedItem.link ?? "")
-        self.type = "RSSFeedGenerator"
-        self.isPodcast = true
-    }
-
-    init(item: Item, mediaType: Entity) {
-        self.id = "\(item.id)"
-        self.title = item.title
-        self.image = item.image ?? item.feedImage ?? URL(fileURLWithPath: "")
-        self.publicationDate = item.datePublished
-        self.author = item.feedAuthor
-        self.isPodcast = mediaType == .podcast
-        self.feedURL = item.feedUrl ?? item.url
-        self.type = "index"
-    }
-}
-
-protocol PodHubConvertable {}
-
-extension Collection {
-    var isNotEmpty: Bool {
-        return !isEmpty
-    }
-}
-@Model
-final class Episode: Codable, Identifiable, Equatable, Hashable, PlayableItemProtocol {
+final class Episode: Codable, Identifiable, PlayableItemProtocol {
     var id: String
     var title: String
     var pubDate: Date
@@ -212,17 +88,11 @@ let trueCrimeDescription = "Uncover real-life mysteries, true crime cases, and i
 let globalCatagories: IdentifiedArrayOf<Catagory> = [
     .init(id: .arts, title: "Arts", description: artsDescription),
     .init(id: .business, title: "Business", description: businessDescription),
-//    .init(id: .comedy, title: "Comedy", description: comedyDescription, image: UIImage(named: "Pic 10")!),
     .init(id: .education, title: "Education", description: educationDescription),
-//    .init(id: .healthAndFitness, title: "Health & Fitness", description: healthAndFitnessDescription, image: UIImage(named: "Pic 10")!),
     .init(id: .kidsAndFamily, title: "Kids & Family", description: kidsAndFamilyDescription),
     .init(id: .music, title: "Music", description: musicDescription),
-//    .init(id: .news, title: "News", description: newsDescription, image: UIImage(named: "Pic 10")!),
-//    .init(id: .religionAndSpirituality, title: religionAndSpiritualityDescription, description: religionAndSpiritualityDescription, image: UIImage(named: "Pic 10")!),
     .init(id: .science, title: "Science", description: scienceDescription),
     .init(id: .societyAndCulture, title: "Society & Culture", description: societyAndCultureDescription),
     .init(id: .sports, title: "Sports", description: sportsDescription),
     .init(id: .technology, title: "Technology", description: technologyDescription)
-//    .init(id: .tvAndFilm, title: "TV & Film", description: tvAndFilmDescription, image: UIImage(named: "Pic 10")!),
-//    .init(id: .trueCrime, title: "True Crime", description: trueCrimeDescription, image: UIImage(named: "Pic 10")!)
 ]

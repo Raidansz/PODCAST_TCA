@@ -1,5 +1,5 @@
 {
-  "originHash" : "1d1edca94151911caffcf62892c79dc1f15ddddfb14f255281ccc409462e7967",
+  "originHash" : "bf6f28a46eaa5de566915fbe2b56184fd26a45ef585786c3c9384556e0bd0788",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -35,6 +35,15 @@
       "state" : {
         "revision" : "68493a33d862c33c9a9f67ec729b3b7df1b20ade",
         "version" : "9.1.2"
+      }
+    },
+    {
+      "identity" : "itunes_podcast_api",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Raidansz/itunes_podcast_api.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "8c611d02ae16a59a19b463acb8ee5dc0036a2612"
       }
     },
     {
@@ -78,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-composable-architecture.git",
       "state" : {
-        "revision" : "56149436a3c3dbf605a89a204aaa904de8ba4580",
-        "version" : "1.15.2"
+        "revision" : "a952dde0bf2b13048843c8dcc72cf21737d67b0c",
+        "version" : "1.16.0"
       }
     },
     {

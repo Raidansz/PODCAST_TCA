@@ -17,7 +17,7 @@ struct PodcastDetailsView: View {
                     Section(content: {
                         LazyVStack(spacing: 24) {
                             if let episodes = store.sharedStateManager.episodes {
-                                ForEach(episodes, id: \.self) { response in
+                                ForEach(episodes) { response in
                                     ListViewCell(
                                         imageURL: response.imageUrl,
                                         author: response.author, title: response.title,

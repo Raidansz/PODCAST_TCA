@@ -16,7 +16,7 @@ enum PlaybackState: Int, Equatable {
     case waitingForConnection
 }
 
-protocol PlayableItemProtocol: Sendable, Identifiable, Equatable {
+protocol PlayableItemProtocol: Sendable, Identifiable {
     var title: String { get }
     var author: String { get }
     var imageUrl: URL? { get }

@@ -27,10 +27,8 @@ struct CategoryDetailsFeature: Sendable {
 
     enum Action {
         case fetchPodcastList(for: Catagory)
-        case podcastResponse(PodHub?)
+        case podcastResponse(PodcastResult?)
     }
-
-    @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
 
     var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -41,12 +39,12 @@ struct CategoryDetailsFeature: Sendable {
                 return .run {[id = category.id]  send in
                     try await send(
                         .podcastResponse(
-                            self.podHubManager.getPodcastListOf(catagory: id)
+                            PodHubManager.shared.getPodcastListOfCatagory(catagory: id)
                         )
                     )
                 }
             case .podcastResponse(let response):
-                state.sharedStateManager.setPodcasts(podcasts: response?.podcasts)
+                state.sharedStateManager.setPodcasts(podcasts: response?.podcastList)
                 state.isLoading = false
                 return .none
             }

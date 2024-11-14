@@ -20,14 +20,14 @@ struct PodcastDetailsFeature {
         @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
     }
 
-    enum Action: Equatable {
+    enum Action {
         case fetchEpisode
         case cellTapped(Episode)
         case playEpisode(PresentationAction<PlayerFeature.Action>)
-        case episodeResponse(IdentifiedArrayOf<Episode>?)
+        case episodeResponse([Episode]?)
     }
 
-    private func parseFeed(url: URL?) async throws -> IdentifiedArrayOf<Episode> {
+    private func parseFeed(url: URL?) async throws -> [Episode] {
         return try await withCheckedThrowingContinuation { continuation in
             guard let url else { return }
             let parser = FeedParser(URL: url)

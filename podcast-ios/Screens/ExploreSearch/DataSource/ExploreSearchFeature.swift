@@ -12,7 +12,7 @@ import Foundation
 struct ExploreSearchFeature {
     @ObservableState
     struct State {
-        var searchResult: PodHub?
+        var searchResult: PodcastResult?
 //        var episodes: IdentifiedArrayOf<Episode>?
         var isLoading: Bool = false
         @Presents var playEpisode: PlayerFeature.State?
@@ -22,19 +22,18 @@ struct ExploreSearchFeature {
         @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
     }
 
-    enum Action: Equatable {
+    enum Action {
         case cellTapped(Episode)
         case playEpisode(PresentationAction<PlayerFeature.Action>)
-        case episodeResponse(IdentifiedArrayOf<Episode>?)
+        case episodeResponse([Episode]?)
         case onDisappear
         case searchTermChanged(String)
         case searchForPodcastTapped(with: String, activeTab: Tab)
-        case showSearchResults(PodHub)
+        case showSearchResults(PodcastResult)
     }
 
-    @Injected(\.podHubManager) private var podHubManager: PodHubManagerProtocol
 
-    private func parseFeed(url: URL?) async throws -> IdentifiedArrayOf<Episode> {
+    private func parseFeed(url: URL?) async throws -> [Episode] {
         guard let url = url else {
             return []
         }
@@ -72,16 +71,10 @@ struct ExploreSearchFeature {
                 state.activeTab = activeTab
                 state.searchResult = nil
                 state.isLoading = true
-                return .run { send in
+                return .run { [activeTab = state.activeTab] send in
                     try await send(
                         .showSearchResults(
-                            self.podHubManager.searchFor(
-                                searchFor: activeTab,
-                                value: term,
-                                limit: nil,
-                                page: nil,
-                                id: nil
-                            )
+                            PodHubManager.shared.searchFor(searchFor: activeTab, value: term)
                         )
                     )
                 }

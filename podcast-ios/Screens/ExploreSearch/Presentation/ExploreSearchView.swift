@@ -161,8 +161,8 @@ struct ExploreSearchContent: View {
     @State var store: StoreOf<ExploreSearchFeature>
     var body: some View {
         LazyVStack(spacing: 24) {
-            if let list = store.searchResult?.podcasts {
-                ForEach(list, id: \.self) { response in
+            if let list = store.searchResult?.podcastList {
+                ForEach(list) { response in
                     NavigationLink(
                         state: ExploreFeature.Path.State.podcastDetails(PodcastDetailsFeature.State(podcast: response))
                     ) {
