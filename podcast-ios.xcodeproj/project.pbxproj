@@ -25,7 +25,7 @@
 		AA6A96DC2CE7F59200F1E1E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA6A96DD2CE7F59200F1E1E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA6A96DE2CE7F59200F1E1E5 /* RootModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootModule.swift; sourceTree = "<group>"; };
-		AA6A97692CE7F65700F1E1E5 /* podcast-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "podcast-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA6A97692CE7F65700F1E1E5 /* podcast-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "podcast-ios.app"; path = "/Users/raidan/Documents/thesis_imp/podcast-ios/build/Debug-iphoneos/podcast-ios.app"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -132,7 +132,6 @@
 				AA6A96DC2CE7F59200F1E1E5 /* Assets.xcassets */,
 				AA6A96DD2CE7F59200F1E1E5 /* Info.plist */,
 				AA6A96DE2CE7F59200F1E1E5 /* RootModule.swift */,
-				AA6A97692CE7F65700F1E1E5 /* podcast-ios.app */,
 			);
 			sourceTree = "<group>";
 		};

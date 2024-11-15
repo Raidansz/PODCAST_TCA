@@ -96,12 +96,9 @@ struct SettingsView: View {
         NavigationStack {
             ZStack(alignment: .top) {
                 SettingsViewContent(store: store)
-                    .blur(
-                        radius: store.isLoading ? 5 : 0
-                    )
                 if store.isLoading {
                     ProgressView("Please wait")
-                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                        .progressViewStyle(CircularProgressViewStyle(tint: .secondary))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }

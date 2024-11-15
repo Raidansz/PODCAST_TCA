@@ -14,14 +14,11 @@ struct ExloreView: View {
         NavigationStack( path: $store.scope(state: \.path, action: \.path)) {
             ZStack(alignment: .top) {
                 ExploreListView(store: store, shouldShowSegmentView: false)
-                    .blur(
-                        radius: store.isLoading ? 5 : 0
-                    )
                     .navigationBarHidden(true)
 
                 if store.isLoading {
                     ProgressView("Please wait")
-                        .progressViewStyle(CircularProgressViewStyle(tint: .blue))
+                        .progressViewStyle(CircularProgressViewStyle(tint: .secondary))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
@@ -54,9 +51,6 @@ struct ExloreView: View {
             NavigationStack {
                 SettingsView(store: store)
             }
-        }
-        .onAppear {
-            store.send(.fetchPodcasts)
         }
     }
 }
@@ -237,7 +231,6 @@ enum Tab: String, CaseIterable {
     case podcasts = "Podcasts"
     case episodes = "Episodes"
 }
-
 
 extension Color {
     static let customGray = Color(red: 49 / 255, green: 49 / 255, blue: 49 / 255)
