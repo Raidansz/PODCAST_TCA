@@ -9,23 +9,23 @@ import Combine
 import Foundation
 import AVFoundation
 import MediaPlayer
-import Kingfisher
+private import Kingfisher
+import AppLogger
 
-final class AudioPlayerManager: NSObject, @unchecked Sendable {
+public final class AudioPlayerManager: NSObject, @unchecked Sendable {
     // MARK: - Stored Properties
-    static let shared = AudioPlayerManager()
+    public static let shared = AudioPlayerManager()
     var audioPlayerManager: AVPlayerManager?
-    var elapsedTimeObserver = PassthroughSubject<TimeInterval, Never>()
-    var shouldObserveElapsedTime: Bool = true
+    public var elapsedTimeObserver = PassthroughSubject<TimeInterval, Never>()
+    public var shouldObserveElapsedTime: Bool = true
     var timeObserver: Any?
-    var totalItemTimeObserver = PassthroughSubject<TimeInterval, Never>()
+    public    var totalItemTimeObserver = PassthroughSubject<TimeInterval, Never>()
     var player: AVPlayer?
     var cachedArtwork: MPMediaItemArtwork?
     @Published var elapsedTime: Double = .zero
-    var playbackStatePublisher
-    = CurrentValueSubject<PlaybackState, Never>(.waitingForSelection)
+    public var playbackStatePublisher = CurrentValueSubject<PlaybackState, Never>(.waitingForSelection)
     var cancellables: Set<AnyCancellable> = []
-    var playableItem: (any PlayableItemProtocol)?
+    public var playableItem: (any PlayableItemProtocol)?
     private var resourceLoaderDelegate: StreamingResourceLoaderDelegate?
     var queue: Queue<any PlayableItemProtocol> = .init()
     // MARK: - Setup
@@ -298,7 +298,7 @@ extension AudioPlayerManager {
 }
 
 // MARK: - Control Panel
-extension AudioPlayerManager {
+public extension AudioPlayerManager {
     func play(avPlayerItem: (any PlayableItemProtocol)?) {
         guard let item = makePlayableItem(avPlayerItem) else { return }
         stop()

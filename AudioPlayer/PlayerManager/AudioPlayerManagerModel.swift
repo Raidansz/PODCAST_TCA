@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PlaybackState: Int, Equatable {
+public enum PlaybackState: Int, Equatable {
     case waitingForSelection
     case buffering
     case playing
@@ -16,7 +16,7 @@ enum PlaybackState: Int, Equatable {
     case waitingForConnection
 }
 
-protocol PlayableItemProtocol: Sendable, Identifiable {
+public protocol PlayableItemProtocol: Sendable, Identifiable {
     var title: String { get }
     var author: String { get }
     var imageUrl: URL? { get }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import Kingfisher
+import AppLogger
 
 struct ListViewHero: View {
     let imageURL: URL?

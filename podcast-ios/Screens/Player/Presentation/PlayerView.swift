@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import Combine
+import AudioPlayer
 
 struct PlayerView: View {
     @Bindable var store: StoreOf<PlayerFeature>

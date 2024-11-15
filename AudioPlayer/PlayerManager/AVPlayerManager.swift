@@ -9,7 +9,8 @@ import AVFoundation
 import UIKit
 import MediaPlayer
 import Combine
-import Kingfisher
+//import Kingfisher
+import AppLogger
 
 final class AVPlayerManager: NSObject, @unchecked Sendable {
     let player: AVPlayer

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AppLogger
 import Kingfisher
 
 class AppDelegate: NSObject, UIApplicationDelegate {

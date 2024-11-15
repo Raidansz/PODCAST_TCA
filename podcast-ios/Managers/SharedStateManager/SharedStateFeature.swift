@@ -8,6 +8,7 @@ import ComposableArchitecture
 import AVFoundation
 import Kingfisher
 import ItunesPodcastManager
+import AppLogger
 
 struct SharedStateManager: Sendable {
     private(set) var episodes: IdentifiedArrayOf<Episode>? = []

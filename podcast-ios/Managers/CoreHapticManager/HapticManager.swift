@@ -6,6 +6,7 @@
 //
 import CoreHaptics
 import Combine
+import AppLogger
 
 final class HapticManager: HapticManagerProtocol, @unchecked Sendable {
     private var engine: CHHapticEngine?
