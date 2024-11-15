@@ -38,7 +38,6 @@
 		AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */; };
 		AA7DE4CB2C9F1E0A00D51A42 /* InjectionKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4CA2C9F1E0600D51A42 /* InjectionKey.swift */; };
 		AA7DE4CD2C9F725200D51A42 /* PlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA7DE4CC2C9F724D00D51A42 /* PlayerView.swift */; };
-		AA7DE4DA2CA090A400D51A42 /* PodcastIndexKey.pl in Resources */ = {isa = PBXBuildFile; fileRef = AA7DE4D92CA090A400D51A42 /* PodcastIndexKey.pl */; };
 		AA8EAD5D2CDD318500224E32 /* CoreLocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8EAD5C2CDD317F00224E32 /* CoreLocationManager.swift */; };
 		AA92784B2C8F151D00D5CF6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784A2C8F151D00D5CF6D /* Assets.xcassets */; };
 		AA92784E2C8F151D00D5CF6D /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA92784D2C8F151D00D5CF6D /* Preview Assets.xcassets */; };
@@ -81,7 +80,6 @@
 		AA7DE4BA2C9F0D5800D51A42 /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		AA7DE4CA2C9F1E0600D51A42 /* InjectionKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InjectionKey.swift; sourceTree = "<group>"; };
 		AA7DE4CC2C9F724D00D51A42 /* PlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerView.swift; sourceTree = "<group>"; };
-		AA7DE4D92CA090A400D51A42 /* PodcastIndexKey.pl */ = {isa = PBXFileReference; lastKnownFileType = text.script.perl; path = PodcastIndexKey.pl; sourceTree = "<group>"; };
 		AA8EAD5C2CDD317F00224E32 /* CoreLocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreLocationManager.swift; sourceTree = "<group>"; };
 		AA9278432C8F151C00D5CF6D /* podcast-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "podcast-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA92784A2C8F151D00D5CF6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -395,7 +393,6 @@
 				AAF16C672CB5D4F00035F9D0 /* Info.plist */,
 				AA92784A2C8F151D00D5CF6D /* Assets.xcassets */,
 				AA92784C2C8F151D00D5CF6D /* Preview Content */,
-				AA7DE4D92CA090A400D51A42 /* PodcastIndexKey.pl */,
 			);
 			path = "podcast-ios";
 			sourceTree = "<group>";
@@ -487,7 +484,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				AA42C1F72CD67F9C00DDF645 /* Settings.bundle in Resources */,
-				AA7DE4DA2CA090A400D51A42 /* PodcastIndexKey.pl in Resources */,
 				AA92784E2C8F151D00D5CF6D /* Preview Assets.xcassets in Resources */,
 				AA92784B2C8F151D00D5CF6D /* Assets.xcassets in Resources */,
 			);
