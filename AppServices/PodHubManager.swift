@@ -8,16 +8,16 @@
 import ItunesPodcastManager
 import Foundation
 
-protocol PodHubManagerProtocol {
-    func searchFor(searchFor: Tab, value: String) async throws -> PodcastResult
+public protocol PodHubManagerProtocol {
+    func searchFor(searchFor: SearchTab, value: String) async throws -> PodcastResult
     func getLocalTrendingPodcasts() async throws -> PodcastResult
     func getTrendingPodcasts() async throws -> PodcastResult
     func getPodcastListOf(catagory: PodcastGenre) async throws -> PodcastResult
 }
 
-class PodHubManager {
-    static let shared = PodHubManager()
-    func searchFor(searchFor: Tab, value: String) async throws -> ItunesPodcastManager.PodcastResult {
+public class PodHubManager {
+    public static let shared = PodHubManager()
+    public func searchFor(searchFor: SearchTab, value: String) async throws -> ItunesPodcastManager.PodcastResult {
         let entity: Entity
         switch searchFor {
         case .all:
@@ -34,7 +34,7 @@ class PodHubManager {
         }
     }
 
-    func getLocalTrendingPodcasts(limit: Int) async throws -> ItunesPodcastManager.PodcastResult {
+    public func getLocalTrendingPodcasts(limit: Int) async throws -> ItunesPodcastManager.PodcastResult {
         let safeCountryCode: Country
         if let countryCode = UserDefaults.standard.string(forKey: "DetectedCountry"),
            let country = Country(rawValue: countryCode) {
@@ -49,7 +49,7 @@ class PodHubManager {
         }
     }
 
-    func getTrendingPodcasts(country: Country, limit: Int) async throws -> ItunesPodcastManager.PodcastResult {
+    public func getTrendingPodcasts(country: Country, limit: Int) async throws -> ItunesPodcastManager.PodcastResult {
         do {
             return   try await getTrendingPodcastItems(country: country, limit: limit)
         } catch {
@@ -57,7 +57,7 @@ class PodHubManager {
         }
     }
 
-    func getPodcastListOfCatagory(
+    public func getPodcastListOfCatagory(
         catagory: ItunesPodcastManager.PodcastGenre
     ) async throws -> ItunesPodcastManager.PodcastResult {
         do {
@@ -67,8 +67,3 @@ class PodHubManager {
         }
     }
 }
-
-public typealias Podcast = ItunesPodcastManager.Podcast
-public typealias Country = ItunesPodcastManager.Country
-public typealias PodcastResult = ItunesPodcastManager.PodcastResult
-public typealias PodcastGenre = ItunesPodcastManager.PodcastGenre

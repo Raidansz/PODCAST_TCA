@@ -8,6 +8,7 @@
 import ComposableArchitecture
 import SwiftUICore
 import Combine
+import AppServices
 
 @Reducer
 struct ExploreFeature: Sendable {
@@ -17,7 +18,7 @@ struct ExploreFeature: Sendable {
         var searchTerm = ""
         var searchPodcastResults: PodcastResult?
         var path = StackState<Path.State>()
-        var catagoryList: IdentifiedArrayOf<Catagory> {
+        var catagoryList: [PodcastCategory] {
             globalCatagories
         }
         var themeForCatagories = getRandomTheme()
@@ -48,7 +49,7 @@ struct ExploreFeature: Sendable {
         case settingsTapped
         case path(StackActionOf<Path>)
         case podcastDetailsTapped(Podcast)
-        case catagoryTapped(Catagory)
+        case catagoryTapped(PodcastCategory)
         case destination(PresentationAction<Destination.Action>)
     }
 

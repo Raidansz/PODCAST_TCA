@@ -8,25 +8,26 @@
 import Foundation
 import ComposableArchitecture
 import FeedKit
+import AppServices
 
 @Reducer
 struct CategoryDetailsFeature: Sendable {
     @ObservableState
     struct State {
-        let category: Catagory
+        let category: PodcastCategory
         var isLoading: Bool = false
         @Presents var playEpisode: PlayerFeature.State?
         var episodeURL: URL?
         @Shared(.runningItem) var runningItem = RunningItem()
         @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
 
-        init(category: Catagory) {
+        init(category: PodcastCategory) {
             self.category = category
         }
     }
 
     enum Action {
-        case fetchPodcastList(for: Catagory)
+        case fetchPodcastList(for: PodcastCategory)
         case podcastResponse(PodcastResult?)
     }
 

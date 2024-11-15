@@ -8,6 +8,7 @@
 import ComposableArchitecture
 import FeedKit
 import Foundation
+import AppServices
 @Reducer
 struct ExploreSearchFeature {
     @ObservableState
@@ -18,7 +19,7 @@ struct ExploreSearchFeature {
         @Presents var playEpisode: PlayerFeature.State?
         var episodeURL: URL?
         var searchTerm: String = ""
-        var activeTab: Tab = .all
+        var activeTab: SearchTab = .all
         @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
     }
 
@@ -28,7 +29,7 @@ struct ExploreSearchFeature {
         case episodeResponse([Episode]?)
         case onDisappear
         case searchTermChanged(String)
-        case searchForPodcastTapped(with: String, activeTab: Tab)
+        case searchForPodcastTapped(with: String, activeTab: SearchTab)
         case showSearchResults(PodcastResult)
     }
 

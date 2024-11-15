@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import AppServices
 
 struct ExloreView: View {
     @Bindable var store: StoreOf<ExploreFeature>
@@ -64,7 +65,7 @@ struct ExloreView: View {
 struct ExploreListView: View {
     @Bindable var store: StoreOf<ExploreFeature>
     @FocusState private var isSearching: Bool
-    @State private var activeTab: Tab = .all
+    @State private var activeTab: SearchTab = .all
     @Environment(\.colorScheme) private var scheme
     @Namespace private var animation
     @State var shouldShowSegmentView: Bool
@@ -144,7 +145,7 @@ struct ExploreListView: View {
                 if shouldShowSegmentView {
                     ScrollView(.horizontal) {
                         HStack(spacing: 12) {
-                            ForEach(Tab.allCases, id: \.rawValue) { tab in
+                            ForEach(SearchTab.allCases, id: \.rawValue) { tab in
                                 Button {
                                     withAnimation(.snappy) {
                                         activeTab = tab
@@ -184,6 +185,7 @@ struct ExploreListView: View {
         .padding(.bottom, isSearching ? -65 : 0)
     }
 }
+
 struct ExploreViewContent: View {
     @Bindable var store: StoreOf<ExploreFeature>
     @Environment(\.colorScheme) private var scheme
@@ -195,11 +197,14 @@ struct ExploreViewContent: View {
                               GridItem(.adaptive(minimum: 100, maximum: 200))],
                     spacing: 8) {
                         ForEach(store.catagoryList) { catagory in
-                            CategoryViewHero(title: catagory.title, theme: (scheme == .dark ? Color.customGray : .gray.opacity(0.15)))
-                                .frame(height: 100)
-                                .onTapGesture {
-                                    store.send(.catagoryTapped(catagory))
-                                }
+                            CategoryViewHero(
+                                title: catagory.title,
+                                theme: (scheme == .dark ? Color.customGray : .gray.opacity(0.15))
+                            )
+                            .frame(height: 100)
+                            .onTapGesture {
+                                store.send(.catagoryTapped(catagory))
+                            }
                         }
                     }
             }, header: {
@@ -230,12 +235,6 @@ struct ErrorMessage {
     let text: String
     let color: Color
     let id: String
-}
-
-enum Tab: String, CaseIterable {
-    case all = "All"
-    case podcasts = "Podcasts"
-    case episodes = "Episodes"
 }
 
 

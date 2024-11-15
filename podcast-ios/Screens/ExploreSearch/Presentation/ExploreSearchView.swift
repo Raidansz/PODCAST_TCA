@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import AppServices
 
 struct ExploreSearchView: View {
     @State var store: StoreOf<ExploreSearchFeature>
@@ -43,7 +44,7 @@ struct ExploreSearchView: View {
 struct ExploreSearchListView: View {
     @Bindable var store: StoreOf<ExploreSearchFeature>
     @FocusState private var isSearching: Bool
-    @State private var activeTab: Tab = .all
+    @State private var activeTab: SearchTab = .all
     @Environment(\.colorScheme) private var scheme
     @Namespace private var animation
     @State var shouldShowSegmentView: Bool
@@ -115,7 +116,7 @@ struct ExploreSearchListView: View {
                 if shouldShowSegmentView {
                     ScrollView(.horizontal) {
                         HStack(spacing: 12) {
-                            ForEach(Tab.allCases, id: \.rawValue) { tab in
+                            ForEach(SearchTab.allCases, id: \.rawValue) { tab in
                                 Button {
                                     withAnimation(.snappy) {
                                         activeTab = tab

@@ -6,28 +6,40 @@
 //
 
 import Foundation
-import ComposableArchitecture
+//import ComposableArchitecture
 import FeedKit
 import UIKit
+import ItunesPodcastManager
 import AudioPlayer
 
-final class Episode: Codable, Identifiable, PlayableItemProtocol {
-    var id: String
-    var title: String
-    var pubDate: Date
-    var episodeDescription: String
-    var author: String
-    var streamURL: URL?
+public typealias Podcast = ItunesPodcastManager.Podcast
+public typealias Country = ItunesPodcastManager.Country
+public typealias PodcastResult = ItunesPodcastManager.PodcastResult
+public typealias PodcastGenre = ItunesPodcastManager.PodcastGenre
 
-    var fileUrl: String?
-    var imageUrl: URL?
+public enum SearchTab: String, CaseIterable {
+    case all = "All"
+    case podcasts = "Podcasts"
+    case episodes = "Episodes"
+}
+
+public final class Episode: Codable, Identifiable, PlayableItemProtocol, @unchecked Sendable {
+    public var id: String
+    public var title: String
+    public var pubDate: Date
+    public var episodeDescription: String
+    public var author: String
+    public var streamURL: URL?
+
+    public var fileUrl: String?
+    public var imageUrl: URL?
 
     enum CodingKeys: String, CodingKey {
         case id, title, pubDate, episodeDescription, author, streamURL, fileUrl, imageUrl
     }
 
     // Custom initializer for decoding
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)
         title = try container.decode(String.self, forKey: .title)
@@ -40,7 +52,7 @@ final class Episode: Codable, Identifiable, PlayableItemProtocol {
     }
 
     // Custom encoding function
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
         try container.encode(title, forKey: .title)
@@ -52,7 +64,7 @@ final class Episode: Codable, Identifiable, PlayableItemProtocol {
         try container.encodeIfPresent(imageUrl, forKey: .imageUrl)
     }
 
-    init(feedItem: RSSFeedItem) {
+    public init(feedItem: RSSFeedItem) {
         self.id = feedItem.guid?.value ?? UUID().uuidString
         self.streamURL = URL(string: feedItem.enclosure?.attributes?.url ?? "") ?? URL(fileURLWithPath: "")
         self.title = feedItem.title ?? "No Title"
@@ -60,14 +72,14 @@ final class Episode: Codable, Identifiable, PlayableItemProtocol {
         self.author = feedItem.iTunes?.iTunesAuthor ?? "Unknown Author"
         self.imageUrl = URL(string: feedItem.iTunes?.iTunesImage?.attributes?.href ?? "")
         let descriptionText = feedItem.iTunes?.iTunesSubtitle ?? feedItem.description ?? "No Description Available"
-        self.episodeDescription = descriptionText.cleanHTMLTags()
+        self.episodeDescription = descriptionText
     }
 }
 
-struct Catagory: Identifiable, Hashable {
-    let id: PodcastGenre
-    let title: String
-    let description: String
+public struct PodcastCategory: Identifiable, Hashable {
+  public let id: PodcastGenre
+  public let title: String
+  public let description: String
 }
 
 let artsDescription = "Explore podcasts about literature, visual arts, and performing arts."
@@ -86,14 +98,14 @@ let technologyDescription = "Keep up with the latest tech trends, innovations, a
 let tvAndFilmDescription = "Get insights into movies, television shows, and the entertainment industry."
 let trueCrimeDescription = "Uncover real-life mysteries, true crime cases, and investigative storytelling."
 
-let globalCatagories: IdentifiedArrayOf<Catagory> = [
-    .init(id: .arts, title: "Arts", description: artsDescription),
-    .init(id: .business, title: "Business", description: businessDescription),
-    .init(id: .education, title: "Education", description: educationDescription),
-    .init(id: .kidsAndFamily, title: "Kids & Family", description: kidsAndFamilyDescription),
-    .init(id: .music, title: "Music", description: musicDescription),
-    .init(id: .science, title: "Science", description: scienceDescription),
-    .init(id: .societyAndCulture, title: "Society & Culture", description: societyAndCultureDescription),
-    .init(id: .sports, title: "Sports", description: sportsDescription),
-    .init(id: .technology, title: "Technology", description: technologyDescription)
+public let globalCatagories: [PodcastCategory] = [
+    PodcastCategory(id: .arts, title: "Arts", description: artsDescription),
+    PodcastCategory(id: .business, title: "Business", description: businessDescription),
+    PodcastCategory(id: .education, title: "Education", description: educationDescription),
+    PodcastCategory(id: .kidsAndFamily, title: "Kids & Family", description: kidsAndFamilyDescription),
+    PodcastCategory(id: .music, title: "Music", description: musicDescription),
+    PodcastCategory(id: .science, title: "Science", description: scienceDescription),
+    PodcastCategory(id: .societyAndCulture, title: "Society & Culture", description: societyAndCultureDescription),
+    PodcastCategory(id: .sports, title: "Sports", description: sportsDescription),
+    PodcastCategory(id: .technology, title: "Technology", description: technologyDescription)
 ]

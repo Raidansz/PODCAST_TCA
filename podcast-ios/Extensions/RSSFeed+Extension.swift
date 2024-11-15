@@ -8,6 +8,7 @@
 import FeedKit
 import ComposableArchitecture
 import Foundation
+import AppServices
 
 extension RSSFeed {
     func toEpisodes() -> [Episode] {

@@ -6,6 +6,7 @@
 //
 
 import CoreLocation
+import AppServices
 
 final class LocationCountryDetector: NSObject, CLLocationManagerDelegate {
     private let locationManager = CLLocationManager()
