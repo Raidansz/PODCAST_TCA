@@ -63,7 +63,7 @@ final class Episode: Codable, Identifiable, PlayableItemProtocol {
     }
 }
 
-struct Catagory: Identifiable, Hashable {
+struct Catagory: Identifiable, Hashable, Equatable {
     let id: PodcastGenre
     let title: String
     let description: String

@@ -37,6 +37,7 @@ struct CategoryDetailsView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
+        .navigationTitle(store.category.title)
         .onAppear {
             store.send(.fetchPodcastList(for: store.category))
         }

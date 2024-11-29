@@ -34,16 +34,6 @@ struct ExloreView: View {
         }
         .sheet(
             item: $store.scope(
-                state: \.destination?.showMorePodcasts,
-                action: \.destination.showMorePodcasts
-            )
-        ) { store in
-            NavigationStack {
-                ShowMorePodcastView(store: store)
-            }
-        }
-        .sheet(
-            item: $store.scope(
                 state: \.destination?.settings,
                 action: \.destination.settings
             )

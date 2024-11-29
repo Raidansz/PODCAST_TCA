@@ -111,15 +111,6 @@ struct ControllButton: View {
             HStack {
                 Spacer()
                 Button {
-                    ()
-                } label: {
-                    Image(systemName: "line.3.horizontal")
-                        .resizable()
-                        .foregroundStyle(Color.blue.opacity(0.8))
-                        .frame(width: 20, height: 20)
-                }
-                Spacer()
-                Button {
                     AudioPlayerManager.shared.seekBackward()
                 } label: {
                     Image(systemName: "gobackward.15")
@@ -149,15 +140,6 @@ struct ControllButton: View {
                         .resizable()
                         .foregroundStyle(Color.blue.opacity(0.9))
                         .frame(width: 30, height: 30)
-                }
-                Spacer()
-                Button {
-                    ()
-                } label: {
-                    Image(systemName: "moon.zzz.fill")
-                        .resizable()
-                        .foregroundStyle(Color.blue.opacity(0.8))
-                        .frame(width: 20, height: 20)
                 }
                 Spacer()
             }

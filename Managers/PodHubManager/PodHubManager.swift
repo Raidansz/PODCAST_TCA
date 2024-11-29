@@ -72,3 +72,9 @@ public typealias Podcast = ItunesPodcastManager.Podcast
 public typealias Country = ItunesPodcastManager.Country
 public typealias PodcastResult = ItunesPodcastManager.PodcastResult
 public typealias PodcastGenre = ItunesPodcastManager.PodcastGenre
+
+extension PodcastResult: @retroactive Equatable {
+    public static func == (lhs: ItunesPodcastManager.PodcastResult, rhs: ItunesPodcastManager.PodcastResult) -> Bool {
+        lhs.id == rhs.id
+    }
+}

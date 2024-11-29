@@ -35,7 +35,6 @@ struct ExploreFeature: Sendable {
 
     @Reducer
     enum Destination {
-        case showMorePodcasts(ShowMorePodcastFeature)
         case settings(SettingFeature)
     }
 

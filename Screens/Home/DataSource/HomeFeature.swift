@@ -39,7 +39,6 @@ struct HomeFeature: Sendable {
 
     @Reducer
     enum Destination {
-        case showMorePodcasts(ShowMorePodcastFeature)
     }
 
     var body: some ReducerOf<Self> {
@@ -85,3 +84,4 @@ struct HomeFeature: Sendable {
         .forEach(\.path, action: \.path)
     }
 }
+
