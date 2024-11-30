@@ -23,7 +23,7 @@ final class LocationCountryDetector: NSObject, CLLocationManagerDelegate {
             print("Location detection already in progress")
             return
         }
-        
+
         self.completion = completion
         locationManager.requestLocation()  // Request a single location update
     }

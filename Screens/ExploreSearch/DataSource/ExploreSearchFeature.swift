@@ -32,13 +32,12 @@ struct ExploreSearchFeature {
         case showSearchResults(PodcastResult)
     }
 
-
     private func parseFeed(url: URL?) async throws -> [Episode] {
         guard let url = url else {
             return []
         }
         let parser = FeedParser(URL: url)
-        let result = try await parser.parseAsync()
+        let result = try await parser.parseRSSAsync()
         guard let rssFeed = result.rssFeed else {
             return []
         }

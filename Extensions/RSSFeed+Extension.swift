@@ -14,7 +14,7 @@ extension RSSFeed {
         let imageUrl = iTunes?.iTunesImage?.attributes?.href
         var episodes = [Episode]()
         items?.forEach { feedItem in
-            var item = Episode(feedItem: feedItem)
+            let item = Episode(feedItem: feedItem)
             if item.imageUrl == nil {
                 item.imageUrl = URL(string: imageUrl ?? "")
             }
@@ -24,12 +24,10 @@ extension RSSFeed {
     }
 }
 
-extension FeedParser: @unchecked @retroactive Sendable {
-    public func parseAsync() async throws -> Feed {
+extension FeedParser {
+    public func parseRSSAsync() async throws -> Feed {
         return try await withCheckedThrowingContinuation { continuation in
-            DispatchQueue.global(qos: .userInitiated).async {
-                let result = self.parse()
-
+            parseAsync { result in
                 switch result {
                 case .success(let feed):
                     continuation.resume(returning: feed)

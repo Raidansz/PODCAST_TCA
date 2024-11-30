@@ -207,15 +207,15 @@ extension AudioPlayerManager {
 extension AudioPlayerManager {
     func updateNowPlayingInfo(playableItem: (any PlayableItemProtocol)?) {
         guard let playableItem else { return }
-        
+
         var nowPlayingInfo = [String: Any]()
-        
+
         nowPlayingInfo[MPMediaItemPropertyTitle] = playableItem.title
         nowPlayingInfo[MPMediaItemPropertyArtist] = playableItem.author
         nowPlayingInfo[MPNowPlayingInfoPropertyPlaybackRate] = player?.rate ?? 0.0
         nowPlayingInfo[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elapsedTime
         nowPlayingInfo[MPMediaItemPropertyPlaybackDuration] = player?.currentItem?.duration.seconds
-        
+
         if let cachedArtwork = self.cachedArtwork {
             nowPlayingInfo[MPMediaItemPropertyArtwork] = cachedArtwork
             MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo

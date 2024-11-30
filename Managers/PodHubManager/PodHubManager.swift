@@ -14,7 +14,7 @@ protocol PodHubManagerProtocol {
     func getTrendingPodcasts() async throws -> PodcastResult
     func getPodcastListOf(catagory: PodcastGenre) async throws -> PodcastResult
 }
-
+@PodhubActor
 class PodHubManager {
     static let shared = PodHubManager()
     func searchFor(searchFor: Tab, value: String) async throws -> ItunesPodcastManager.PodcastResult {
@@ -49,15 +49,15 @@ class PodHubManager {
         }
     }
 
-    func getTrendingPodcasts(country: Country, limit: Int) async throws -> ItunesPodcastManager.PodcastResult {
+    nonisolated  func getTrendingPodcasts(country: Country, limit: Int) async throws -> ItunesPodcastManager.PodcastResult {
         do {
-            return   try await getTrendingPodcastItems(country: country, limit: limit)
+            return try await getTrendingPodcastItems(country: country, limit: limit)
         } catch {
             throw error
         }
     }
 
-    func getPodcastListOfCatagory(
+    nonisolated func getPodcastListOfCatagory(
         catagory: ItunesPodcastManager.PodcastGenre
     ) async throws -> ItunesPodcastManager.PodcastResult {
         do {
@@ -77,4 +77,8 @@ extension PodcastResult: @retroactive Equatable {
     public static func == (lhs: ItunesPodcastManager.PodcastResult, rhs: ItunesPodcastManager.PodcastResult) -> Bool {
         lhs.id == rhs.id
     }
+}
+
+@globalActor actor PodhubActor: Sendable {
+    public static let shared = PodhubActor()
 }
