@@ -30,6 +30,8 @@ struct CategoryDetailsFeature: Sendable {
         case podcastResponse(PodcastResult?)
     }
 
+    @Dependency(\.podHubClient) var podhubClient
+
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -39,7 +41,7 @@ struct CategoryDetailsFeature: Sendable {
                 return .run {[id = category.id]  send in
                     try await send(
                         .podcastResponse(
-                            PodHubManager.shared.getPodcastListOfCatagory(catagory: id)
+                            podhubClient.getPodcastListOfCatagory(id)
                         )
                     )
                 }

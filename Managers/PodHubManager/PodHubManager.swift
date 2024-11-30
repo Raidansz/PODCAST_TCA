@@ -7,19 +7,21 @@
 
 import ItunesPodcastManager
 import Foundation
+import Dependencies
 
-protocol PodHubManagerProtocol {
-    func searchFor(searchFor: Tab, value: String) async throws -> PodcastResult
-    func getLocalTrendingPodcasts() async throws -> PodcastResult
-    func getTrendingPodcasts() async throws -> PodcastResult
-    func getPodcastListOf(catagory: PodcastGenre) async throws -> PodcastResult
+struct PodHubClient {
+    var searchFor: @Sendable (Tab, String) async throws -> ItunesPodcastManager.PodcastResult
+    var getLocalTrendingPodcasts: @Sendable (Int) async throws -> ItunesPodcastManager.PodcastResult
+    var getTrendingPodcasts: @Sendable (Country, Int) async throws -> ItunesPodcastManager.PodcastResult
+    var getPodcastListOfCatagory: @Sendable (
+        ItunesPodcastManager.PodcastGenre
+    ) async throws -> ItunesPodcastManager.PodcastResult
 }
-@PodhubActor
-class PodHubManager {
-    static let shared = PodHubManager()
-    func searchFor(searchFor: Tab, value: String) async throws -> ItunesPodcastManager.PodcastResult {
+
+extension PodHubClient: DependencyKey {
+    static let liveValue = Self { tab, term in
         let entity: Entity
-        switch searchFor {
+        switch tab {
         case .all:
             entity = .podcastAndEpisode
         case .episodes:
@@ -28,13 +30,11 @@ class PodHubManager {
             entity = .podcast
         }
         do {
-            return     try await searchPodcasts(term: value, entity: entity)
+            return  try await searchPodcasts(term: term, entity: entity)
         } catch {
             throw error
         }
-    }
-
-    func getLocalTrendingPodcasts(limit: Int) async throws -> ItunesPodcastManager.PodcastResult {
+    } getLocalTrendingPodcasts: { limit in
         let safeCountryCode: Country
         if let countryCode = UserDefaults.standard.string(forKey: "DetectedCountry"),
            let country = Country(rawValue: countryCode) {
@@ -43,29 +43,30 @@ class PodHubManager {
             safeCountryCode = .unitedStates
         }
         do {
-            return  try await  getTrendingPodcasts(country: safeCountryCode, limit: limit )
+            return try await getTrendingPodcastItems(country: safeCountryCode, limit: limit)
         } catch {
             throw error
         }
-    }
-
-    nonisolated  func getTrendingPodcasts(country: Country, limit: Int) async throws -> ItunesPodcastManager.PodcastResult {
+    } getTrendingPodcasts: { country, limit in
         do {
             return try await getTrendingPodcastItems(country: country, limit: limit)
         } catch {
             throw error
         }
-    }
-
-    nonisolated func getPodcastListOfCatagory(
-        catagory: ItunesPodcastManager.PodcastGenre
-    ) async throws -> ItunesPodcastManager.PodcastResult {
+    } getPodcastListOfCatagory: { catagory in
         do {
             return try await getPodcastListOf(category: catagory, mediaType: .podcast, limit: 50)
         } catch {
             throw error
         }
     }
+}
+
+extension DependencyValues {
+  var podHubClient: PodHubClient {
+    get { self[PodHubClient.self] }
+    set { self[PodHubClient.self] = newValue }
+  }
 }
 
 public typealias Podcast = ItunesPodcastManager.Podcast

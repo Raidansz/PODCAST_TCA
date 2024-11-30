@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PlaybackState: Int, Equatable {
+public enum PlaybackState: Int, Equatable {
     case waitingForSelection
     case buffering
     case playing

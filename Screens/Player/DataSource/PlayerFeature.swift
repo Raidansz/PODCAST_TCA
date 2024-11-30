@@ -10,9 +10,9 @@ import AVFoundation
 import Combine
 
 @Reducer
-struct PlayerFeature {
+public struct PlayerFeature {
     @ObservableState
-    struct State {
+    public struct State {
         var player: AVPlayer?
         var isPlaying: PlaybackState = .paused
         var audioURL: URL?
@@ -23,7 +23,7 @@ struct PlayerFeature {
         }
     }
 
-    enum Action: Equatable {
+    public enum Action: Equatable {
         case handlePlayAction
         case onCurrentTimeChange(Double)
         case onTotalTimeChange(Double)
@@ -32,7 +32,7 @@ struct PlayerFeature {
         case flushRunningItem
     }
 
-    var body: some ReducerOf<Self> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .handlePlayAction:

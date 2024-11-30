@@ -10,23 +10,22 @@ import ComposableArchitecture
 import FeedKit
 import UIKit
 
-final class Episode: Codable, Identifiable, PlayableItemProtocol {
-    var id: String
-    var title: String
-    var pubDate: Date
-    var episodeDescription: String
-    var author: String
-    var streamURL: URL?
-
-    var fileUrl: String?
-    var imageUrl: URL?
+public final class Episode: Codable, Identifiable, PlayableItemProtocol {
+   public var id: String
+   public var title: String
+   public var pubDate: Date
+   public var episodeDescription: String
+   public var author: String
+   public var streamURL: URL?
+   public var fileUrl: String?
+   public var imageUrl: URL?
 
     enum CodingKeys: String, CodingKey {
         case id, title, pubDate, episodeDescription, author, streamURL, fileUrl, imageUrl
     }
 
     // Custom initializer for decoding
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)
         title = try container.decode(String.self, forKey: .title)
@@ -39,7 +38,7 @@ final class Episode: Codable, Identifiable, PlayableItemProtocol {
     }
 
     // Custom encoding function
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         try container.encode(id, forKey: .id)
         try container.encode(title, forKey: .title)

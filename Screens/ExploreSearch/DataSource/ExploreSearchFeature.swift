@@ -32,6 +32,8 @@ struct ExploreSearchFeature {
         case showSearchResults(PodcastResult)
     }
 
+    @Dependency(\.podHubClient) var podhubClient
+
     private func parseFeed(url: URL?) async throws -> [Episode] {
         guard let url = url else {
             return []
@@ -73,7 +75,7 @@ struct ExploreSearchFeature {
                 return .run { [activeTab = state.activeTab] send in
                     try await send(
                         .showSearchResults(
-                            PodHubManager.shared.searchFor(searchFor: activeTab, value: term)
+                            podhubClient.searchFor(activeTab, term)
                         )
                     )
                 }

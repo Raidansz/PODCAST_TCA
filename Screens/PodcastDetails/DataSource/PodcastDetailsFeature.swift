@@ -9,9 +9,9 @@ import ComposableArchitecture
 import FeedKit
 
 @Reducer
-struct PodcastDetailsFeature {
+public struct PodcastDetailsFeature {
     @ObservableState
-    struct State {
+    public struct State {
         let podcast: Podcast
         var isLoading: Bool = false
         @Presents var playEpisode: PlayerFeature.State?
@@ -20,7 +20,7 @@ struct PodcastDetailsFeature {
         @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
     }
 
-    enum Action {
+    public enum Action {
         case fetchEpisode
         case cellTapped(Episode)
         case playEpisode(PresentationAction<PlayerFeature.Action>)
@@ -47,7 +47,7 @@ struct PodcastDetailsFeature {
         }
     }
 
-    var body: some ReducerOf<Self> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .fetchEpisode:

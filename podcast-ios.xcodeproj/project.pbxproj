@@ -13,16 +13,16 @@
 		AA61A6BB2CD984DB00095FE0 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = AA61A6BA2CD984DB00095FE0 /* Alamofire */; };
 		AA6A96E12CE7F59200F1E1E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA6A96DC2CE7F59200F1E1E5 /* Assets.xcassets */; };
 		AA6A97032CE7F59200F1E1E5 /* RootModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A96DE2CE7F59200F1E1E5 /* RootModule.swift */; };
-		AA6A977C2CEAAB4900F1E1E5 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = AA6A977B2CEAAB4900F1E1E5 /* ComposableArchitecture */; };
 		AA7C8EBC2CDA4AB400122196 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA7C8EBB2CDA4AB400122196 /* FeedKit */; };
 		AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */; };
+		AA8C78F42CFB67540007A77A /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = AA8C78F32CFB67540007A77A /* ComposableArchitecture */; };
 		AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = AA9278552C8F155C00D5CF6D /* ComposableArchitecture */; };
 		AAAFD55C2CD40228006E2A89 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = AAAFD55B2CD40228006E2A89 /* Kingfisher */; };
 		AAFED4392CC9AE0F00A9096D /* Cache in Frameworks */ = {isa = PBXBuildFile; productRef = AAFED4382CC9AE0F00A9096D /* Cache */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		AA6A97722CE8011700F1E1E5 /* PBXContainerItemProxy */ = {
+		AA8C78EC2CFB62400007A77A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = AA92783B2C8F151C00D5CF6D /* Project object */;
 			proxyType = 1;
@@ -36,8 +36,8 @@
 		AA6A96DC2CE7F59200F1E1E5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AA6A96DD2CE7F59200F1E1E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AA6A96DE2CE7F59200F1E1E5 /* RootModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootModule.swift; sourceTree = "<group>"; };
-		AA6A976E2CE8011700F1E1E5 /* PodcastTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PodcastTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA8C78892CEFDF910007A77A /* podcast-ios.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "podcast-ios.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA8C78E82CFB62400007A77A /* AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -109,14 +109,15 @@
 		AA6A971E2CE7F5A300F1E1E5 /* Preview Content */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (AA6A97662CE7F5A300F1E1E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Preview Content"; sourceTree = "<group>"; };
 		AA6A973F2CE7F5A300F1E1E5 /* Screens */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (AA6A97672CE7F5A300F1E1E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Screens; sourceTree = "<group>"; };
 		AA6A97422CE7F5A300F1E1E5 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (AA6A97682CE7F5A300F1E1E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
+		AA8C78E92CFB62400007A77A /* AppTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = AppTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		AA6A976B2CE8011700F1E1E5 /* Frameworks */ = {
+		AA8C78E52CFB62400007A77A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA6A977C2CEAAB4900F1E1E5 /* ComposableArchitecture in Frameworks */,
+				AA8C78F42CFB67540007A77A /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,34 +159,38 @@
 				AA6A96DC2CE7F59200F1E1E5 /* Assets.xcassets */,
 				AA6A96DD2CE7F59200F1E1E5 /* Info.plist */,
 				AA6A96DE2CE7F59200F1E1E5 /* RootModule.swift */,
-				AA6A976E2CE8011700F1E1E5 /* PodcastTests.xctest */,
+				AA8C78E92CFB62400007A77A /* AppTests */,
 				AA6A977A2CEAAB4900F1E1E5 /* Frameworks */,
 				AA8C78892CEFDF910007A77A /* podcast-ios.app */,
+				AA8C78E82CFB62400007A77A /* AppTests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		AA6A976D2CE8011700F1E1E5 /* PodcastTests */ = {
+		AA8C78E72CFB62400007A77A /* AppTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = AA6A97742CE8011700F1E1E5 /* Build configuration list for PBXNativeTarget "PodcastTests" */;
+			buildConfigurationList = AA8C78EE2CFB62400007A77A /* Build configuration list for PBXNativeTarget "AppTests" */;
 			buildPhases = (
-				AA6A976A2CE8011700F1E1E5 /* Sources */,
-				AA6A976B2CE8011700F1E1E5 /* Frameworks */,
-				AA6A976C2CE8011700F1E1E5 /* Resources */,
+				AA8C78E42CFB62400007A77A /* Sources */,
+				AA8C78E52CFB62400007A77A /* Frameworks */,
+				AA8C78E62CFB62400007A77A /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				AA6A97732CE8011700F1E1E5 /* PBXTargetDependency */,
+				AA8C78ED2CFB62400007A77A /* PBXTargetDependency */,
 			);
-			name = PodcastTests;
+			fileSystemSynchronizedGroups = (
+				AA8C78E92CFB62400007A77A /* AppTests */,
+			);
+			name = AppTests;
 			packageProductDependencies = (
-				AA6A977B2CEAAB4900F1E1E5 /* ComposableArchitecture */,
+				AA8C78F32CFB67540007A77A /* ComposableArchitecture */,
 			);
-			productName = PodcastTests;
-			productReference = AA6A976E2CE8011700F1E1E5 /* PodcastTests.xctest */;
+			productName = AppTests;
+			productReference = AA8C78E82CFB62400007A77A /* AppTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		AA9278422C8F151C00D5CF6D /* podcast-ios */ = {
@@ -229,7 +234,7 @@
 				LastSwiftUpdateCheck = 1600;
 				LastUpgradeCheck = 1540;
 				TargetAttributes = {
-					AA6A976D2CE8011700F1E1E5 = {
+					AA8C78E72CFB62400007A77A = {
 						CreatedOnToolsVersion = 16.0;
 						TestTargetID = AA9278422C8F151C00D5CF6D;
 					};
@@ -261,13 +266,13 @@
 			projectRoot = "";
 			targets = (
 				AA9278422C8F151C00D5CF6D /* podcast-ios */,
-				AA6A976D2CE8011700F1E1E5 /* PodcastTests */,
+				AA8C78E72CFB62400007A77A /* AppTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		AA6A976C2CE8011700F1E1E5 /* Resources */ = {
+		AA8C78E62CFB62400007A77A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -306,7 +311,7 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		AA6A976A2CE8011700F1E1E5 /* Sources */ = {
+		AA8C78E42CFB62400007A77A /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -324,15 +329,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		AA6A97732CE8011700F1E1E5 /* PBXTargetDependency */ = {
+		AA8C78ED2CFB62400007A77A /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = AA9278422C8F151C00D5CF6D /* podcast-ios */;
-			targetProxy = AA6A97722CE8011700F1E1E5 /* PBXContainerItemProxy */;
+			targetProxy = AA8C78EC2CFB62400007A77A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
-		AA6A97752CE8011700F1E1E5 /* Debug */ = {
+		AA8C78EF2CFB62400007A77A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -342,16 +347,20 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.atwsmf.PodcastTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.atwsmf.AppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/podcast-ios.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/podcast-ios";
 			};
 			name = Debug;
 		};
-		AA6A97762CE8011700F1E1E5 /* Release */ = {
+		AA8C78F02CFB62400007A77A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -361,11 +370,15 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.atwsmf.PodcastTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.atwsmf.AppTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/podcast-ios.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/podcast-ios";
 			};
 			name = Release;
@@ -568,11 +581,11 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		AA6A97742CE8011700F1E1E5 /* Build configuration list for PBXNativeTarget "PodcastTests" */ = {
+		AA8C78EE2CFB62400007A77A /* Build configuration list for PBXNativeTarget "AppTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				AA6A97752CE8011700F1E1E5 /* Debug */,
-				AA6A97762CE8011700F1E1E5 /* Release */,
+				AA8C78EF2CFB62400007A77A /* Debug */,
+				AA8C78F02CFB62400007A77A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -672,11 +685,6 @@
 			package = AA61A6B92CD984DB00095FE0 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		AA6A977B2CEAAB4900F1E1E5 /* ComposableArchitecture */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AA9278542C8F155C00D5CF6D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
-			productName = ComposableArchitecture;
-		};
 		AA7C8EBB2CDA4AB400122196 /* FeedKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AA7C8EBA2CDA4AB400122196 /* XCRemoteSwiftPackageReference "FeedKit" */;
@@ -686,6 +694,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
+		};
+		AA8C78F32CFB67540007A77A /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA9278542C8F155C00D5CF6D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
 		};
 		AA9278552C8F155C00D5CF6D /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;

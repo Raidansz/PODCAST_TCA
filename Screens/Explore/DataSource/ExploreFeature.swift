@@ -51,6 +51,8 @@ struct ExploreFeature: Sendable {
         case destination(PresentationAction<Destination.Action>)
     }
 
+    @Dependency(\.podHubClient) var podhubClient
+
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
@@ -60,7 +62,7 @@ struct ExploreFeature: Sendable {
                 return .run {  send in
                     try await send(
                         .fetchPodcastsResponse(
-                            PodHubManager.shared.getTrendingPodcasts(country: .unitedStates, limit: 50)
+                            podhubClient.getTrendingPodcasts( .unitedStates, 50)
                         )
                     )
                 }
@@ -76,8 +78,8 @@ struct ExploreFeature: Sendable {
                 return .run { send in
                     try await send(
                         .showSearchResults(
-                            PodHubManager.shared.searchFor(
-                                searchFor: .podcasts, value: term),
+                            podhubClient.searchFor(
+                                 .podcasts, term),
                             term
                         )
                     )

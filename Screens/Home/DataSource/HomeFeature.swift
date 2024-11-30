@@ -10,18 +10,23 @@ import Kingfisher
 import AVFoundation
 
 @Reducer
-struct HomeFeature: Sendable {
+public struct HomeFeature: Sendable {
     @ObservableState
-    struct State {
+    public struct State: Equatable {
+        public static func == (lhs: HomeFeature.State, rhs: HomeFeature.State) -> Bool {
+            lhs.id == lhs.id
+        }
+
         var path = StackState<Path.State>()
         var isLoading: Bool = false
         let limit = 10
         @Presents var destination: Destination.State?
-        let uuid = UUID()
+        let id = UUID()
         @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
+        public init() {}
     }
 
-    enum Action {
+    public enum Action {
         case fetchTrendingPodcasts
         case loadView
         case trendingPodcastResponse(PodcastResult)
@@ -32,16 +37,18 @@ struct HomeFeature: Sendable {
         case destination(PresentationAction<Destination.Action>)
     }
 
+    @Dependency(\.podHubClient) var podhubClient
+
     @Reducer
-    enum Path {
+    public enum Path {
         case podcastDetails(PodcastDetailsFeature)
     }
 
     @Reducer
-    enum Destination {
+    public enum Destination {
     }
-
-    var body: some ReducerOf<Self> {
+    public init() {}
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .fetchTrendingPodcasts:
@@ -49,7 +56,7 @@ struct HomeFeature: Sendable {
                 return .run { send in
                     try await send(
                         .trendingPodcastResponse(
-                            PodHubManager.shared.getLocalTrendingPodcasts(limit: 50)
+                            podhubClient.getLocalTrendingPodcasts(50)
                         )
                     )
                 }
@@ -75,7 +82,7 @@ struct HomeFeature: Sendable {
                 state.isLoading = true
                 return .run { send in
                     try await send(
-                        .fetchPodcastResponse(response: PodHubManager.shared.getPodcastListOfCatagory(catagory: forCatagory), ofCatagory: forCatagory)
+                        .fetchPodcastResponse(response: podhubClient.getPodcastListOfCatagory(forCatagory), ofCatagory: forCatagory)
                     )
                 }
             }
@@ -84,4 +91,3 @@ struct HomeFeature: Sendable {
         .forEach(\.path, action: \.path)
     }
 }
-
