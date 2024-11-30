@@ -98,6 +98,13 @@
 			);
 			target = AA9278422C8F151C00D5CF6D /* podcast-ios */;
 		};
+		AA8C7A072CFBC22A0007A77A /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				mock.json,
+			);
+			target = AA9278422C8F151C00D5CF6D /* podcast-ios */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -107,7 +114,7 @@
 		AA6A971E2CE7F5A300F1E1E5 /* Preview Content */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (AA6A97662CE7F5A300F1E1E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = "Preview Content"; sourceTree = "<group>"; };
 		AA6A973F2CE7F5A300F1E1E5 /* Screens */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (AA6A97672CE7F5A300F1E1E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Screens; sourceTree = "<group>"; };
 		AA6A97422CE7F5A300F1E1E5 /* Views */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (AA6A97682CE7F5A300F1E1E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Views; sourceTree = "<group>"; };
-		AA8C78E92CFB62400007A77A /* AppTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = AppTests; sourceTree = "<group>"; };
+		AA8C78E92CFB62400007A77A /* AppTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (AA8C7A072CFBC22A0007A77A /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = AppTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */

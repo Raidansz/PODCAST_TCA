@@ -14,7 +14,7 @@ struct CategoryDetailsView: View {
         ZStack(alignment: .top) {
             ScrollView {
                 LazyVStack(spacing: 24) {
-                    if let podcastList = store.sharedStateManager.podcasts {
+                    if let podcastList = store.podcasts {
                         ForEach(podcastList) { podcast in
                             NavigationLink(state: ExploreFeature.Path.State.podcastDetails(PodcastDetailsFeature.State(podcast: podcast))) {
                                 ListViewCell(

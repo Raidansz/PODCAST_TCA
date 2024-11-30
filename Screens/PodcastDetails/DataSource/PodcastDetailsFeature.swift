@@ -13,11 +13,11 @@ public struct PodcastDetailsFeature {
     @ObservableState
     public struct State {
         let podcast: Podcast
+        var episodes: [Episode]?
         var isLoading: Bool = false
         @Presents var playEpisode: PlayerFeature.State?
         var episodeURL: URL?
         @Shared(.runningItem) var runningItem = RunningItem()
-        @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
     }
 
     public enum Action {
@@ -61,7 +61,7 @@ public struct PodcastDetailsFeature {
                 }
             case .episodeResponse(let response):
                 state.isLoading = false
-                state.sharedStateManager.setEpisode(episode: response)
+                state.episodes = response
                 return .none
             case .cellTapped(let episode):
                 state.playEpisode = PlayerFeature.State(episode: episode)

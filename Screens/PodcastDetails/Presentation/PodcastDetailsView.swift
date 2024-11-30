@@ -16,7 +16,7 @@ struct PodcastDetailsView: View {
                     // TODO: Pagination
                     Section(content: {
                         LazyVStack(spacing: 24) {
-                            if let episodes = store.sharedStateManager.episodes {
+                            if let episodes = store.episodes {
                                 ForEach(episodes) { response in
                                     ListViewCell(
                                         imageURL: response.imageUrl,

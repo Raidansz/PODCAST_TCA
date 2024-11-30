@@ -8,6 +8,7 @@
 import ItunesPodcastManager
 import Foundation
 import Dependencies
+import SwiftyJSON
 
 public struct PodHubClient {
     var searchFor: @Sendable (Tab, String) async throws -> ItunesPodcastManager.PodcastResult
@@ -63,19 +64,47 @@ public struct PodHubClient {
 }
 
 public extension PodHubClient {
-    static func mock(initialData: String) -> Self {
-        let mockPodcast = PodcastResult(searchResults: SearchResults(resultCount: 0, results: []), mediaType: .podcast)
-        return Self { tab, term in
-            return mockPodcast
-        } getLocalTrendingPodcasts: { limit in
-            return mockPodcast
-        } getTrendingPodcasts: { country, limit in
-            return mockPodcast
-        } getPodcastListOfCatagory: { catagory in
-            return mockPodcast
+    static func mock() -> Self {
+        guard let mockfile = Bundle.main.url(forResource: "mock", withExtension: "json") else {
+            fatalError("Mock file not found")
+        }
+        
+        do {
+            let data = try Data(contentsOf: mockfile)
+            print("Mock JSON: \(String(data: data, encoding: .utf8)!)")
+            
+            let json = try JSON(data: data)
+            let resultCount = json["resultCount"].intValue
+            let resultsArray = json["results"].arrayValue
+            
+            print("Parsed results: \(resultsArray)")
+
+            let mockResults = resultsArray.compactMap { jsonItem in
+                SearchResult(json: jsonItem)
+            }
+
+            let mockPodcastResult = PodcastResult(
+                searchResults: SearchResults(
+                    resultCount: resultCount,
+                    results: mockResults
+                )
+            )
+
+            return Self { _, _ in
+                return mockPodcastResult
+            } getLocalTrendingPodcasts: { _ in
+                return mockPodcastResult
+            } getTrendingPodcasts: { _, _ in
+                return mockPodcastResult
+            } getPodcastListOfCatagory: { _ in
+                return mockPodcastResult
+            }
+        } catch {
+            fatalError("Error parsing mock JSON: \(error.localizedDescription)")
         }
     }
 }
+
 public extension DependencyValues {
   var podHubClient: PodHubClient {
     get { self[PodHubClient.self] }

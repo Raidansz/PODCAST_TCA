@@ -9,40 +9,40 @@ import AVFoundation
 import Kingfisher
 import ItunesPodcastManager
 
-struct SharedStateManager: Sendable {
-    public var episodes: IdentifiedArrayOf<Episode>? = []
-    public var podcasts: IdentifiedArrayOf<Podcast>? = []
-    public var topCategorizedPodcasts: [PodcastGenre: IdentifiedArrayOf<Podcast>?]?
-
-    public mutating func setEpisode(episode: [Episode]?) {
-        self.episodes = IdentifiedArrayOf(uniqueElements: episode ?? [])
-    }
-
-    public func getPodcastList() -> IdentifiedArrayOf<Podcast>? {
-        return podcasts
-    }
-
-    public mutating  func setPodcasts(podcasts: [Podcast]?, category: PodcastGenre? = nil) {
-        guard let category else {
-            self.podcasts = IdentifiedArrayOf(uniqueElements: podcasts ?? [])
-            return
-        }
-
-        if topCategorizedPodcasts == nil {
-            topCategorizedPodcasts = [:]
-        }
-
-        if let podcasts = podcasts, let firstPodcast = podcasts.first {
-            topCategorizedPodcasts?[category] = IdentifiedArrayOf(uniqueElements: podcasts)
-        }
-    }
-}
-
-extension PersistenceReaderKey where Self == InMemoryKey<SharedStateManager> {
-    static var sharedStateManager: Self {
-        inMemory("SharedStateManager")
-    }
-}
+//struct SharedStateManager: Sendable {
+//    public var episodes: IdentifiedArrayOf<Episode>? = []
+//    public var podcasts: IdentifiedArrayOf<Podcast>? = []
+//    public var topCategorizedPodcasts: [PodcastGenre: IdentifiedArrayOf<Podcast>?]?
+//
+//    public mutating func setEpisode(episode: [Episode]?) {
+//        self.episodes = IdentifiedArrayOf(uniqueElements: episode ?? [])
+//    }
+//
+//    public func getPodcastList() -> IdentifiedArrayOf<Podcast>? {
+//        return podcasts
+//    }
+//
+//    public mutating  func setPodcasts(podcasts: [Podcast]?, category: PodcastGenre? = nil) {
+//        guard let category else {
+//            self.podcasts = IdentifiedArrayOf(uniqueElements: podcasts ?? [])
+//            return
+//        }
+//
+//        if topCategorizedPodcasts == nil {
+//            topCategorizedPodcasts = [:]
+//        }
+//
+//        if let podcasts = podcasts, let firstPodcast = podcasts.first {
+//            topCategorizedPodcasts?[category] = IdentifiedArrayOf(uniqueElements: podcasts)
+//        }
+//    }
+//}
+//
+//extension PersistenceReaderKey where Self == InMemoryKey<SharedStateManager> {
+//    static var sharedStateManager: Self {
+//        inMemory("SharedStateManager")
+//    }
+//}
 
 struct RunningItem: Codable {
     private(set) var episode: Episode?
@@ -119,7 +119,7 @@ extension PersistenceReaderKey where Self == InMemoryKey<RunningItem> {
     // clear image cache
     KingfisherManager.shared.cache.clearCache()
 
-    @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
-    sharedStateManager = SharedStateManager()
+//    @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
+//    sharedStateManager = SharedStateManager()
     return true
 }
