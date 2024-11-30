@@ -38,7 +38,7 @@ struct HomeViewContent: View {
     var body: some View {
         ScrollView {
             Section(content: {
-                if let podcasts = store.sharedStateManager.podcasts {
+                if let podcasts = store.podcasts {
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
                             ForEach(podcasts) { podcast in
@@ -64,7 +64,7 @@ struct HomeViewContent: View {
 
             Section(content: {
                 LazyVStack(spacing: 24) {
-                    if let podcasts = store.sharedStateManager.podcasts {
+                    if let podcasts = store.podcasts {
                         ForEach(podcasts) { podcast in
                             ListViewCell(
                                 imageURL: podcast.image,

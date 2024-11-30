@@ -10,15 +10,19 @@ import Kingfisher
 import ItunesPodcastManager
 
 struct SharedStateManager: Sendable {
-    private(set) var episodes: IdentifiedArrayOf<Episode>? = []
-    private(set) var podcasts: IdentifiedArrayOf<Podcast>? = []
-     var topCategorizedPodcasts: [PodcastGenre: IdentifiedArrayOf<Podcast>?]?
+    public var episodes: IdentifiedArrayOf<Episode>? = []
+    public var podcasts: IdentifiedArrayOf<Podcast>? = []
+    public var topCategorizedPodcasts: [PodcastGenre: IdentifiedArrayOf<Podcast>?]?
 
-    mutating func setEpisode(episode: [Episode]?) {
+    public mutating func setEpisode(episode: [Episode]?) {
         self.episodes = IdentifiedArrayOf(uniqueElements: episode ?? [])
     }
 
-    mutating func setPodcasts(podcasts: [Podcast]?, category: PodcastGenre? = nil) {
+    public func getPodcastList() -> IdentifiedArrayOf<Podcast>? {
+        return podcasts
+    }
+
+    public mutating  func setPodcasts(podcasts: [Podcast]?, category: PodcastGenre? = nil) {
         guard let category else {
             self.podcasts = IdentifiedArrayOf(uniqueElements: podcasts ?? [])
             return

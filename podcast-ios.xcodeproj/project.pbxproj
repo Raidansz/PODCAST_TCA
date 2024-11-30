@@ -8,14 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		AA21AB932CE6711800F356A5 /* ItunesPodcastManager in Frameworks */ = {isa = PBXBuildFile; productRef = AA21AB922CE6711800F356A5 /* ItunesPodcastManager */; };
-		AA21AB952CE6711800F356A5 /* ItunesPodcastManagerLogger in Frameworks */ = {isa = PBXBuildFile; productRef = AA21AB942CE6711800F356A5 /* ItunesPodcastManagerLogger */; };
 		AA42C1F72CD67F9C00DDF645 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AA42C1F62CD67F9C00DDF645 /* Settings.bundle */; };
 		AA61A6BB2CD984DB00095FE0 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = AA61A6BA2CD984DB00095FE0 /* Alamofire */; };
 		AA6A96E12CE7F59200F1E1E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA6A96DC2CE7F59200F1E1E5 /* Assets.xcassets */; };
 		AA6A97032CE7F59200F1E1E5 /* RootModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A96DE2CE7F59200F1E1E5 /* RootModule.swift */; };
 		AA7C8EBC2CDA4AB400122196 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA7C8EBB2CDA4AB400122196 /* FeedKit */; };
 		AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */; };
-		AA8C78F42CFB67540007A77A /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = AA8C78F32CFB67540007A77A /* ComposableArchitecture */; };
 		AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = AA9278552C8F155C00D5CF6D /* ComposableArchitecture */; };
 		AAAFD55C2CD40228006E2A89 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = AAAFD55B2CD40228006E2A89 /* Kingfisher */; };
 		AAFED4392CC9AE0F00A9096D /* Cache in Frameworks */ = {isa = PBXBuildFile; productRef = AAFED4382CC9AE0F00A9096D /* Cache */; };
@@ -117,7 +115,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA8C78F42CFB67540007A77A /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,7 +125,6 @@
 				AAAFD55C2CD40228006E2A89 /* Kingfisher in Frameworks */,
 				AAFED4392CC9AE0F00A9096D /* Cache in Frameworks */,
 				AA61A6BB2CD984DB00095FE0 /* Alamofire in Frameworks */,
-				AA21AB952CE6711800F356A5 /* ItunesPodcastManagerLogger in Frameworks */,
 				AA21AB932CE6711800F356A5 /* ItunesPodcastManager in Frameworks */,
 				AA7C8EBC2CDA4AB400122196 /* FeedKit in Frameworks */,
 				AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */,
@@ -187,7 +183,6 @@
 			);
 			name = AppTests;
 			packageProductDependencies = (
-				AA8C78F32CFB67540007A77A /* ComposableArchitecture */,
 			);
 			productName = AppTests;
 			productReference = AA8C78E82CFB62400007A77A /* AppTests.xctest */;
@@ -218,7 +213,6 @@
 				AA61A6BA2CD984DB00095FE0 /* Alamofire */,
 				AA7C8EBB2CDA4AB400122196 /* FeedKit */,
 				AA21AB922CE6711800F356A5 /* ItunesPodcastManager */,
-				AA21AB942CE6711800F356A5 /* ItunesPodcastManagerLogger */,
 			);
 			productName = "podcast-ios";
 			productReference = AA8C78892CEFDF910007A77A /* podcast-ios.app */;
@@ -615,8 +609,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Raidansz/itunes_podcast_api.git";
 			requirement = {
-				branch = main;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.2;
 			};
 		};
 		AA61A6B92CD984DB00095FE0 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
@@ -675,11 +669,6 @@
 			package = AA21AB912CE6711800F356A5 /* XCRemoteSwiftPackageReference "itunes_podcast_api" */;
 			productName = ItunesPodcastManager;
 		};
-		AA21AB942CE6711800F356A5 /* ItunesPodcastManagerLogger */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AA21AB912CE6711800F356A5 /* XCRemoteSwiftPackageReference "itunes_podcast_api" */;
-			productName = ItunesPodcastManagerLogger;
-		};
 		AA61A6BA2CD984DB00095FE0 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AA61A6B92CD984DB00095FE0 /* XCRemoteSwiftPackageReference "Alamofire" */;
@@ -694,11 +683,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
 			productName = SwiftyJSON;
-		};
-		AA8C78F32CFB67540007A77A /* ComposableArchitecture */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = AA9278542C8F155C00D5CF6D /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
-			productName = ComposableArchitecture;
 		};
 		AA9278552C8F155C00D5CF6D /* ComposableArchitecture */ = {
 			isa = XCSwiftPackageProductDependency;

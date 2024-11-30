@@ -17,12 +17,13 @@ public struct HomeFeature: Sendable {
             lhs.id == lhs.id
         }
 
-        var path = StackState<Path.State>()
-        var isLoading: Bool = false
-        let limit = 10
+        public var path = StackState<Path.State>()
+        public var isLoading: Bool = false
+        public let limit = 10
         @Presents var destination: Destination.State?
-        let id = UUID()
-        @Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
+        public let id = UUID()
+        //@Shared(.sharedStateManager) var sharedStateManager = SharedStateManager()
+        public var podcasts: [Podcast]?
         public init() {}
     }
 
@@ -30,10 +31,10 @@ public struct HomeFeature: Sendable {
         case fetchTrendingPodcasts
         case loadView
         case trendingPodcastResponse(PodcastResult)
-        case fetchPodcastResponse(response: PodcastResult, ofCatagory: PodcastGenre)
+        //case fetchPodcastResponse(response: PodcastResult, ofCatagory: PodcastGenre)
         case path(StackActionOf<Path>)
         case podcastDetailsTapped(Podcast)
-        case fetchCatagoryPodcastList(forCatagory: PodcastGenre)
+      //  case fetchCatagoryPodcastList(forCatagory: PodcastGenre)
         case destination(PresentationAction<Destination.Action>)
     }
 
@@ -61,7 +62,7 @@ public struct HomeFeature: Sendable {
                     )
                 }
             case .trendingPodcastResponse(let result):
-                state.sharedStateManager.setPodcasts(podcasts: result.podcastList)
+                state.podcasts = result.podcastList ?? nil
                 state.isLoading = false
                 return .none
             case .loadView:
@@ -75,16 +76,16 @@ public struct HomeFeature: Sendable {
             case .podcastDetailsTapped(let podcast):
                 state.path.append(.podcastDetails(PodcastDetailsFeature.State(podcast: podcast)))
                 return .none
-            case .fetchPodcastResponse(response: let response, ofCatagory: let ofCatagory):
-                state.sharedStateManager.setPodcasts(podcasts: response.podcastList, category: ofCatagory)
-                return .none
-            case .fetchCatagoryPodcastList(forCatagory: let forCatagory):
-                state.isLoading = true
-                return .run { send in
-                    try await send(
-                        .fetchPodcastResponse(response: podhubClient.getPodcastListOfCatagory(forCatagory), ofCatagory: forCatagory)
-                    )
-                }
+//            case .fetchPodcastResponse(response: let response, ofCatagory: let ofCatagory):
+//                state.sharedStateManager.setPodcasts(podcasts: response.podcastList, category: ofCatagory)
+//                return .none
+//            case .fetchCatagoryPodcastList(forCatagory: let forCatagory):
+//                state.isLoading = true
+//                return .run { send in
+//                    try await send(
+//                        .fetchPodcastResponse(response: podhubClient.getPodcastListOfCatagory(forCatagory), ofCatagory: forCatagory)
+//                    )
+//                }
             }
         }
         .ifLet(\.$destination, action: \.destination)

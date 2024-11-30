@@ -9,7 +9,7 @@ import ItunesPodcastManager
 import Foundation
 import Dependencies
 
-struct PodHubClient {
+public struct PodHubClient {
     var searchFor: @Sendable (Tab, String) async throws -> ItunesPodcastManager.PodcastResult
     var getLocalTrendingPodcasts: @Sendable (Int) async throws -> ItunesPodcastManager.PodcastResult
     var getTrendingPodcasts: @Sendable (Country, Int) async throws -> ItunesPodcastManager.PodcastResult
@@ -18,8 +18,8 @@ struct PodHubClient {
     ) async throws -> ItunesPodcastManager.PodcastResult
 }
 
-extension PodHubClient: DependencyKey {
-    static let liveValue = Self { tab, term in
+ extension PodHubClient: DependencyKey {
+     public static let liveValue = Self { tab, term in
         let entity: Entity
         switch tab {
         case .all:
@@ -62,21 +62,21 @@ extension PodHubClient: DependencyKey {
     }
 }
 
-extension PodHubClient {
-    static func mock(initialData: PodcastResult) -> Self {
-      let data = LockIsolated(initialData)
+public extension PodHubClient {
+    static func mock(initialData: String) -> Self {
+        let mockPodcast = PodcastResult(searchResults: SearchResults(resultCount: 0, results: []), mediaType: .podcast)
         return Self { tab, term in
-            return data.value
+            return mockPodcast
         } getLocalTrendingPodcasts: { limit in
-            return data.value
+            return mockPodcast
         } getTrendingPodcasts: { country, limit in
-            return data.value
+            return mockPodcast
         } getPodcastListOfCatagory: { catagory in
-            return data.value
+            return mockPodcast
         }
     }
 }
-extension DependencyValues {
+public extension DependencyValues {
   var podHubClient: PodHubClient {
     get { self[PodHubClient.self] }
     set { self[PodHubClient.self] = newValue }
