@@ -62,6 +62,20 @@ extension PodHubClient: DependencyKey {
     }
 }
 
+extension PodHubClient {
+    static func mock(initialData: PodcastResult) -> Self {
+      let data = LockIsolated(initialData)
+        return Self { tab, term in
+            return data.value
+        } getLocalTrendingPodcasts: { limit in
+            return data.value
+        } getTrendingPodcasts: { country, limit in
+            return data.value
+        } getPodcastListOfCatagory: { catagory in
+            return data.value
+        }
+    }
+}
 extension DependencyValues {
   var podHubClient: PodHubClient {
     get { self[PodHubClient.self] }
