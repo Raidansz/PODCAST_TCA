@@ -6,7 +6,7 @@
 //
 
 import ComposableArchitecture
-import FeedKit
+
 import Foundation
 @Reducer
 struct ExploreSearchFeature {
@@ -34,16 +34,16 @@ struct ExploreSearchFeature {
     @Dependency(\.podHubClient) var podhubClient
 
     private func parseFeed(url: URL?) async throws -> [Episode] {
-        guard let url = url else {
-            return []
-        }
-        let parser = FeedParser(URL: url)
-        let result = try await parser.parseRSSAsync()
-        guard let rssFeed = result.rssFeed else {
-            return []
-        }
+//        guard let url = url else {
+//            return []
+//        }
+//        let parser = FeedParser(URL: url)
+//        let result = try await parser.parseRSSAsync()
+//        guard let rssFeed = result.rssFeed else {
+//            return []
+//        }
 
-        return rssFeed.toEpisodes()
+        return []
     }
 
     var body: some ReducerOf<Self> {

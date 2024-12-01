@@ -9,10 +9,11 @@
 /* Begin PBXBuildFile section */
 		AA21AB932CE6711800F356A5 /* ItunesPodcastManager in Frameworks */ = {isa = PBXBuildFile; productRef = AA21AB922CE6711800F356A5 /* ItunesPodcastManager */; };
 		AA42C1F72CD67F9C00DDF645 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AA42C1F62CD67F9C00DDF645 /* Settings.bundle */; };
+		AA4A7AE22CFCD9A600FFEADF /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA4A7AE12CFCD9A600FFEADF /* FeedKit */; };
 		AA61A6BB2CD984DB00095FE0 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = AA61A6BA2CD984DB00095FE0 /* Alamofire */; };
 		AA6A96E12CE7F59200F1E1E5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA6A96DC2CE7F59200F1E1E5 /* Assets.xcassets */; };
 		AA6A97032CE7F59200F1E1E5 /* RootModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA6A96DE2CE7F59200F1E1E5 /* RootModule.swift */; };
-		AA7C8EBC2CDA4AB400122196 /* FeedKit in Frameworks */ = {isa = PBXBuildFile; productRef = AA7C8EBB2CDA4AB400122196 /* FeedKit */; };
+		AA6A9C5A2CFBEA06001C9038 /* SWXMLHash in Frameworks */ = {isa = PBXBuildFile; productRef = AA6A9C592CFBEA06001C9038 /* SWXMLHash */; };
 		AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */; };
 		AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = AA9278552C8F155C00D5CF6D /* ComposableArchitecture */; };
 		AAAFD55C2CD40228006E2A89 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = AAAFD55B2CD40228006E2A89 /* Kingfisher */; };
@@ -131,9 +132,10 @@
 			files = (
 				AAAFD55C2CD40228006E2A89 /* Kingfisher in Frameworks */,
 				AAFED4392CC9AE0F00A9096D /* Cache in Frameworks */,
+				AA6A9C5A2CFBEA06001C9038 /* SWXMLHash in Frameworks */,
+				AA4A7AE22CFCD9A600FFEADF /* FeedKit in Frameworks */,
 				AA61A6BB2CD984DB00095FE0 /* Alamofire in Frameworks */,
 				AA21AB932CE6711800F356A5 /* ItunesPodcastManager in Frameworks */,
-				AA7C8EBC2CDA4AB400122196 /* FeedKit in Frameworks */,
 				AA7DE4C72C9F1D4D00D51A42 /* SwiftyJSON in Frameworks */,
 				AA9278562C8F155C00D5CF6D /* ComposableArchitecture in Frameworks */,
 			);
@@ -218,8 +220,9 @@
 				AAFED4382CC9AE0F00A9096D /* Cache */,
 				AAAFD55B2CD40228006E2A89 /* Kingfisher */,
 				AA61A6BA2CD984DB00095FE0 /* Alamofire */,
-				AA7C8EBB2CDA4AB400122196 /* FeedKit */,
 				AA21AB922CE6711800F356A5 /* ItunesPodcastManager */,
+				AA6A9C592CFBEA06001C9038 /* SWXMLHash */,
+				AA4A7AE12CFCD9A600FFEADF /* FeedKit */,
 			);
 			productName = "podcast-ios";
 			productReference = AA8C78892CEFDF910007A77A /* podcast-ios.app */;
@@ -259,8 +262,9 @@
 				AAFED4372CC9AE0F00A9096D /* XCRemoteSwiftPackageReference "Cache" */,
 				AAAFD55A2CD40228006E2A89 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				AA61A6B92CD984DB00095FE0 /* XCRemoteSwiftPackageReference "Alamofire" */,
-				AA7C8EBA2CDA4AB400122196 /* XCRemoteSwiftPackageReference "FeedKit" */,
 				AA21AB912CE6711800F356A5 /* XCRemoteSwiftPackageReference "itunes_podcast_api" */,
+				AA6A9C582CFBEA06001C9038 /* XCRemoteSwiftPackageReference "SWXMLHash" */,
+				AA4A7AE02CFCD9A600FFEADF /* XCRemoteSwiftPackageReference "FeedKit" */,
 			);
 			productRefGroup = AA92783A2C8F151C00D5CF6D;
 			projectDirPath = "";
@@ -620,6 +624,14 @@
 				minimumVersion = 1.0.2;
 			};
 		};
+		AA4A7AE02CFCD9A600FFEADF /* XCRemoteSwiftPackageReference "FeedKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nmdias/FeedKit.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.1.2;
+			};
+		};
 		AA61A6B92CD984DB00095FE0 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
@@ -628,12 +640,12 @@
 				minimumVersion = 5.10.1;
 			};
 		};
-		AA7C8EBA2CDA4AB400122196 /* XCRemoteSwiftPackageReference "FeedKit" */ = {
+		AA6A9C582CFBEA06001C9038 /* XCRemoteSwiftPackageReference "SWXMLHash" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/nmdias/FeedKit.git";
+			repositoryURL = "https://github.com/drmohundro/SWXMLHash.git";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 9.1.2;
+				minimumVersion = 8.1.0;
 			};
 		};
 		AA7DE4C52C9F1D4D00D51A42 /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
@@ -676,15 +688,20 @@
 			package = AA21AB912CE6711800F356A5 /* XCRemoteSwiftPackageReference "itunes_podcast_api" */;
 			productName = ItunesPodcastManager;
 		};
+		AA4A7AE12CFCD9A600FFEADF /* FeedKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AA4A7AE02CFCD9A600FFEADF /* XCRemoteSwiftPackageReference "FeedKit" */;
+			productName = FeedKit;
+		};
 		AA61A6BA2CD984DB00095FE0 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AA61A6B92CD984DB00095FE0 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
 		};
-		AA7C8EBB2CDA4AB400122196 /* FeedKit */ = {
+		AA6A9C592CFBEA06001C9038 /* SWXMLHash */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = AA7C8EBA2CDA4AB400122196 /* XCRemoteSwiftPackageReference "FeedKit" */;
-			productName = FeedKit;
+			package = AA6A9C582CFBEA06001C9038 /* XCRemoteSwiftPackageReference "SWXMLHash" */;
+			productName = SWXMLHash;
 		};
 		AA7DE4C62C9F1D4D00D51A42 /* SwiftyJSON */ = {
 			isa = XCSwiftPackageProductDependency;

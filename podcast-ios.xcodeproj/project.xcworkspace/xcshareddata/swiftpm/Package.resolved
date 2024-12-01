@@ -1,5 +1,5 @@
 {
-  "originHash" : "de46894feb1b5062733005f21f121c5de38837b2c9ed222d31b1a8c147df5255",
+  "originHash" : "c12985b6d2955e4126bb43723d2b05cff2f9398d55fc77ae0986c41d9e80220f",
   "pins" : [
     {
       "identity" : "alamofire",
@@ -161,6 +161,15 @@
       "state" : {
         "revision" : "af76cf3ef710b6ca5f8c05f3a31307d44a3c5828",
         "version" : "5.0.2"
+      }
+    },
+    {
+      "identity" : "swxmlhash",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/drmohundro/SWXMLHash.git",
+      "state" : {
+        "revision" : "6ae7b83692c4a2ed53ea2cb0e6cda20768800a99",
+        "version" : "8.1.0"
       }
     },
     {

@@ -14,27 +14,12 @@ extension RSSFeed {
         let imageUrl = iTunes?.iTunesImage?.attributes?.href
         var episodes = [Episode]()
         items?.forEach { feedItem in
-            let item = Episode(feedItem: feedItem)
+            var item = Episode(feedItem: feedItem)
             if item.imageUrl == nil {
                 item.imageUrl = URL(string: imageUrl ?? "")
             }
             episodes.append(item)
         }
         return episodes
-    }
-}
-
-extension FeedParser {
-    public func parseRSSAsync() async throws -> Feed {
-        return try await withCheckedThrowingContinuation { continuation in
-            parseAsync { result in
-                switch result {
-                case .success(let feed):
-                    continuation.resume(returning: feed)
-                case .failure(let error):
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
     }
 }

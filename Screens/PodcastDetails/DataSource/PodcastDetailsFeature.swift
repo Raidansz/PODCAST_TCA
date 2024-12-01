@@ -9,7 +9,7 @@ import ComposableArchitecture
 import FeedKit
 
 @Reducer
-public struct PodcastDetailsFeature {
+public struct PodcastDetailsFeature: Sendable {
     @ObservableState
     public struct State {
         let podcast: Podcast
@@ -17,7 +17,6 @@ public struct PodcastDetailsFeature {
         var isLoading: Bool = false
         @Presents var playEpisode: PlayerFeature.State?
         var episodeURL: URL?
-        @Shared(.runningItem) var runningItem = RunningItem()
     }
 
     public enum Action {
@@ -28,29 +27,31 @@ public struct PodcastDetailsFeature {
     }
 
     private func parseFeed(url: URL?) async throws -> [Episode] {
-        return try await withCheckedThrowingContinuation { continuation in
-            guard let url else { return }
+        guard let url = url else { return [] }
+
+        return try await Task { () -> [Episode] in
             let parser = FeedParser(URL: url)
-            parser.parseAsync { result in
-                switch result {
-                case let .success(feed):
-                    guard let rssFeed = feed.rssFeed else {
-                        continuation.resume(returning: [])
-                        return
-                    }
-                    let episodes = rssFeed.toEpisodes()
-                    continuation.resume(returning: episodes)
-                case let .failure(parserError):
-                    continuation.resume(throwing: parserError)
+            let result = parser.parse()
+
+            switch result {
+            case .success(let feed):
+                if let episodes = feed.rssFeed?.toEpisodes() {
+                    return episodes
+                } else {
+                    return []
                 }
+            case .failure(let error):
+                throw error
             }
-        }
+        }.value
     }
+
 
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .fetchEpisode:
+                state.episodes = nil
                 state.isLoading = true
                 return .run { [url = state.podcast.feedURL] send in
                     try await send(

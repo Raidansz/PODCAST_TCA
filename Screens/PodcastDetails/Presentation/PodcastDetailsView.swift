@@ -9,7 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct PodcastDetailsView: View {
-    @State var store: StoreOf<PodcastDetailsFeature>
+    var store: StoreOf<PodcastDetailsFeature>
     var body: some View {
             ZStack(alignment: .top) {
                 ScrollView {

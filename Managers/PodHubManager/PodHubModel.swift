@@ -10,7 +10,7 @@ import ComposableArchitecture
 import FeedKit
 import UIKit
 
-public final class Episode: Codable, Identifiable, PlayableItemProtocol {
+public struct Episode: Codable, Identifiable, PlayableItemProtocol {
    public var id: String
    public var title: String
    public var pubDate: Date
@@ -19,36 +19,6 @@ public final class Episode: Codable, Identifiable, PlayableItemProtocol {
    public var streamURL: URL?
    public var fileUrl: String?
    public var imageUrl: URL?
-
-    enum CodingKeys: String, CodingKey {
-        case id, title, pubDate, episodeDescription, author, streamURL, fileUrl, imageUrl
-    }
-
-    // Custom initializer for decoding
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(String.self, forKey: .id)
-        title = try container.decode(String.self, forKey: .title)
-        pubDate = try container.decode(Date.self, forKey: .pubDate)
-        episodeDescription = try container.decode(String.self, forKey: .episodeDescription)
-        author = try container.decode(String.self, forKey: .author)
-        streamURL = try container.decodeIfPresent(URL.self, forKey: .streamURL)
-        fileUrl = try container.decodeIfPresent(String.self, forKey: .fileUrl)
-        imageUrl = try container.decodeIfPresent(URL.self, forKey: .imageUrl)
-    }
-
-    // Custom encoding function
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(id, forKey: .id)
-        try container.encode(title, forKey: .title)
-        try container.encode(pubDate, forKey: .pubDate)
-        try container.encode(episodeDescription, forKey: .episodeDescription)
-        try container.encode(author, forKey: .author)
-        try container.encodeIfPresent(streamURL, forKey: .streamURL)
-        try container.encodeIfPresent(fileUrl, forKey: .fileUrl)
-        try container.encodeIfPresent(imageUrl, forKey: .imageUrl)
-    }
 
     init(feedItem: RSSFeedItem) {
         self.id = feedItem.guid?.value ?? UUID().uuidString
