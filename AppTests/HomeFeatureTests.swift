@@ -1,5 +1,5 @@
 //
-//  HomeFeatureTest.swift
+//  HomeFeatureTests.swift
 //  AppTests
 //
 //  Created by Raidan on 2024. 11. 30..
@@ -12,7 +12,7 @@ import Testing
 @testable import podcast_ios
 
 @MainActor
-struct HomeFeatureTest {
+struct HomeFeatureTests {
 @Test
     func test_initialState() async throws {
         let store = TestStore(initialState: HomeFeature.State()) {

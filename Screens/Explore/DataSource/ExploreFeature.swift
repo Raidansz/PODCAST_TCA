@@ -12,7 +12,7 @@ import Combine
 @Reducer
 struct ExploreFeature: Sendable {
     @ObservableState
-    struct State {
+    struct State: Equatable {
         var podcasts: [Podcast]?
         var isLoading: Bool = false
         var searchTerm = ""
@@ -24,6 +24,12 @@ struct ExploreFeature: Sendable {
         var themeForCatagories = getRandomTheme()
         let searchID = "search"
         @Presents var destination: Destination.State?
+        static func == (lhs: ExploreFeature.State, rhs: ExploreFeature.State) -> Bool {
+            lhs.podcasts == rhs.podcasts
+            && lhs.isLoading == rhs.isLoading
+            && lhs.searchTerm == rhs.searchTerm
+            && lhs.searchPodcastResults == rhs.searchPodcastResults
+        }
     }
 
     @Reducer
