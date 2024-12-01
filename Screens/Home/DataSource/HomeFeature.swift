@@ -23,6 +23,7 @@ public struct HomeFeature: Sendable {
         @Presents var destination: Destination.State?
         public let id = UUID()
         public var podcasts: [Podcast]?
+        public var text: String = "was not called"
         public init() {}
     }
 
@@ -51,6 +52,7 @@ public struct HomeFeature: Sendable {
             switch action {
             case .fetchTrendingPodcasts:
                 state.isLoading = true
+                defer { state.text = "was called from fetch" }
                 return .run { send in
                     try await send(
                         .trendingPodcastResponse(
@@ -59,8 +61,9 @@ public struct HomeFeature: Sendable {
                     )
                 }
             case .trendingPodcastResponse(let result):
-                state.podcasts = result.podcastList ?? nil
+                state.podcasts = result.podcastList
                 state.isLoading = false
+                defer { state.text = "was called from response" }
                 return .none
             case .loadView:
                 return .run { send in

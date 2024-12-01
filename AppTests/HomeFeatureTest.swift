@@ -5,36 +5,41 @@
 //  Created by Raidan on 2024. 11. 30..
 //
 
-import XCTest
-import podcast_ios
 import ComposableArchitecture
-import SwiftyJSON
+import Foundation
+import Testing
+
+@testable import podcast_ios
 
 @MainActor
-final class HomeFeatureTest: XCTestCase {
-
+struct HomeFeatureTest {
+@Test
     func test_initialState() async throws {
         let store = TestStore(initialState: HomeFeature.State()) {
             HomeFeature()
         }
-        XCTAssertNil(store.state.podcasts)
-        XCTAssertFalse(store.state.isLoading)
+        #expect(store.state.podcasts == nil)
+        #expect(store.state.isLoading == false)
     }
-
-    func test_fetchTrendingPodcast() async throws {
-        let store = TestStore(initialState: HomeFeature.State()) {
+    @Test
+    func test_fetchTrendingPodcastFlow() async throws {
+        let state = HomeFeature.State()
+        let store = TestStore(initialState: state) {
             HomeFeature()
         } withDependencies: {
             $0.podHubClient = .mock()
         }
-        store.exhaustivity = .off
-        XCTAssertNil(store.state.podcasts)
-        XCTAssertFalse(store.state.isLoading)
-        await store.send(.fetchTrendingPodcasts)
-        XCTAssertTrue(store.state.isLoading)
-        XCTAssertNotNil(store.state.podcasts)
+        #expect(store.state.podcasts == nil)
+        #expect(store.state.isLoading == false)
+        await store.send(\.loadView)
+        await store.receive(\.fetchTrendingPodcasts)
+        #expect(store.state.isLoading == true)
+        await store.receive(\.trendingPodcastResponse)
+        #expect(store.state.podcasts != nil)
+        #expect(store.state.isLoading == false)
     }
 
+    @Test
     func test_fetchTrendingPodcastCount() async throws {
 
         let store = TestStore(initialState: HomeFeature.State()) {
@@ -43,15 +48,18 @@ final class HomeFeatureTest: XCTestCase {
             $0.podHubClient = .mock()
         }
 
-        store.exhaustivity = .off
-        XCTAssertNil(store.state.podcasts)
-        XCTAssertFalse(store.state.isLoading)
-        await store.send(.fetchTrendingPodcasts)
-        try await Task.sleep(nanoseconds: 200_000_000)
-        XCTAssertTrue(store.state.isLoading)
-      //  XCTAssertEqual(store.state.podcasts?.count, 60)
+        #expect(store.state.podcasts == nil)
+        #expect(store.state.isLoading == false)
+        await store.send(\.loadView)
+        await store.receive(\.fetchTrendingPodcasts)
+        #expect(store.state.isLoading == true)
+        await store.receive(\.trendingPodcastResponse)
+        #expect(store.state.podcasts != nil)
+        #expect(store.state.isLoading == false)
+        #expect(store.state.podcasts?.count == 60)
     }
 
+    @Test
     func test_fetchTrendingPodcastFirstItem() async throws {
         let store = TestStore(initialState: HomeFeature.State()) {
             HomeFeature()
@@ -59,18 +67,16 @@ final class HomeFeatureTest: XCTestCase {
             $0.podHubClient = .mock()
         }
 
-        store.exhaustivity = .off
-        XCTAssertNil(store.state.podcasts)
-        XCTAssertFalse(store.state.isLoading)
-
-        await store.send(.fetchTrendingPodcasts)
-        try await Task.sleep(nanoseconds: 200_000_000)
-
-        print("Final state: \(store.state)")
-        XCTAssertTrue(store.state.isLoading)
-//        store.assert {
-//            XCTAssertEqual($0.podcasts?.count, 1)
-//        }
+        #expect(store.state.podcasts == nil)
+        #expect(store.state.isLoading == false)
+        await store.send(\.loadView)
+        await store.receive(\.fetchTrendingPodcasts)
+        #expect(store.state.isLoading == true)
+        await store.receive(\.trendingPodcastResponse)
+        #expect(store.state.podcasts != nil)
+        #expect(store.state.isLoading == false)
+        #expect(store.state.podcasts?.count == 60)
+        #expect(store.state.podcasts?.first?.title == "Comic Geek Speak Podcast - The Best Comic Book Podcast")
     }
 
 }

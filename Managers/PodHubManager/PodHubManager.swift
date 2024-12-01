@@ -68,17 +68,11 @@ public extension PodHubClient {
         guard let mockfile = Bundle.main.url(forResource: "mock", withExtension: "json") else {
             fatalError("Mock file not found")
         }
-        
         do {
             let data = try Data(contentsOf: mockfile)
-            print("Mock JSON: \(String(data: data, encoding: .utf8)!)")
-            
             let json = try JSON(data: data)
             let resultCount = json["resultCount"].intValue
             let resultsArray = json["results"].arrayValue
-            
-            print("Parsed results: \(resultsArray)")
-
             let mockResults = resultsArray.compactMap { jsonItem in
                 SearchResult(json: jsonItem)
             }
@@ -125,4 +119,10 @@ extension PodcastResult: @retroactive Equatable {
 
 @globalActor actor PodhubActor: Sendable {
     public static let shared = PodhubActor()
+}
+
+extension Podcast: @retroactive Equatable {
+    public static func == (lhs: ItunesPodcastManager.Podcast, rhs: ItunesPodcastManager.Podcast) -> Bool {
+        lhs.id == rhs.id
+    }
 }
