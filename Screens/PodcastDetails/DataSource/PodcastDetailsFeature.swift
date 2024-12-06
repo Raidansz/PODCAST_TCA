@@ -46,7 +46,6 @@ public struct PodcastDetailsFeature: Sendable {
         }.value
     }
 
-
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {

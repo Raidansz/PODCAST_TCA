@@ -33,19 +33,6 @@ struct ExploreSearchFeature {
 
     @Dependency(\.podHubClient) var podhubClient
 
-    private func parseFeed(url: URL?) async throws -> [Episode] {
-//        guard let url = url else {
-//            return []
-//        }
-//        let parser = FeedParser(URL: url)
-//        let result = try await parser.parseRSSAsync()
-//        guard let rssFeed = result.rssFeed else {
-//            return []
-//        }
-
-        return []
-    }
-
     var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
